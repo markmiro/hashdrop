@@ -27,14 +27,6 @@ export default function Home() {
       </Head>
       <main className={styles.pageWrapper}>
         <h1>{config.title}</h1>
-        <p>
-          {config.desc}
-          <br />
-          <a href="https://www.notion.so/markmiro/About-hash-drops-5de1ea6e6fe049f9a9b71f73bfba9d6c">
-            Learn how to drop your hash
-          </a>
-          .
-        </p>
         <label>
           Text input:
           <br />
@@ -68,6 +60,13 @@ export default function Home() {
           )}
         </div>
         <br />
+        <hr />
+        <p>
+          <a href="https://www.kalzumeus.com/essays/dropping-hashes">
+            Dropping hashes: an idiom used to demonstrate provenance of
+            documents
+          </a>
+        </p>
       </main>
     </div>
   );
