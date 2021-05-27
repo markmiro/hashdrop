@@ -1,25 +1,35 @@
 .pageWrapper {
   padding: 1ch;
-  max-width: 65ch;
+  max-width: 60ch;
   margin: 0 auto;
   font-size: 18px;
 }
 
 .textInput {
+  font-size: inherit;
   width: 100%;
-  height: 5em;
+  height: 8em;
   padding: 2ch;
 }
 
 .hashOutput {
+  font-family: monospace;
   word-break: break-all;
   padding: 2ch;
   background-color: #00000011;
 }
 
 .copyButton {
+  font-size: inherit;
+  padding: 1ch;
+  border: 0;
+  color: white;
+  background-color: #000;
   display: block;
   width: 100%;
+}
+.copyButton:hover {
+  background-color: #000000cc;
 }
 
 .noHashOutput {
