@@ -16,8 +16,8 @@ export default function Verify() {
       reader.onload = (e) => {
         const contents = e.target?.result;
         console.log(contents);
-        setText(contents);
-        calcHash(contents);
+        setText(contents as string);
+        calcHash(contents as string);
       };
       reader.readAsText(files[0]);
     }
