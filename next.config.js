@@ -1,6 +1,6 @@
 // https://blog.fleek.co/posts/fleek-nextJS
 module.exports = {
-  exportTrailingSlash: true,
+  trailingSlash: true,
   exportPathMap: function () {
     return {
       "/": { page: "/" },
