@@ -1,8 +1,10 @@
-import sha512 from "crypto-js/sha512";
 import copy from "copy-to-clipboard";
+import debounce from "lodash/debounce";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import styles from "../styles/Home.module.css";
+
+const Hash = require("ipfs-only-hash");
 
 const config = {
   title: "hash💧",
@@ -10,13 +12,19 @@ const config = {
 };
 
 export default function Home() {
+  const dlRef = useRef<HTMLAnchorElement>(null);
+  const [loading, setLoading] = useState(false);
   const [text, setText] = useState("");
   const [hash, setHash] = useState("");
 
-  useEffect(() => {
-    const hashed = sha512(text).toString();
-    setHash(hashed);
-  }, [text]);
+  const setHashDebounce = useCallback(
+    debounce(async (text: string) => {
+      const ipfsTextHash = await Hash.of(text, { cidVersion: 1 });
+      setHash(ipfsTextHash);
+      setLoading(false);
+    }, 500),
+    []
+  );
 
   return (
     <div>
@@ -33,13 +41,28 @@ export default function Home() {
           <textarea
             className={styles.textInput}
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e) => {
+              setText(e.target.value);
+              setLoading(true);
+              setHashDebounce(e.target.value);
+            }}
           />
         </label>
         <br />
+        <a
+          ref={dlRef}
+          download="file.txt"
+          href={"data:text/plain," + encodeURIComponent(text)}
+        >
+          Download File
+        </a>
+        <br />
         <br />
         <div>Hashed output:</div>
-        <div className={styles.hashOutput}>
+        <div
+          className={styles.hashOutput}
+          style={{ opacity: loading ? 0.7 : 1 }}
+        >
           {text ? (
             <div>
               {hash}
