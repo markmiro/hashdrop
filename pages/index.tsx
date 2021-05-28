@@ -43,7 +43,7 @@ export default function Home() {
       reader.onload = (e) => {
         const contents = e.target?.result;
         console.log(contents);
-        updateText(contents);
+        updateText(contents as string);
       };
       reader.readAsText(files[0]);
     }
