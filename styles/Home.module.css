@@ -1,10 +1,3 @@
-.pageWrapper {
-  padding: 1ch;
-  max-width: 60ch;
-  margin: 0 auto;
-  font-size: 18px;
-}
-
 .textInput {
   font-size: inherit;
   width: 100%;
@@ -35,12 +28,4 @@
 .noHashOutput {
   text-align: center;
   color: #00000066;
-}
-
-.fileDrop {
-  background: #00000022;
-  height: 20ch;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }

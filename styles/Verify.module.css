@@ -1,0 +1,11 @@
+.fileDrop {
+  font-family: monospace;
+  word-break: break-all;
+  padding: 2ch;
+  background-color: #00000011;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30vh;
+  border: 2px inset;
+}
