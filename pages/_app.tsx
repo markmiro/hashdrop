@@ -19,14 +19,14 @@ function MyApp({ Component, pageProps }: AppProps) {
           <h1 className={styles.logo}>
             <Link href="/">{config.title}</Link>
           </h1>
-          {/* <div>
+          <div>
             <Link href="/">
               <a>Drop</a>
             </Link>{" "}
             <Link href="/verify">
               <a>Verify</a>
             </Link>
-          </div> */}
+          </div>
         </nav>
         <Component {...pageProps} />
       </main>

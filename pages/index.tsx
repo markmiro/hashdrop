@@ -6,6 +6,7 @@ import styles from "../styles/Home.module.css";
 const Hash = require("ipfs-only-hash");
 
 export default function Home() {
+  const fileRef = useRef<HTMLInputElement>(null);
   const dlRef = useRef<HTMLAnchorElement>(null);
   const [loading, setLoading] = useState(false);
   const [text, setText] = useState("");
@@ -20,6 +21,34 @@ export default function Home() {
     []
   );
 
+  function reset() {
+    if (!fileRef.current) return;
+    fileRef.current.type = "text";
+    fileRef.current.type = "file";
+    fileRef.current.setAttribute("value", "");
+    setText("");
+    setHash("");
+  }
+
+  function updateText(text: string) {
+    setLoading(true);
+    setText(text);
+    setHashDebounce(text);
+  }
+
+  function loadFile(e: any) {
+    const files = e.target.files;
+    if (files && files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const contents = e.target?.result;
+        console.log(contents);
+        updateText(contents);
+      };
+      reader.readAsText(files[0]);
+    }
+  }
+
   return (
     <div>
       <label>
@@ -28,38 +57,43 @@ export default function Home() {
         <textarea
           className={styles.textInput}
           value={text}
-          onChange={(e) => {
-            setText(e.target.value);
-            setLoading(true);
-            setHashDebounce(e.target.value);
-          }}
+          onChange={(e) => updateText(e.target.value)}
         />
       </label>
-      <br />
       <a
         ref={dlRef}
         download="file.txt"
         href={"data:text/plain," + encodeURIComponent(text)}
       >
-        Download File
-      </a>
+        Download File ⬇
+      </a>{" "}
+      <input type="file" ref={fileRef} onChange={loadFile} />{" "}
+      <button onClick={reset}>Reset</button>
       <br />
       <br />
       <div>Hashed output:</div>
       <div className={styles.hashOutput} style={{ opacity: loading ? 0.7 : 1 }}>
         {text ? (
           <div>
-            {loading && !hash ? "Hashing..." : hash}
-            <br />
-            <br />
+            {!hash ? "Hashing..." : hash}{" "}
             <button
-              className={styles.copyButton}
               onClick={() => {
                 copy(hash);
                 alert("Copied text");
               }}
             >
               Copy
+            </button>
+            <br />
+            <br />
+            <button
+              className={styles.copyButton}
+              onClick={() => {
+                copy(`https://hashdrop.eth.link/verify/?hash=${hash}`);
+                alert("Copied hash link");
+              }}
+            >
+              Copy Link
             </button>
           </div>
         ) : (
