@@ -1,6 +1,7 @@
 import copy from "copy-to-clipboard";
 import debounce from "lodash/debounce";
 import { useCallback, useRef, useState } from "react";
+import queryString from "query-string";
 import styles from "../styles/Home.module.css";
 
 const Hash = require("ipfs-only-hash");
@@ -95,6 +96,15 @@ export default function Home() {
             >
               Copy Link
             </button>
+            {/* https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/guides/web-intent */}
+            <a
+              href={`https://twitter.com/intent/tweet?${queryString.stringify({
+                text: "I made a prediction",
+                url: `https://hashdrop.me/verify/?hash=${hash}`,
+              })}`}
+            >
+              Tweet
+            </a>
           </div>
         ) : (
           <div className={styles.noHashOutput}>Type a message above ⤴</div>
