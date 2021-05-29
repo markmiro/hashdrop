@@ -89,7 +89,7 @@ export default function Home() {
             <button
               className={styles.copyButton}
               onClick={() => {
-                copy(`https://hashdrop.eth.link/verify/?hash=${hash}`);
+                copy(`https://hashdrop.me/verify/?hash=${hash}`);
                 alert("Copied hash link");
               }}
             >
