@@ -1,27 +1,47 @@
 {
   "name": "hashdrop",
+  "homepage": ".",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "export": "next export"
-  },
   "dependencies": {
+    "@testing-library/jest-dom": "^5.12.0",
+    "@testing-library/react": "^11.2.7",
+    "@testing-library/user-event": "^12.8.3",
     "copy-to-clipboard": "^3.3.1",
+    "i": "^0.3.6",
     "ipfs-only-hash": "^4.0.0",
     "lodash": "^4.17.21",
-    "next": "10.2.3",
-    "query-string": "^7.0.0",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "npm": "^7.15.1",
+    "query-string": "^4.3.4",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-helmet": "^6.1.0",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "4.0.3",
+    "web-vitals": "^1.1.2"
   },
-  "devDependencies": {
-    "@types/lodash": "^4.14.170",
-    "@types/react": "17.0.7",
-    "prettier": "^2.3.0",
-    "pretty-quick": "^3.1.0",
-    "typescript": "4.2.4"
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
