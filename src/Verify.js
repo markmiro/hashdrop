@@ -44,7 +44,7 @@ export default function Verify() {
 
   useEffect(() => {
     checkWantedHash(wantedHash);
-  }, [wantedHash]);
+  }, [wantedHash, checkWantedHash]);
 
   const calcHash = useCallback(async (text) => {
     setHashFound(false);
@@ -110,7 +110,12 @@ export default function Verify() {
           {wantedHashFound ? (
             <>
               From IPFS:
-              <iframe src={hashToUrl(wantedHash)} width="100%" height="500px" />
+              <iframe
+                src={hashToUrl(wantedHash)}
+                width="100%"
+                height="500px"
+                title="ipfs preview"
+              />
             </>
           ) : (
             <div className={styles.warningBox}>
@@ -153,7 +158,12 @@ export default function Verify() {
               {hashFound ? (
                 <>
                   From IPFS:
-                  <iframe src={hashToUrl(hash)} width="100%" height="500px" />
+                  <iframe
+                    src={hashToUrl(hash)}
+                    width="100%"
+                    height="500px"
+                    title="ipfs preview"
+                  />
                 </>
               ) : (
                 <div className={styles.errorBox}>

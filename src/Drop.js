@@ -95,7 +95,7 @@ export default function Drop() {
             <button
               className={styles.copyButton}
               onClick={() => {
-                copy(`https://hashdrop.me/verify/?hash=${hash}`);
+                copy(`https://hashdrop.me/#/verify/?hash=${hash}`);
                 alert("Copied hash link");
               }}
             >
@@ -105,7 +105,7 @@ export default function Drop() {
             <a
               href={`https://twitter.com/intent/tweet?${queryString.stringify({
                 text: "I made a prediction",
-                url: `https://hashdrop.me/verify/?hash=${hash}`,
+                url: `https://hashdrop.me/#/verify/?hash=${hash}`,
               })}`}
             >
               Tweet

@@ -31,15 +31,3 @@ export default function App() {
     </>
   );
 }
-
-function Home() {
-  return <h2>Home</h2>;
-}
-
-// function Drop() {
-//   return <h2>Drop</h2>;
-// }
-
-// function Verify() {
-//   return <h2>Verify</h2>;
-// }
