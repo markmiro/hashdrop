@@ -1,0 +1,62 @@
+.textInput {
+  font-size: inherit;
+  width: 100%;
+  padding: 2ch;
+}
+
+.actualFileArea {
+  padding: 2ch;
+  background-color: #00000011;
+}
+
+.fileDrop {
+  position: relative;
+  font-family: monospace;
+  word-break: break-all;
+  padding: 2ch;
+  background-color: #00000011;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  height: 30vh;
+  border: 2px inset;
+}
+
+.fileDropInput {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  opacity: 0;
+}
+
+.text {
+  max-height: 20vh;
+  overflow: scroll;
+  font-family: monospace;
+  word-break: break-all;
+  padding: 2ch;
+  background-color: #00000011;
+  margin: 0;
+}
+
+.warningBox {
+  padding: 2ch;
+  text-align: center;
+  background-color: rgb(255, 244, 197);
+}
+
+.errorBox {
+  padding: 2ch;
+  text-align: center;
+  background-color: rgb(255, 197, 197);
+}
+
+.successBox {
+  padding: 2ch;
+  text-align: center;
+  background-color: rgb(181, 255, 181);
+}

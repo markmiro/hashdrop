@@ -68,3 +68,16 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+---
+
+# hashdrop-specific
+
+Settings for making it work on IPFS:
+https://blog.fleek.co/posts/fleek-create-react-app
+
+EX: `"homepage": "."` in `package.json` will make it so the page will also work on IPFS gateways whose URLs are in the format /ipfs/HASH.
+
+### Hash router
+
+https://docs.fleek.co/hosting/troubleshooting/#site-is-not-loading-properly-via-ipfs-gateway-and-shows-invalid-ipfs-path-error
