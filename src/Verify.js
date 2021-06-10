@@ -6,13 +6,6 @@ import { config } from "./config";
 import styles from "./Verify.module.css";
 const Hash = require("ipfs-only-hash");
 
-function getQueryStringHash() {
-  if (!window.location.search) return "";
-  const { hash } = queryString.parse(window.location.search);
-  if (typeof hash !== "string") return "";
-  return hash;
-}
-
 function hashToUrl(hash) {
   return `https://${hash}.ipfs.dweb.link`;
 }
