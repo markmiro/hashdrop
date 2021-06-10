@@ -20,6 +20,9 @@ export default function App() {
           <Route path="/drop">
             <Drop />
           </Route>
+          <Route path="/verify/:cid">
+            <Verify />
+          </Route>
           <Route path="/verify">
             <Verify />
           </Route>

@@ -1,6 +1,7 @@
 import queryString from "query-string";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Helmet from "react-helmet";
+import { useHistory, useParams } from "react-router";
 import { config } from "./config";
 import styles from "./Verify.module.css";
 const Hash = require("ipfs-only-hash");
@@ -17,8 +18,9 @@ function hashToUrl(hash) {
 }
 
 export default function Verify() {
+  const his = useHistory();
+  const { cid } = useParams();
   const fileRef = useRef(null);
-  const [hasLocationSearch, setHasLocationSearch] = useState(false);
   const [text, setText] = useState("");
   const [wantedHash, setWantedHash] = useState("");
   const [hash, setHash] = useState("");
@@ -38,11 +40,15 @@ export default function Verify() {
   );
 
   useEffect(() => {
-    setWantedHash(getQueryStringHash());
-    if (window.location.search) setHasLocationSearch(true);
+    setWantedHash(cid);
   }, []);
 
   useEffect(() => {
+    if (wantedHash) {
+      his.replace(`/verify/${wantedHash}`);
+    } else {
+      his.replace(`/verify`);
+    }
     checkWantedHash(wantedHash);
   }, [wantedHash, checkWantedHash]);
 
@@ -102,7 +108,6 @@ export default function Verify() {
           autoCorrect="off"
           autoCapitalize="off"
           autoFocus
-          disabled={hasLocationSearch}
         />
       </label>
       {wantedHash && (
