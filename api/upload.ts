@@ -1,0 +1,89 @@
+import { VercelRequest, VercelResponse } from "@vercel/node";
+import axios from "axios";
+import { Blob } from "buffer";
+import FormData from "form-data";
+import formidable, { File } from "formidable";
+import fs from "fs";
+
+export default async (req: VercelRequest, res: VercelResponse) => {
+  if (req.method !== "POST") {
+    res.status(405).json({
+      error: { message: "Only 'POST' method is supported." },
+    });
+    return;
+  }
+
+  const file = await getFile(req);
+
+  try {
+    const cid = await pinFile(file);
+    res.status(200).json({ cid });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ cid: "" });
+  }
+};
+
+// ---------------------------------------------
+
+async function getFile(req: VercelRequest) {
+  const form = new formidable.IncomingForm({
+    multiples: false,
+    keepExtensions: true,
+  });
+
+  const file = await new Promise((resolve) => {
+    form.parse(req, async (err, fields, files) => {
+      // console.log(files.file.name);
+      resolve(files.file);
+    });
+  });
+
+  return file;
+}
+
+async function pinFile(file: File | Blob) {
+  // We gather a local file for this example, but any valid readStream source will work here.
+  let data = new FormData();
+  // https://github.com/form-data/form-data/issues/220
+  try {
+    // https://github.com/form-data/form-data/issues/359
+    data.append("file", fs.createReadStream(file.path));
+  } catch (err) {
+    console.log(err);
+  }
+
+  // You'll need to make sure that the metadata is in the form of a JSON object that's been convered to a string
+  // metadata is optional
+  const metadata = JSON.stringify({
+    name: "test-upload",
+    // keyvalues: {
+    //   exampleKey: "exampleValue"
+    // }
+  });
+  data.append("pinataMetadata", metadata);
+
+  // pinataOptions are optional
+  const pinataOptions = JSON.stringify({
+    cidVersion: 1,
+  });
+  data.append("pinataOptions", pinataOptions);
+
+  try {
+    const response = await axios.post(
+      "https://api.pinata.cloud/pinning/pinFileToIPFS",
+      data,
+      {
+        maxBodyLength: Infinity, //this is needed to prevent axios from erroring out with large files
+        headers: {
+          "Content-Type": `multipart/form-data; boundary=${data.getBoundary()}`,
+          pinata_api_key: process.env.PINATA_API_KEY,
+          pinata_secret_api_key: process.env.PINATA_API_SECRET,
+        },
+      }
+    );
+    return response.data.IpfsHash;
+  } catch (err) {
+    console.error(err);
+  }
+}
