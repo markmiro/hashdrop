@@ -12,7 +12,8 @@
     "formidable": "^1.2.2",
     "ipfs-only-hash": "4.0.0",
     "react": "17.0.2",
-    "react-dom": "17.0.2"
+    "react-dom": "17.0.2",
+    "react-router-dom": "5.2.0"
   },
   "devDependencies": {
     "@babel/runtime": "7.14.5",
@@ -20,6 +21,7 @@
     "@types/node": "^15.12.2",
     "@types/react": "^17.0.11",
     "@types/react-dom": "^17.0.7",
+    "@types/react-router-dom": "5.1.8",
     "@vercel/node": "^1.11.0",
     "react-scripts": "4.0.3",
     "typescript": "^4.3.2"
