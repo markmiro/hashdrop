@@ -1,11 +1,4 @@
-import {
-  HashRouter,
-  Switch,
-  Route,
-  Link,
-  Redirect,
-  NavLink,
-} from "react-router-dom";
+import { HashRouter, Switch, Route, Redirect, NavLink } from "react-router-dom";
 import { Compare } from "./Compare";
 import { Layout } from "./Layout";
 
