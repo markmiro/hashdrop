@@ -4,7 +4,6 @@ import { ipfsCid } from "./ipfsCid";
 import { pinFile, unpin } from "./pinata";
 import { Tab, Tabs } from "./Tabs";
 import { VStack } from "./VStack";
-import "./styles.css";
 import { CopyButton } from "./CopyButton";
 import { Layout } from "./Layout";
 
