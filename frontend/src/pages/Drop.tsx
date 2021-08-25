@@ -7,6 +7,8 @@ import aes from "crypto-js/aes";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";
 import { textToBlob } from "../util/textToBlob";
+import { DownloadButton } from "../components/DownloadButton";
+import { UploadToIpfsButton } from "../components/UploadToIpfsButton";
 
 const GrayBox: FC = ({ children }) => (
   <div className="db pa2 bg-black-05">{children}</div>
@@ -19,6 +21,9 @@ export function Drop() {
   const [localCid, setLocalCid] = useState("");
   const [generatedPassword, setGeneratedPassword] = useState("");
   const [encrypted, setEncrypted] = useState<string | null>(null);
+  const [encryptedFileOrBlob, setEncryptedFileOrBlob] = useState<
+    File | Blob | null
+  >(null);
   const [encryptedLocalCid, setEncryptedLocalCid] = useState("");
 
   useEffect(() => {
@@ -56,7 +61,9 @@ export function Drop() {
       const dataUrl = await fileOrBlobAsDataUrl(fileOrBlob);
       const encrypted = aes.encrypt(dataUrl, generatedPassword).toString();
       setEncrypted(encrypted);
-      const cid = await ipfsCid(textToBlob(encrypted));
+      const encryptedFileOrBlob = textToBlob(encrypted);
+      setEncryptedFileOrBlob(encryptedFileOrBlob);
+      const cid = await ipfsCid(encryptedFileOrBlob);
       setEncryptedLocalCid(cid);
     };
     doAsync();
@@ -77,13 +84,13 @@ export function Drop() {
       <div className="pt4" />
       <button onClick={signDropId}>Sign Drop Id</button>
       <div className="pt4" />
+      <h2 className="mv0">Encrypted</h2>
+      <div className="pt4" />
       <GrayBox>
         Signed Drop ID / Generated Password:
         <div style={{ wordBreak: "break-all" }}>
           {generatedPassword || "N/A"}
         </div>
-      </GrayBox>
-      <GrayBox>
         Encrypted:
         <div
           className="f7 h4 overflow-scroll ba"
@@ -91,11 +98,16 @@ export function Drop() {
         >
           {encrypted || "N/A"}
         </div>
-      </GrayBox>
-      <GrayBox>
-        Local CID (of encrypted):
+        <div>
+          <DownloadButton text={encrypted ?? ""} cid={encryptedLocalCid} />
+        </div>
+        Local CID:
         <Cid cid={encryptedLocalCid} />
       </GrayBox>
+      <div className="pt4" />
+      <UploadToIpfsButton fileOrBlob={encryptedFileOrBlob}>
+        Upload Encrypted File
+      </UploadToIpfsButton>
     </div>
   );
 }
