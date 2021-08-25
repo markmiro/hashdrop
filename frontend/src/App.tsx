@@ -48,7 +48,7 @@ export function App() {
               <Verify />
             </Route>
             <Route path="/">
-              <Redirect to="/encrypt" />
+              <Redirect to="/compare" />
             </Route>
           </Switch>
         </div>
