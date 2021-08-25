@@ -13,7 +13,7 @@ Make sure `vercel` is installed globally, and you've logged in via `vercel login
 Pull environment variables from vercel:
 
 ```
-vercel env pull .env.local
+vercel env pull
 ```
 
 [More on env variables in CRA](https://create-react-app.dev/docs/adding-custom-environment-variables/#what-other-env-files-can-be-used)
