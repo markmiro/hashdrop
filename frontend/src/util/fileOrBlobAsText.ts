@@ -1,4 +1,4 @@
-export function fileAsText(file: File | Blob) {
+export function fileOrBlobAsText(fileOrBlob: File | Blob) {
   return new Promise<string>((resolve, reject) => {
     try {
       const reader = new FileReader();
@@ -7,7 +7,7 @@ export function fileAsText(file: File | Blob) {
         // console.log(contents);
         resolve(contents);
       };
-      reader.readAsText(file);
+      reader.readAsText(fileOrBlob);
     } catch (err) {
       reject(err);
     }

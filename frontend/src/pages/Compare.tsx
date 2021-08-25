@@ -4,7 +4,7 @@ import { ipfsCid } from "../util/ipfsCid";
 import { pinFile, unpin } from "../util/pinata";
 import { Tab, Tabs } from "../generic/Tabs";
 import { VStack } from "../generic/VStack";
-import { fileAsText } from "../util/fileAsText";
+import { fileOrBlobAsText } from "../util/fileOrBlobAsText";
 import { textTypes } from "../util/textTypes";
 import { Cid } from "../generic/Cid";
 import { resetFileInput } from "../util/resetFileInput";
@@ -35,7 +35,7 @@ export function Compare() {
   const updateTextFile = useCallback(async (file: null | File | Blob) => {
     if (!file) return;
     if (textTypes.includes(file.type)) {
-      const text = await fileAsText(file);
+      const text = await fileOrBlobAsText(file);
       setText(text);
     } else {
       setText("");
