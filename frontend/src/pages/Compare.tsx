@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import detectEthereumProvider from "@metamask/detect-provider";
 import { ipfsCid } from "../util/ipfsCid";
 import { pinFile, unpin } from "../util/pinata";
 import { Tab, Tabs } from "../generic/Tabs";
@@ -15,9 +14,6 @@ type ExpectedTab = "STRING" | "PINATA";
 export function Compare() {
   const fileRef = useRef<HTMLInputElement>(null);
   const previewRef = useRef<HTMLIFrameElement>(null);
-  const [ethProvider, setEthProvider] = useState<any>(null);
-  const [ethConnecting, setEthConnecting] = useState<boolean>(false);
-  const [ethAccount, setEthAccount] = useState<string>("");
   const [contentTab, setContentTab] = useState<ContentTab>("TEXT");
   const [expectedTab, setExpectedTab] = useState<ExpectedTab>("STRING");
   const [text, setText] = useState("");
@@ -131,77 +127,8 @@ export function Compare() {
     }
   }, [contentTab, text, textFile, file]);
 
-  useEffect(() => {
-    let cancel = false;
-    detectEthereumProvider().then((provider) => {
-      if (cancel) return;
-      setEthProvider(provider);
-    });
-
-    return () => {
-      cancel = true;
-    };
-  }, []);
-
-  async function connectWallet() {
-    setEthConnecting(true);
-    // TODO: handle errors
-    const [account] = await ethProvider.request({
-      method: "eth_requestAccounts",
-    });
-    setEthAccount(account);
-    setEthConnecting(false);
-  }
-
-  async function disconnectWallet() {
-    setEthAccount("");
-    setEthConnecting(false);
-  }
-
   return (
     <div>
-      <div>
-        {ethProvider ? (
-          <div>
-            {ethProvider.networkVersion ? (
-              <span>
-                {/* Chain names at: https://chainid.network/chains.json */}
-                {/* More info at: https://docs.metamask.io/guide/ethereum-provider.html#chain-ids */}
-                {ethProvider.networkVersion === "1"
-                  ? "Mainnet"
-                  : "Test Network"}
-                :{" "}
-              </span>
-            ) : (
-              ""
-            )}
-            {ethAccount ? (
-              <span>
-                {ethAccount}{" "}
-                <button onClick={disconnectWallet}>Disconnect</button>
-              </span>
-            ) : (
-              <button onClick={connectWallet} disabled={ethConnecting}>
-                Connect Ethereum Wallet
-              </button>
-            )}
-          </div>
-        ) : (
-          <div className="bg-washed-red red pa2 tc">
-            <b>Error: MetaMask Not Detected</b>
-            <div className="f6 o-70">
-              Either the browser extension is not installed or it's not enabled
-              for this site.
-            </div>
-            <a
-              className="link blue underline"
-              href="https://metamask.io/download.html"
-            >
-              Install MetaMask ↗
-            </a>
-          </div>
-        )}
-      </div>
       <div className="pt4" />
       <h1 className="ma0">Compare CIDs</h1>
       <p className="mv0 f6 black-60">
