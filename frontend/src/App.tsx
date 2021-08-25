@@ -1,7 +1,21 @@
 import { HashRouter, Switch, Route, Redirect, NavLink } from "react-router-dom";
-import { Compare } from "./Compare";
-import { Encrypt } from "./Encrypt";
-import { Layout } from "./Layout";
+import { Drop } from "./pages/Drop";
+import { Compare } from "./pages/Compare";
+import { Encrypt } from "./pages/Encrypt";
+import { Verify } from "./pages/Verify";
+
+function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    // Global styles
+    <div className="code pv4 ph2 lh-copy">
+      {/* Container */}
+      <div className="ml-auto mr-auto" style={{ maxWidth: "72ch" }}>
+        {/* Layout */}
+        <div className="flex flex-column items-stretch">{children}</div>
+      </div>
+    </div>
+  );
+}
 
 export function App() {
   return (
@@ -55,12 +69,4 @@ export function App() {
       </HashRouter>
     </Layout>
   );
-}
-
-function Drop() {
-  return <h1>Drop</h1>;
-}
-
-function Verify() {
-  return <h1>Verify</h1>;
 }

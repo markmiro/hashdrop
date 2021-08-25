@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import detectEthereumProvider from "@metamask/detect-provider";
-import { ipfsCid } from "./ipfsCid";
-import { pinFile, unpin } from "./pinata";
-import { Tab, Tabs } from "./Tabs";
-import { VStack } from "./VStack";
-import { CopyButton } from "./CopyButton";
-import { Layout } from "./Layout";
+import { ipfsCid } from "../util/ipfsCid";
+import { pinFile, unpin } from "../util/pinata";
+import { Tab, Tabs } from "../generic/Tabs";
+import { VStack } from "../generic/VStack";
+import { CopyButton } from "../generic/CopyButton";
 
 // https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
 const textTypes = ["text/plain", "text/html", "text/csv", "text/markdown"];
@@ -204,7 +203,7 @@ export function Compare() {
   }
 
   return (
-    <Layout>
+    <div>
       <div>
         {ethProvider ? (
           <div>
@@ -452,6 +451,6 @@ export function Compare() {
       <div className="tc">
         <button onClick={reset}>↺ Reset</button>
       </div>
-    </Layout>
+    </div>
   );
 }
