@@ -25,7 +25,7 @@ export function FileTab({
 
   useEffect(() => {
     onFileChange(file);
-  }, [file]);
+  }, [onFileChange, file]);
 
   return (
     <>

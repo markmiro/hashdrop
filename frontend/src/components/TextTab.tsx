@@ -3,6 +3,7 @@ import { format } from "date-fns";
 import { fileOrBlobAsText } from "../util/fileOrBlobAsText";
 import { resetFileInput } from "../util/resetFileInput";
 import { textTypes } from "../util/textTypes";
+import { textToBlob } from "../util/textToBlob";
 
 function formatDate(date: Date) {
   return format(date, "yyyy-MM-dd-HH_mm_ss");
@@ -21,13 +22,12 @@ export function TextTab({
 
   const updateText = useCallback(async (text) => {
     setText(text);
-    const blob = new Blob([text], { type: "text/plain" });
+    const blob = textToBlob(text);
     setTextBlob(blob);
   }, []);
 
   const resetText = () => {
     setText("");
-    setTextBlob(null);
     if (fileRef?.current) resetFileInput(fileRef.current);
   };
 
@@ -43,8 +43,12 @@ export function TextTab({
   }, []);
 
   useEffect(() => {
+    if (!text) setTextBlob(null);
+  }, [text]);
+
+  useEffect(() => {
     onBlobChange(textBlob);
-  }, [textBlob]);
+  }, [onBlobChange, textBlob]);
 
   return (
     <>
