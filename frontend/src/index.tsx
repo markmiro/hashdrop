@@ -6,11 +6,14 @@ import "./index.css";
 
 import { App } from "./App";
 import { EthToolbar } from "./eth-react/EthToolbar";
+import { EthersProviderProvider } from "./eth-react/EthersProviderContext";
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
   <StrictMode>
-    <App />
+    <EthersProviderProvider>
+      <App />
+    </EthersProviderProvider>
     <EthToolbar />
   </StrictMode>,
   rootElement
