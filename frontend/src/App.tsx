@@ -1,5 +1,6 @@
 import { HashRouter, Switch, Route, Redirect, NavLink } from "react-router-dom";
 import { Compare } from "./Compare";
+import { Encrypt } from "./Encrypt";
 import { Layout } from "./Layout";
 
 export function App() {
@@ -13,6 +14,10 @@ export function App() {
               <b>HASH💧</b>
             </NavLink>
             <div>
+              <NavLink activeClassName="bg-black white" to="/encrypt">
+                Encrypt
+              </NavLink>
+              {" | "}
               <NavLink activeClassName="bg-black white" to="/compare">
                 Compare
               </NavLink>
@@ -30,6 +35,9 @@ export function App() {
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Switch>
+            <Route path="/encrypt">
+              <Encrypt />
+            </Route>
             <Route path="/compare">
               <Compare />
             </Route>
@@ -40,7 +48,7 @@ export function App() {
               <Verify />
             </Route>
             <Route path="/">
-              <Redirect to="/compare" />
+              <Redirect to="/encrypt" />
             </Route>
           </Switch>
         </div>
