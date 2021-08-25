@@ -4,54 +4,10 @@ import { ipfsCid } from "../util/ipfsCid";
 import { pinFile, unpin } from "../util/pinata";
 import { Tab, Tabs } from "../generic/Tabs";
 import { VStack } from "../generic/VStack";
-import { CopyButton } from "../generic/CopyButton";
-
-// https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
-const textTypes = ["text/plain", "text/html", "text/csv", "text/markdown"];
-
-function fileAsText(file: File | Blob) {
-  return new Promise<string>((resolve, reject) => {
-    try {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const contents = e.target?.result as string;
-        // console.log(contents);
-        resolve(contents);
-      };
-      reader.readAsText(file);
-    } catch (err) {
-      reject(err);
-    }
-  });
-}
-
-function resetFileInput(fileInputEl: HTMLInputElement) {
-  if (!fileInputEl) return;
-  fileInputEl.type = "text";
-  fileInputEl.type = "file";
-  fileInputEl.setAttribute("value", "");
-}
-
-function Cid({ cid }: { cid?: string }) {
-  if (!cid) return <div>N/A</div>;
-  return (
-    // https://cid.ipfs.io/#bafkreidripbo7vytlcwvtko2mdl54jfknp3nuowqbr6s5pllkmksoy2mc4
-    <div className="flex items-start">
-      <a
-        href={`https://cid.ipfs.io/#${cid}`}
-        className="db link black underline flex-grow-1"
-        rel="noreferrer"
-        target="_blank"
-        style={{
-          wordBreak: "break-all",
-        }}
-      >
-        {cid} ↗
-      </a>
-      <CopyButton className="ml2" toCopy={cid} />
-    </div>
-  );
-}
+import { fileAsText } from "../util/fileAsText";
+import { textTypes } from "../util/textTypes";
+import { Cid } from "../generic/Cid";
+import { resetFileInput } from "../util/resetFileInput";
 
 type ContentTab = "TEXT" | "FILE";
 type ExpectedTab = "STRING" | "PINATA";
