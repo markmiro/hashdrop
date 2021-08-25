@@ -1,13 +1,18 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { format } from "date-fns";
 import { fileOrBlobAsText } from "../util/fileOrBlobAsText";
 import { resetFileInput } from "../util/resetFileInput";
 import { textTypes } from "../util/textTypes";
 
+function formatDate(date: Date) {
+  return format(date, "yyyy-MM-dd-HH_mm_ss");
+}
+
 export function TextTab({
   onBlobChange,
-  localHash,
+  cid,
 }: {
-  localHash: string;
+  cid?: string;
   onBlobChange: (blob: Blob | null) => void;
 }) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -65,7 +70,7 @@ export function TextTab({
             !text && "o-40"
           }`}
           style={{ pointerEvents: text ? "all" : "none" }}
-          download={`${localHash}.txt`}
+          download={`${cid ?? "hashdrop-" + formatDate(new Date())}.txt`}
           href={"data:text/plain," + encodeURIComponent(text)}
         >
           ⇣ Download

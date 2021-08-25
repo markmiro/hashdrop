@@ -1,6 +1,7 @@
 import { v4 as uuid } from "uuid";
 import aes from "crypto-js/aes";
 import { useEffect, useState } from "react";
+import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";
 
 const id = uuid();
 
@@ -8,15 +9,7 @@ const id = uuid();
 const toDataURL = (url: string) =>
   fetch(url)
     .then((response) => response.blob())
-    .then(
-      (blob) =>
-        new Promise<string>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.onerror = reject;
-          reader.readAsDataURL(blob);
-        })
-    );
+    .then(fileOrBlobAsDataUrl);
 
 export function Encrypt() {
   const [url, setUrl] = useState("");
