@@ -1,0 +1,21 @@
+.pulse {
+  pointer-events: none;
+  user-select: none;
+  display: inline-block;
+  animation-name: pulse;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-out;
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 0.2;
+  }
+}

@@ -1,4 +1,7 @@
 node_modules
+.vscode
+.DS_Store
+.env
 
 #Hardhat files
 cache

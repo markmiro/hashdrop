@@ -1,227 +1,11 @@
 {
   "NOTE": "Auto-generated. Don't edit",
   "contract": {
-    "Token": {
-      "name": "Token",
-      "chainId": {
-        "1": {
-          "address": "0x2ae3411Ab4e98b5fF1CCBBa4244764C2a8b00BF8"
-        },
-        "3": {
-          "address": "0x28f89Eb608A489F006F2dD285fcc4a8D3A6E8550"
-        },
-        "1337": {
-          "address": "0x1429859428C0aBc9C2C47C8Ee9FBaf82cFA0F20f"
-        }
-      },
-      "abi": [
-        {
-          "inputs": [],
-          "stateMutability": "nonpayable",
-          "type": "constructor"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "account",
-              "type": "address"
-            }
-          ],
-          "name": "balanceOf",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "name",
-          "outputs": [
-            {
-              "internalType": "string",
-              "name": "",
-              "type": "string"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "owner",
-          "outputs": [
-            {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "symbol",
-          "outputs": [
-            {
-              "internalType": "string",
-              "name": "",
-              "type": "string"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "totalSupply",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "address",
-              "name": "to",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "amount",
-              "type": "uint256"
-            }
-          ],
-          "name": "transfer",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        }
-      ],
-      "_debug": {
-        "lastDeploy": {
-          "ts": 1629841109343,
-          "str": "Tue, 24 Aug 2021 21:38:29 GMT",
-          "networkName": "unknown"
-        },
-        "sourceName": "contracts/Token.sol"
-      }
-    },
-    "Hello": {
-      "name": "Hello",
-      "chainId": {
-        "1": {
-          "address": "0x80a522d638502e77efae01f0ce68b2b7269b067f"
-        },
-        "3": {
-          "address": "0xb9e9780F9586A57bBc4f0eB6F66b4A21259B5A60"
-        },
-        "1337": {
-          "address": "0xB0D4afd8879eD9F52b28595d31B441D079B2Ca07"
-        }
-      },
-      "abi": [
-        {
-          "inputs": [],
-          "name": "sayIt",
-          "outputs": [
-            {
-              "internalType": "string",
-              "name": "",
-              "type": "string"
-            }
-          ],
-          "stateMutability": "pure",
-          "type": "function"
-        }
-      ],
-      "_debug": {
-        "lastDeploy": {
-          "ts": 1629841109387,
-          "str": "Tue, 24 Aug 2021 21:38:29 GMT",
-          "networkName": "unknown"
-        },
-        "sourceName": "contracts/Hello.sol"
-      }
-    },
-    "Greeter": {
-      "name": "Greeter",
-      "chainId": {
-        "3": {
-          "address": "0x1f6d5072f88e9cFa801254b465A543f055768341"
-        },
-        "1337": {
-          "address": "0xcbEAF3BDe82155F56486Fb5a1072cb8baAf547cc"
-        }
-      },
-      "abi": [
-        {
-          "inputs": [
-            {
-              "internalType": "string",
-              "name": "_greeting",
-              "type": "string"
-            }
-          ],
-          "stateMutability": "nonpayable",
-          "type": "constructor"
-        },
-        {
-          "inputs": [],
-          "name": "greeting",
-          "outputs": [
-            {
-              "internalType": "string",
-              "name": "",
-              "type": "string"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [
-            {
-              "internalType": "string",
-              "name": "_greeting",
-              "type": "string"
-            }
-          ],
-          "name": "setGreeting",
-          "outputs": [],
-          "stateMutability": "nonpayable",
-          "type": "function"
-        }
-      ],
-      "_debug": {
-        "lastDeploy": {
-          "ts": 1629841109302,
-          "str": "Tue, 24 Aug 2021 21:38:29 GMT",
-          "networkName": "unknown"
-        },
-        "sourceName": "contracts/Greeter.sol"
-      }
-    },
     "HashDrop": {
       "name": "HashDrop",
       "chainId": {
-        "3": {
-          "address": "0x8e965bA9d36032708624E8BDF9E5aC99706A1772"
-        },
         "1337": {
-          "address": "0x162A433068F51e18b7d13932F27e66a3f99E6890"
+          "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
         }
       },
       "abi": [
@@ -231,7 +15,12 @@
               "components": [
                 {
                   "internalType": "string",
-                  "name": "hash",
+                  "name": "id",
+                  "type": "string"
+                },
+                {
+                  "internalType": "string",
+                  "name": "cid",
                   "type": "string"
                 }
               ],
@@ -262,7 +51,12 @@
           "outputs": [
             {
               "internalType": "string",
-              "name": "hash",
+              "name": "id",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "cid",
               "type": "string"
             }
           ],
@@ -291,16 +85,21 @@
         {
           "inputs": [
             {
-              "internalType": "uint256",
+              "internalType": "string",
               "name": "",
-              "type": "uint256"
+              "type": "string"
             }
           ],
           "name": "idToDrop",
           "outputs": [
             {
               "internalType": "string",
-              "name": "hash",
+              "name": "id",
+              "type": "string"
+            },
+            {
+              "internalType": "string",
+              "name": "cid",
               "type": "string"
             }
           ],
@@ -323,8 +122,8 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1629841109422,
-          "str": "Tue, 24 Aug 2021 21:38:29 GMT",
+          "ts": 1629930021620,
+          "str": "Wed, 25 Aug 2021 22:20:21 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/HashDrop.sol"

@@ -9,6 +9,7 @@ import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";
 import { textToBlob } from "../util/textToBlob";
 import { DownloadButton } from "../components/DownloadButton";
 import { UploadToIpfsButton } from "../components/UploadToIpfsButton";
+import { EthHashDropSubmitButton } from "../components/EthHashDropSubmitButton";
 
 const GrayBox: FC = ({ children }) => (
   <div className="db pa2 bg-black-05">{children}</div>
@@ -19,6 +20,8 @@ export function Drop() {
   const [fileOrBlob, setFileOrBlob] = useState<File | Blob | null>(null);
   const [dropId, setDropId] = useState("");
   const [localCid, setLocalCid] = useState("");
+
+  // Encrypted
   const [generatedPassword, setGeneratedPassword] = useState("");
   const [encrypted, setEncrypted] = useState<string | null>(null);
   const [encryptedFileOrBlob, setEncryptedFileOrBlob] = useState<
@@ -108,6 +111,15 @@ export function Drop() {
       <UploadToIpfsButton fileOrBlob={encryptedFileOrBlob}>
         Upload Encrypted File
       </UploadToIpfsButton>
+      <div className="pt4" />
+      <h2 className="mv0">Ethereum</h2>
+      <div className="pt4" />
+      <b>HashDrop.sol</b>
+      <EthHashDropSubmitButton
+        id={dropId}
+        cid={encryptedLocalCid}
+        onSubmitComplete={() => alert("done!")}
+      />
     </div>
   );
 }
