@@ -1,6 +1,4 @@
 import { FC, useCallback, useEffect, useRef, useState } from "react";
-import { Pulse } from "../generic/Pulse";
-import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";
 import { resetFileInput } from "../util/resetFileInput";
 
 function FilePreview({
