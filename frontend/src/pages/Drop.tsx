@@ -6,12 +6,12 @@ import { DataTabs } from "../components/DataTabs";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
 import { Loader } from "../generic/Loader";
-import { Disabled } from "../generic/Disabled";
 import { HashDrop as T } from "../typechain";
 import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";
 import { ipfsCid } from "../util/ipfsCid";
 import { pinFile } from "../util/pinata";
 import { textToBlob } from "../util/textToBlob";
+import { Cover } from "../generic/Cover";
 
 function useAdd() {
   const provider = useEthersProvider();
@@ -114,10 +114,11 @@ function useHashDrop() {
   const add = useCallback(
     async (fileOrBlob: File | Blob | null) => {
       try {
-        setStatus("INITIAL");
+        setIsProcessing(true);
+        await updateStatus("PROCESSING");
+
         if (!fileOrBlob) throw new Error("Please pick a file.");
         const dropId = uuid();
-        await updateStatus("PROCESSING");
         const cid = await ipfsCid(fileOrBlob);
 
         // Save / upload
@@ -127,9 +128,11 @@ function useHashDrop() {
         const remoteCid = await pinFile(fileOrBlob);
         if (cid !== remoteCid) throw new Error("Internal error.");
         await updateStatus("SUCCESS");
+        setIsProcessing(false);
       } catch (err) {
         setStatus("ERROR");
         setError(err.message);
+        setIsProcessing(false);
         throw new Error(err);
       }
     },
@@ -139,7 +142,8 @@ function useHashDrop() {
   const addPrivate = useCallback(
     async (fileOrBlob: File | Blob | null) => {
       try {
-        setStatus("INITIAL");
+        setStatus("PROCESSING");
+        setIsProcessing(true);
         if (!fileOrBlob) throw new Error("Please pick a file.");
 
         // Create password
@@ -158,9 +162,11 @@ function useHashDrop() {
         const remotePrivateCid = await pinFile(privateFileOrBlob);
         if (privateCid !== remotePrivateCid) throw new Error("Internal error.");
         setStatus("SUCCESS");
+        setIsProcessing(false);
       } catch (err) {
         setStatus("ERROR");
         setError(err.message);
+        setIsProcessing(false);
         throw new Error(err);
       }
     },
@@ -183,33 +189,34 @@ export function Drop() {
       <div className="pt4" />
       <h1 className="mv0">Drop</h1>
       <div className="pt4" />
-      <Disabled disabled={hashdrop.isProcessing}>
-        <DataTabs onFileOrBlobChange={setFileOrBlob} />
-        <div className="pt4" />
-        <button
-          className="pa2 w-100"
-          disabled={!fileOrBlob}
-          onClick={() => hashdrop.add(fileOrBlob)}
-        >
-          Add
-        </button>
-        <div className="pt2" />
-        <button
-          className="pa2 w-100"
-          disabled={!fileOrBlob}
-          onClick={() => hashdrop.addPrivate(fileOrBlob)}
-        >
-          Add Private
-        </button>
-      </Disabled>
+      <DataTabs onFileOrBlobChange={setFileOrBlob} />
+      <div className="pt4" />
+      <button
+        className="pa2 w-100"
+        disabled={!fileOrBlob}
+        onClick={() => hashdrop.add(fileOrBlob)}
+      >
+        Add
+      </button>
       <div className="pt2" />
-      <div className="tc">
-        <StatusText
-          status={hashdrop.status}
-          error={hashdrop.error}
-          onReset={hashdrop.resetStatus}
-        />
-      </div>
+      <button
+        className="pa2 w-100"
+        disabled={!fileOrBlob}
+        onClick={() => hashdrop.addPrivate(fileOrBlob)}
+      >
+        Add Private
+      </button>
+      {hashdrop.status !== "INITIAL" && (
+        <Cover>
+          <div className="shadow-4 ba measure w-100 tc bg-white pa2">
+            <StatusText
+              status={hashdrop.status}
+              error={hashdrop.error}
+              onReset={hashdrop.resetStatus}
+            />
+          </div>
+        </Cover>
+      )}
     </div>
   );
 }
