@@ -25,7 +25,6 @@ export function UploadToIpfsButton({
       const cid = await pinFile(fileOrBlob);
       onUpload && onUpload(cid);
     } catch (err) {
-      debugger;
       alert("Error uploading file");
     }
     setIsLoading(false);

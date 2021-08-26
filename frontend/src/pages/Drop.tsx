@@ -23,7 +23,6 @@ function useAdd() {
       setSuccess(false);
       setError("");
       setLoading(true);
-      debugger;
       if (!hashdrop.contract) throw new Error("Contract isn't set yet");
       try {
         const signer = provider.getSigner();

@@ -9,8 +9,6 @@ export async function pinFile(file: File | Blob) {
   let data = new FormData();
   data.append("file", file);
 
-  debugger;
-
   const response = await axios.post(url, data, {
     maxBodyLength: Infinity, // this is needed to prevent axios from erroring out with large files
     headers: {

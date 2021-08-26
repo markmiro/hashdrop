@@ -91,7 +91,6 @@ export function Compare() {
       setExpectedHash(remoteHash);
       await unpin(remoteHash);
     } catch (err) {
-      debugger;
       setExpectedHash("");
       alert("Error uploading file");
     }
