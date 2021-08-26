@@ -6,7 +6,7 @@ import { useContract } from "../eth-react/useContract";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { ErrorMessage } from "../generic/ErrorMessage";
 import { Loader } from "../generic/Loader";
-import { Pulse } from "../generic/Pulse";
+import { Disabled } from "../generic/Disabled";
 import { HashDrop as T } from "../typechain";
 
 export function EthHashDropSubmitButton({
@@ -67,7 +67,7 @@ export function EthHashDropSubmitButton({
     <>
       <AddressLink address={hashdrop.contract?.address} />
       <div className="w-100">
-        <Pulse className="w-100" pulsing={isSubmitting}>
+        <Disabled className="w-100" disabled={isSubmitting}>
           <form onSubmit={handleSubmit}>
             <button type="submit">Submit</button>
             <div className="flex flex-column" style={{ gap: ".5em" }}>
@@ -80,7 +80,7 @@ export function EthHashDropSubmitButton({
               </div>
             </div>
           </form>
-        </Pulse>
+        </Disabled>
       </div>
     </>
   );

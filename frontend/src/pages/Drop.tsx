@@ -1,9 +1,12 @@
 import aes from "crypto-js/aes";
-import { useCallback, useState } from "react";
+import delay from "delay";
+import { FC, useCallback, useState } from "react";
 import { v4 as uuid } from "uuid";
 import { DataTabs } from "../components/DataTabs";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
+import { Loader } from "../generic/Loader";
+import { Disabled } from "../generic/Disabled";
 import { HashDrop as T } from "../typechain";
 import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";
 import { ipfsCid } from "../util/ipfsCid";
@@ -14,30 +17,26 @@ function useAdd() {
   const provider = useEthersProvider();
   const hashdrop = useContract<T>("HashDrop");
 
-  const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const add = useCallback(
     async ({ id, cid }: { id: string; cid: string }) => {
       setSuccess(false);
-      setError("");
       setLoading(true);
       if (!hashdrop.contract) throw new Error("Contract isn't set yet");
-      try {
-        const signer = provider.getSigner();
-        const tx = await hashdrop.contract.connect(signer).add({ id, cid });
-        await tx.wait();
-        setSuccess(true);
-      } catch (err) {
-        setError(err.message);
-      }
+
+      const signer = provider.getSigner();
+      const tx = await hashdrop.contract.connect(signer).add({ id, cid });
+      await tx.wait();
+      setSuccess(true);
+
       setLoading(false);
     },
     [provider, hashdrop]
   );
 
-  return { add, error, loading, success };
+  return { add, loading, success };
 }
 
 async function encryptFileOrBlob(fileOrBlob: File | Blob, password: string) {
@@ -47,40 +46,123 @@ async function encryptFileOrBlob(fileOrBlob: File | Blob, password: string) {
   return pFileOrBlob;
 }
 
+type DropStatus =
+  | "INITIAL"
+  | "PROCESSING"
+  | "ENCRYPTING"
+  | "SENDING_IPFS"
+  | "SENDING_ETH"
+  | "SUCCESS"
+  | "ERROR";
+
+const StatusText: FC<{
+  status: DropStatus;
+  error: string;
+  onReset: () => void;
+}> = ({ status, error, onReset, children }) => {
+  switch (status) {
+    case "INITIAL":
+      return <>{children}</>;
+    case "PROCESSING":
+      return <Loader>Processing</Loader>;
+    case "ENCRYPTING":
+      return <Loader>Encrypting</Loader>;
+    case "SENDING_IPFS":
+      return <Loader>Sending to IPFS</Loader>;
+    case "SENDING_ETH":
+      return <Loader>Saving to Ethereum blockchain</Loader>;
+    case "SUCCESS":
+      return (
+        <div className="pa4 tc bg-light-green">
+          <div>😎</div>
+          Success
+          <button className="w-100 mt2 pa2" onClick={onReset}>
+            OK
+          </button>
+        </div>
+      );
+    case "ERROR":
+      return (
+        <div className="pa4 tc bg-washed-red red">
+          <div>😵</div>
+          Error
+          {error && <div className="f6">{error}</div>}
+          <button className="w-100 mt2 pa2" onClick={onReset}>
+            OK
+          </button>
+        </div>
+      );
+    default:
+      return <>{children}</>;
+  }
+};
+
 function useHashDrop() {
   const provider = useEthersProvider();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [status, setStatus] = useState<DropStatus>("INITIAL");
+  const [error, setError] = useState("");
   const ethAdd = useAdd();
+
+  const updateStatus = async (status: DropStatus) => {
+    setStatus(status);
+    await delay(1000);
+  };
+
+  const resetStatus = () => setStatus("INITIAL");
 
   const add = useCallback(
     async (fileOrBlob: File | Blob | null) => {
-      if (!fileOrBlob) throw new Error("Please pick a file.");
-      const dropId = uuid();
-      const cid = await ipfsCid(fileOrBlob);
+      try {
+        setStatus("INITIAL");
+        if (!fileOrBlob) throw new Error("Please pick a file.");
+        const dropId = uuid();
+        await updateStatus("PROCESSING");
+        const cid = await ipfsCid(fileOrBlob);
 
-      // Save / upload
-      await ethAdd.add({ cid, id: dropId });
-      const remoteCid = await pinFile(fileOrBlob);
-      if (cid !== remoteCid) throw new Error("Internal error.");
+        // Save / upload
+        await updateStatus("SENDING_ETH");
+        await ethAdd.add({ cid, id: dropId });
+        await updateStatus("SENDING_IPFS");
+        const remoteCid = await pinFile(fileOrBlob);
+        if (cid !== remoteCid) throw new Error("Internal error.");
+        await updateStatus("SUCCESS");
+      } catch (err) {
+        setStatus("ERROR");
+        setError(err.message);
+        throw new Error(err);
+      }
     },
     [ethAdd]
   );
 
   const addPrivate = useCallback(
     async (fileOrBlob: File | Blob | null) => {
-      if (!fileOrBlob) throw new Error("Please pick a file.");
+      try {
+        setStatus("INITIAL");
+        if (!fileOrBlob) throw new Error("Please pick a file.");
 
-      // Create password
-      const dropId = uuid();
-      const ps = await provider.getSigner().signMessage(dropId);
+        // Create password
+        await updateStatus("ENCRYPTING");
+        const dropId = uuid();
+        const ps = await provider.getSigner().signMessage(dropId);
 
-      // Encrypt
-      const privateFileOrBlob = await encryptFileOrBlob(fileOrBlob, ps);
-      const privateCid = await ipfsCid(privateFileOrBlob);
+        // Encrypt
+        const privateFileOrBlob = await encryptFileOrBlob(fileOrBlob, ps);
+        const privateCid = await ipfsCid(privateFileOrBlob);
 
-      // Save / upload
-      await ethAdd.add({ cid: privateCid, id: dropId });
-      const remotePrivateCid = await pinFile(privateFileOrBlob);
-      if (privateCid !== remotePrivateCid) throw new Error("Internal error.");
+        // Save / upload
+        await updateStatus("SENDING_ETH");
+        await ethAdd.add({ cid: privateCid, id: dropId });
+        await updateStatus("SENDING_IPFS");
+        const remotePrivateCid = await pinFile(privateFileOrBlob);
+        if (privateCid !== remotePrivateCid) throw new Error("Internal error.");
+        setStatus("SUCCESS");
+      } catch (err) {
+        setStatus("ERROR");
+        setError(err.message);
+        throw new Error(err);
+      }
     },
     [provider, ethAdd]
   );
@@ -89,7 +171,7 @@ function useHashDrop() {
     throw new Error("TODO: implement");
   }, []);
 
-  return { add, addPrivate, verify };
+  return { add, addPrivate, verify, status, isProcessing, error, resetStatus };
 }
 
 export function Drop() {
@@ -101,25 +183,33 @@ export function Drop() {
       <div className="pt4" />
       <h1 className="mv0">Drop</h1>
       <div className="pt4" />
-      <DataTabs onFileOrBlobChange={setFileOrBlob} />
-      <div className="pt4" />
-      <button
-        className="pa2 w-100"
-        disabled={!fileOrBlob}
-        onClick={() => hashdrop.add(fileOrBlob).then(() => alert("Success!"))}
-      >
-        Add
-      </button>
+      <Disabled disabled={hashdrop.isProcessing}>
+        <DataTabs onFileOrBlobChange={setFileOrBlob} />
+        <div className="pt4" />
+        <button
+          className="pa2 w-100"
+          disabled={!fileOrBlob}
+          onClick={() => hashdrop.add(fileOrBlob)}
+        >
+          Add
+        </button>
+        <div className="pt2" />
+        <button
+          className="pa2 w-100"
+          disabled={!fileOrBlob}
+          onClick={() => hashdrop.addPrivate(fileOrBlob)}
+        >
+          Add Private
+        </button>
+      </Disabled>
       <div className="pt2" />
-      <button
-        className="pa2 w-100"
-        disabled={!fileOrBlob}
-        onClick={() =>
-          hashdrop.addPrivate(fileOrBlob).then(() => alert("Success!"))
-        }
-      >
-        Add Private
-      </button>
+      <div className="tc">
+        <StatusText
+          status={hashdrop.status}
+          error={hashdrop.error}
+          onReset={hashdrop.resetStatus}
+        />
+      </div>
     </div>
   );
 }
