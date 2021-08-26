@@ -21,7 +21,7 @@ export function EthHashDropSubmitButton({
   const provider = useEthersProvider();
   const [submitError, setSubmitError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState(false);
-  const [isAdding, setIsAdding] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const hashdrop = useContract<T>("HashDrop");
   const [dropCount, setDropCount] = useState(0);
   const [loadingDropCount, setLoadingDropCount] = useState(false);
@@ -45,7 +45,7 @@ export function EthHashDropSubmitButton({
     e.preventDefault();
     setSubmitSuccess(false);
     setSubmitError("");
-    setIsAdding(true);
+    setIsSubmitting(true);
     if (!hashdrop.contract) throw new Error("Contract isn't set yet");
     try {
       const signer = provider.getSigner();
@@ -56,7 +56,7 @@ export function EthHashDropSubmitButton({
     } catch (err) {
       setSubmitError(err.message);
     }
-    setIsAdding(false);
+    setIsSubmitting(false);
   };
 
   if (hashdrop.error) return <ErrorMessage>{hashdrop.error}</ErrorMessage>;
@@ -67,7 +67,7 @@ export function EthHashDropSubmitButton({
     <>
       <AddressLink address={hashdrop.contract?.address} />
       <div className="w-100">
-        <Pulse className="w-100" pulsing={isAdding}>
+        <Pulse className="w-100" pulsing={isSubmitting}>
           <form onSubmit={handleSubmit}>
             <button type="submit">Submit</button>
             <div className="flex flex-column" style={{ gap: ".5em" }}>
