@@ -7,7 +7,7 @@ export function formatDate(date: Date) {
 export function DownloadButton({ cid, text }: { cid?: string; text: string }) {
   return (
     <a
-      className={`dib ba br2 ph2 no-underline bg-washed-yellow black flex-shrink-0 ${
+      className={`dib ba br2 ph2 no-underline black flex-shrink-0 ${
         !text && "o-40"
       }`}
       style={{ pointerEvents: text ? "all" : "none" }}

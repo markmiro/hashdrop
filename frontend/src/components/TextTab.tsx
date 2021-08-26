@@ -51,7 +51,7 @@ export function TextTab({
       <textarea
         autoFocus
         placeholder="Type here..."
-        className="ba br2 b--black bg-washed-yellow pa2 db w-100 h4"
+        className="ba br2 b--black pa2 db w-100 h4"
         value={text}
         onChange={(e) => updateText(e.target.value)}
       />
