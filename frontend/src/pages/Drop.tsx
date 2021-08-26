@@ -1,125 +1,126 @@
-import { FC, useCallback, useEffect, useState } from "react";
-import { v4 as uuid } from "uuid";
-import { Cid } from "../generic/Cid";
-import { ipfsCid } from "../util/ipfsCid";
-import { DataTabs } from "../components/DataTabs";
 import aes from "crypto-js/aes";
+import { useCallback, useState } from "react";
+import { v4 as uuid } from "uuid";
+import { DataTabs } from "../components/DataTabs";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
+import { useContract } from "../eth-react/useContract";
+import { HashDrop as T } from "../typechain";
 import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";
+import { ipfsCid } from "../util/ipfsCid";
+import { pinFile } from "../util/pinata";
 import { textToBlob } from "../util/textToBlob";
-import { DownloadButton } from "../components/DownloadButton";
-import { UploadToIpfsButton } from "../components/UploadToIpfsButton";
-import { EthHashDropSubmitButton } from "../components/EthHashDropSubmitButton";
 
-const GrayBox: FC = ({ children }) => (
-  <div className="db pa2 bg-black-05">{children}</div>
-);
+function useAdd() {
+  const provider = useEthersProvider();
+  const hashdrop = useContract<T>("HashDrop");
+
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const add = useCallback(
+    async ({ id, cid }: { id: string; cid: string }) => {
+      setSuccess(false);
+      setError("");
+      setLoading(true);
+      debugger;
+      if (!hashdrop.contract) throw new Error("Contract isn't set yet");
+      try {
+        const signer = provider.getSigner();
+        const tx = await hashdrop.contract.connect(signer).add({ id, cid });
+        await tx.wait();
+        setSuccess(true);
+      } catch (err) {
+        setError(err.message);
+      }
+      setLoading(false);
+    },
+    [provider, hashdrop]
+  );
+
+  return { add, error, loading, success };
+}
+
+async function encryptFileOrBlob(fileOrBlob: File | Blob, password: string) {
+  const dataUrl = await fileOrBlobAsDataUrl(fileOrBlob);
+  const encrypted = aes.encrypt(dataUrl, password).toString();
+  const pFileOrBlob = textToBlob(encrypted);
+  return pFileOrBlob;
+}
+
+function useHashDrop() {
+  const provider = useEthersProvider();
+  const ethAdd = useAdd();
+
+  const add = useCallback(
+    async (fileOrBlob: File | Blob | null) => {
+      if (!fileOrBlob) throw new Error("Please pick a file.");
+      const dropId = uuid();
+      const cid = await ipfsCid(fileOrBlob);
+
+      // Save / upload
+      await ethAdd.add({ cid, id: dropId });
+      const remoteCid = await pinFile(fileOrBlob);
+      if (cid !== remoteCid) throw new Error("Internal error.");
+    },
+    [ethAdd]
+  );
+
+  const addPrivate = useCallback(
+    async (fileOrBlob: File | Blob | null) => {
+      if (!fileOrBlob) throw new Error("Please pick a file.");
+
+      // Create password
+      const dropId = uuid();
+      const ps = await provider.getSigner().signMessage(dropId);
+
+      // Encrypt
+      const privateFileOrBlob = await encryptFileOrBlob(fileOrBlob, ps);
+      const privateCid = await ipfsCid(privateFileOrBlob);
+
+      // Save / upload
+      await ethAdd.add({ cid: privateCid, id: dropId });
+      const remotePrivateCid = await pinFile(privateFileOrBlob);
+      if (privateCid !== remotePrivateCid) throw new Error("Internal error.");
+    },
+    [provider, ethAdd]
+  );
+
+  const verify = useCallback(async (fileOrBlob: File | Blob | null, cid) => {
+    throw new Error("TODO: implement");
+  }, []);
+
+  return { add, addPrivate, verify };
+}
 
 export function Drop() {
-  const provider = useEthersProvider();
   const [fileOrBlob, setFileOrBlob] = useState<File | Blob | null>(null);
-  const [dropId, setDropId] = useState("");
-  const [localCid, setLocalCid] = useState("");
-
-  // Encrypted
-  const [generatedPassword, setGeneratedPassword] = useState("");
-  const [encrypted, setEncrypted] = useState<string | null>(null);
-  const [encryptedFileOrBlob, setEncryptedFileOrBlob] = useState<
-    File | Blob | null
-  >(null);
-  const [encryptedLocalCid, setEncryptedLocalCid] = useState("");
-
-  useEffect(() => {
-    setDropId(uuid());
-  }, []);
-
-  const updateLocalCid = useCallback(async (fileOrBlob: File | Blob | null) => {
-    setFileOrBlob(fileOrBlob);
-    if (!fileOrBlob) {
-      setLocalCid("");
-      return;
-    }
-    try {
-      const cid = await ipfsCid(fileOrBlob);
-      setLocalCid(cid);
-    } catch (err) {
-      alert(err.message);
-    }
-  }, []);
-
-  async function signDropId() {
-    console.log(dropId);
-    const signed = await provider.getSigner().signMessage(dropId);
-    console.log(signed);
-    // alert(signed);
-    setGeneratedPassword(signed);
-  }
-
-  useEffect(() => {
-    if (!fileOrBlob || !generatedPassword) {
-      setEncrypted(null);
-      return;
-    }
-    const doAsync = async () => {
-      const dataUrl = await fileOrBlobAsDataUrl(fileOrBlob);
-      const encrypted = aes.encrypt(dataUrl, generatedPassword).toString();
-      setEncrypted(encrypted);
-      const encryptedFileOrBlob = textToBlob(encrypted);
-      setEncryptedFileOrBlob(encryptedFileOrBlob);
-      const cid = await ipfsCid(encryptedFileOrBlob);
-      setEncryptedLocalCid(cid);
-    };
-    doAsync();
-  }, [fileOrBlob, generatedPassword]);
+  const hashdrop = useHashDrop();
 
   return (
     <div>
       <div className="pt4" />
       <h1 className="mv0">Drop</h1>
       <div className="pt4" />
-      <DataTabs onFileOrBlobChange={updateLocalCid} />
-      <GrayBox>
-        Local CID:
-        <Cid cid={localCid} />
-        Drop ID:
-        <div>{dropId}</div>
-      </GrayBox>
+      <DataTabs onFileOrBlobChange={setFileOrBlob} />
       <div className="pt4" />
-      <button onClick={signDropId}>Sign Drop Id</button>
-      <div className="pt4" />
-      <h2 className="mv0">Encrypted</h2>
-      <div className="pt4" />
-      <GrayBox>
-        Signed Drop ID / Generated Password:
-        <div style={{ wordBreak: "break-all" }}>
-          {generatedPassword || "N/A"}
-        </div>
-        Encrypted:
-        <div
-          className="f7 h4 overflow-scroll ba"
-          style={{ wordBreak: "break-all" }}
-        >
-          {encrypted || "N/A"}
-        </div>
-        <div>
-          <DownloadButton text={encrypted ?? ""} cid={encryptedLocalCid} />
-        </div>
-        Local CID:
-        <Cid cid={encryptedLocalCid} />
-      </GrayBox>
-      <div className="pt4" />
-      <UploadToIpfsButton fileOrBlob={encryptedFileOrBlob}>
-        Upload Encrypted File
-      </UploadToIpfsButton>
-      <div className="pt4" />
-      <h2 className="mv0">Ethereum</h2>
-      <div className="pt4" />
-      <b>HashDrop.sol</b>
-      <EthHashDropSubmitButton
-        id={dropId}
-        cid={encryptedLocalCid}
-        onSubmitComplete={() => alert("done!")}
-      />
+      <button
+        className="pa2 w-100"
+        disabled={!fileOrBlob}
+        onClick={() => hashdrop.add(fileOrBlob).then(() => alert("Success!"))}
+      >
+        Add
+      </button>
+      <div className="pt2" />
+      <button
+        className="pa2 w-100"
+        disabled={!fileOrBlob}
+        onClick={() =>
+          hashdrop.addPrivate(fileOrBlob).then(() => alert("Success!"))
+        }
+      >
+        Add Private
+      </button>
     </div>
   );
 }

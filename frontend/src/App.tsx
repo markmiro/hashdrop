@@ -3,6 +3,7 @@ import { Drop } from "./pages/Drop";
 import { Compare } from "./pages/Compare";
 import { Encrypt } from "./pages/Encrypt";
 import { Verify } from "./pages/Verify";
+import { DropOld } from "./pages/DropOld";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -57,6 +58,9 @@ export function App() {
             </Route>
             <Route path="/drop">
               <Drop />
+            </Route>
+            <Route path="/drop-old">
+              <DropOld />
             </Route>
             <Route path="/verify">
               <Verify />
