@@ -62,7 +62,7 @@ export function Encrypt() {
       <div className="f7 tr o-60">
         Difference: {Math.round((enc.length / message.length) * 100)}%
       </div>
-      <iframe src={url} width="100%" />
+      <iframe title="content" src={url} width="100%" />
       <div>
         Encrypted
         <div
