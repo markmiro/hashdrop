@@ -10,8 +10,8 @@ type FeChainId<C extends FeContractName> = keyof FeContract<C>["chainId"];
 
 export type OnConnect<T extends BaseContract> = (contract: T) => void;
 
-// const c: FeContract<"Hello"> = feArtifacts.contract.Hello;
-// const id: FeChainId<"Token"> = c.chainId[1337];
+// TODO: Each instance of `useContract()` is unique so they're not going to stay in sync.
+// Consider introducing a global reducer to keep things in sync.
 export function useContract<T extends BaseContract>(
   contractName: FeContractName,
   onConnect?: OnConnect<T>
