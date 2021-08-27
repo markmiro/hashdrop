@@ -1,9 +1,16 @@
 import { ethers } from "hardhat";
 import { expect } from "chai";
 import { HashDrop as T } from "../frontend/src/typechain";
+import { ipfsCid } from "../frontend/src/util/ipfsCid";
+import { textToBlob } from "../frontend/src/util/textToBlob";
+import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 
 describe("HashDrop", () => {
-  let HashDrop, hashdrop, owner, acc1, acc2;
+  let HashDrop,
+    hashdrop,
+    owner: SignerWithAddress,
+    acc1: SignerWithAddress,
+    acc2: SignerWithAddress;
 
   beforeEach(async () => {
     HashDrop = await ethers.getContractFactory("HashDrop");
@@ -11,7 +18,7 @@ describe("HashDrop", () => {
     hashdrop = await HashDrop.deploy();
   });
 
-  it("should return the expected message", async () => {
+  it("should increase drop count", async () => {
     const HashDrop = await ethers.getContractFactory("HashDrop");
     const hashdrop = (await HashDrop.deploy()) as T;
 
