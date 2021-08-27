@@ -2,7 +2,7 @@ import aes from "crypto-js/aes";
 import delay from "delay";
 import queryString from "query-string";
 import { FC, useCallback, useState } from "react";
-import { DataTabs } from "../components/DataTabs";
+import { DataTabs } from "../components/DataTabs/DataTabs";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
 import { Cid } from "../generic/Cid";

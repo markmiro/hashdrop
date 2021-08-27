@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { resetFileInput } from "../util/resetFileInput";
+import { resetFileInput } from "../../util/resetFileInput";
 import { FilePreviewWithInfo } from "./FilePreviewWithInfo";
 
 export function FileTab({

@@ -1,7 +1,7 @@
 import { FC, useCallback, useEffect, useState } from "react";
 import { Cid } from "../generic/Cid";
 import { ipfsCid } from "../util/ipfsCid";
-import { DataTabs } from "../components/DataTabs";
+import { DataTabs } from "../components/DataTabs/DataTabs";
 import aes from "crypto-js/aes";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";

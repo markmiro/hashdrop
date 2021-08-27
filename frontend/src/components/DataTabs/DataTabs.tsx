@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Tab, Tabs } from "../generic/Tabs";
+import { Tab, Tabs } from "../../generic/Tabs";
 import { TextTab } from "./TextTab";
 import { FileTab } from "./FileTab";
 

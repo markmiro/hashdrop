@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { fileOrBlobAsText } from "../util/fileOrBlobAsText";
-import { resetFileInput } from "../util/resetFileInput";
-import { textTypes } from "../util/textTypes";
-import { textToBlob } from "../util/textToBlob";
-import { DownloadButton } from "./DownloadButton";
+import { fileOrBlobAsText } from "../../util/fileOrBlobAsText";
+import { resetFileInput } from "../../util/resetFileInput";
+import { textTypes } from "../../util/textTypes";
+import { textToBlob } from "../../util/textToBlob";
+import { DownloadButton } from "./../DownloadButton";
 
 export function TextTab({
   onBlobChange,
