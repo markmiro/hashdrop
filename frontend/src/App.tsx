@@ -4,6 +4,7 @@ import { Compare } from "./pages/Compare";
 import { Encrypt } from "./pages/Encrypt";
 import { Verify } from "./pages/Verify";
 import { DropOld } from "./pages/DropOld";
+import { ShowDrop } from "./components/ShowDrop";
 import { DropCount } from "./components/DropCount";
 
 function Layout({ children }: { children: React.ReactNode }) {
@@ -57,6 +58,10 @@ export function App() {
             <Route path="/compare">
               <Compare />
             </Route>
+            <Route
+              path="/drop/:cid"
+              render={(props) => <ShowDrop cid={props.match.params.cid} />}
+            ></Route>
             <Route path="/drop">
               <Drop />
             </Route>

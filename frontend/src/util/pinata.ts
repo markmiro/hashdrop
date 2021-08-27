@@ -1,6 +1,13 @@
 import axios from "axios";
 import FormData from "form-data";
 
+/**
+ * @param cid
+ * @returns Pinata Gateway IPFS url CID
+ */
+export const cidToUrl = (cid: string) =>
+  `https://find.mypinata.cloud/ipfs/${cid}`;
+
 // Returns IPFS hash (CID)
 export async function pinFile(file: File | Blob) {
   const url = `/api/upload`;

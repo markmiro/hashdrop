@@ -1,16 +1,31 @@
 import aes from "crypto-js/aes";
 import delay from "delay";
+import queryString from "query-string";
 import { FC, useCallback, useState } from "react";
 import { DataTabs } from "../components/DataTabs";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
+import { Cid } from "../generic/Cid";
+import { CopyButton } from "../generic/CopyButton";
+import { Cover } from "../generic/Cover";
 import { Loader } from "../generic/Loader";
 import { HashDrop as T } from "../typechain";
 import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";
 import { ipfsCid } from "../util/ipfsCid";
 import { pinFile } from "../util/pinata";
 import { textToBlob } from "../util/textToBlob";
-import { Cover } from "../generic/Cover";
+
+// const DROP_ORIGIN = `https://ipfs.io/ipfs/${HASHDROP_DEPLOY_CID}`;
+const DROP_ORIGIN = window.location.origin;
+// const DROP_ORIGIN = "https://www.hashdrop.me";
+
+const dropUrl = (dropId: string) => `${DROP_ORIGIN}/#/drop/${dropId}`;
+
+const tweetUrl = (dropId: string) =>
+  `https://twitter.com/intent/tweet?${queryString.stringify({
+    text: "I made a prediction",
+    url: dropUrl(dropId),
+  })}`;
 
 function useAdd() {
   const provider = useEthersProvider();
@@ -222,14 +237,14 @@ export function Drop() {
       <div className="pt4" />
       <DataTabs onFileOrBlobChange={setFileOrBlob} />
       <div className="pt4" />
-      <button
+      {/* <button
         className="pa2 w-100"
         disabled={!fileOrBlob}
         onClick={() => hashdrop.add(fileOrBlob)}
       >
         Add
-      </button>
-      <div className="pt2" />
+      </button> */}
+      {/* <div className="pt2" /> */}
       <button
         className="pa2 w-100"
         disabled={!fileOrBlob}
@@ -248,6 +263,24 @@ export function Drop() {
           </div>
         </Cover>
       )}
+      {!hashdrop.isProcessing && hashdrop.cid && (
+        <>
+          <div className="flex" style={{ gap: ".5em" }}>
+            <CopyButton toCopy={dropUrl(hashdrop.cid)} />
+            {/* https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/guides/web-intent */}
+            <a href={tweetUrl(hashdrop.cid)}>Tweet</a>
+            <a href={dropUrl(hashdrop.cid)} target="_blank" rel="noreferrer">
+              See Drop
+            </a>
+          </div>
+          <Cid cid={hashdrop.cid} />
+        </>
+      )}
+      <p>
+        <a href="https://www.kalzumeus.com/essays/dropping-hashes">
+          Dropping hashes: an idiom used to demonstrate provenance of documents
+        </a>
+      </p>
     </div>
   );
 }
