@@ -5,7 +5,7 @@
       "name": "HashDrop",
       "chainId": {
         "1337": {
-          "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+          "address": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
         }
       },
       "abi": [
@@ -41,19 +41,6 @@
           "type": "function"
         },
         {
-          "inputs": [],
-          "name": "dropCount",
-          "outputs": [
-            {
-              "internalType": "uint256",
-              "name": "",
-              "type": "uint256"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
           "inputs": [
             {
               "internalType": "string",
@@ -61,7 +48,7 @@
               "type": "string"
             }
           ],
-          "name": "dropToAddress",
+          "name": "cidToAddress",
           "outputs": [
             {
               "internalType": "address",
@@ -80,7 +67,7 @@
               "type": "string"
             }
           ],
-          "name": "dropToPrivateDrop",
+          "name": "cidToPrivateCid",
           "outputs": [
             {
               "internalType": "string",
@@ -90,12 +77,25 @@
           ],
           "stateMutability": "view",
           "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "dropCount",
+          "outputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
         }
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1630082224202,
-          "str": "Fri, 27 Aug 2021 16:37:04 GMT",
+          "ts": 1630102554512,
+          "str": "Fri, 27 Aug 2021 22:15:54 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/HashDrop.sol"

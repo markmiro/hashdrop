@@ -8,11 +8,11 @@ contract HashDrop {
     }
 
     uint256 public dropCount = 0;
-    mapping(string => address) public dropToAddress;
-    mapping(string => string) public dropToPrivateDrop;
+    mapping(string => address) public cidToAddress;
+    mapping(string => string) public cidToPrivateCid;
 
     function add(string calldata cid) public payable {
-        dropToAddress[cid] = msg.sender;
+        cidToAddress[cid] = msg.sender;
         dropCount++;
         // TODO: send a little eth to my wallet
     }
@@ -21,8 +21,8 @@ contract HashDrop {
         public
         payable
     {
-        dropToAddress[cid] = msg.sender;
-        dropToPrivateDrop[cid] = pcid;
+        cidToAddress[cid] = msg.sender;
+        cidToPrivateCid[cid] = pcid;
         dropCount++;
         // TODO: send a little eth to my wallet
     }
