@@ -4,6 +4,7 @@ import { Compare } from "./pages/Compare";
 import { Encrypt } from "./pages/Encrypt";
 import { Verify } from "./pages/Verify";
 import { DropOld } from "./pages/DropOld";
+import { DropCount } from "./components/DropCount";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -71,6 +72,8 @@ export function App() {
           </Switch>
         </div>
       </HashRouter>
+      <hr />
+      <DropCount />
     </Layout>
   );
 }
