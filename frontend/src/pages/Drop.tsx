@@ -167,7 +167,7 @@ function useHashDrop() {
         setStatus("ERROR");
         setError(err.message);
         setIsProcessing(false);
-        throw new Error(err);
+        // throw new Error(err);
       }
     },
     [ethAdd]
@@ -203,7 +203,7 @@ function useHashDrop() {
         setStatus("ERROR");
         setError(err.message);
         setIsProcessing(false);
-        throw new Error(err);
+        // throw new Error(err);
       }
     },
     [provider, ethAdd]
