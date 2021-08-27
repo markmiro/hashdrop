@@ -8,30 +8,27 @@ export function ShowDrop({ cid }: { cid: string }) {
   const [loading, setLoading] = useState(false);
   const [cidPublished, setCidPublished] = useState(false);
 
-  const checkWantedCid = useCallback(
-    async (cid) => {
-      try {
-        setLoading(true);
-        await delay(1000);
-        const res = await fetch(cidToUrl(cid));
-        if (res.status === 404) {
-          throw new Error("Not found");
-        }
-        setCidPublished(true);
-        setLoading(false);
-      } catch (err) {
-        setCidPublished(false);
-        setLoading(false);
+  const checkWantedCid = useCallback(async (cid) => {
+    try {
+      setLoading(true);
+      await delay(1000);
+      const res = await fetch(cidToUrl(cid));
+      if (res.status === 404) {
+        throw new Error("Not found");
       }
-    },
-    [cid]
-  );
+      setCidPublished(true);
+      setLoading(false);
+    } catch (err) {
+      setCidPublished(false);
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     // Reset `cidPublished` so UI waits until API comes back with success before trying to show the file.
     setCidPublished(false);
     checkWantedCid(cid);
-  }, [cid]);
+  }, [cid, checkWantedCid]);
 
   return (
     <div>
