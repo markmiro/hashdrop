@@ -1,9 +1,9 @@
-import { v4 as uuid } from "uuid";
 import aes from "crypto-js/aes";
+import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";
 
-const id = uuid();
+const id = ethers.utils.hexlify(ethers.utils.randomBytes(12));
 
 // https://stackoverflow.com/a/20285053
 const toDataURL = (url: string) =>
@@ -31,7 +31,7 @@ export function Encrypt() {
   return (
     <div>
       <div>
-        <label className="db">PS</label>
+        <label className="db">ID</label>
         <input disabled readOnly className="w-100" value={id} />
       </div>
       <div>

@@ -5,28 +5,16 @@
       "name": "HashDrop",
       "chainId": {
         "1337": {
-          "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+          "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
         }
       },
       "abi": [
         {
           "inputs": [
             {
-              "components": [
-                {
-                  "internalType": "string",
-                  "name": "id",
-                  "type": "string"
-                },
-                {
-                  "internalType": "string",
-                  "name": "cid",
-                  "type": "string"
-                }
-              ],
-              "internalType": "struct HashDrop.Drop",
-              "name": "drop",
-              "type": "tuple"
+              "internalType": "string",
+              "name": "cid",
+              "type": "string"
             }
           ],
           "name": "add",
@@ -37,27 +25,29 @@
         {
           "inputs": [
             {
-              "internalType": "address",
-              "name": "",
-              "type": "address"
+              "internalType": "string",
+              "name": "cid",
+              "type": "string"
             },
+            {
+              "internalType": "string",
+              "name": "pcid",
+              "type": "string"
+            }
+          ],
+          "name": "addPrivate",
+          "outputs": [],
+          "stateMutability": "payable",
+          "type": "function"
+        },
+        {
+          "inputs": [],
+          "name": "dropCount",
+          "outputs": [
             {
               "internalType": "uint256",
               "name": "",
               "type": "uint256"
-            }
-          ],
-          "name": "addressToDrops",
-          "outputs": [
-            {
-              "internalType": "string",
-              "name": "id",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "cid",
-              "type": "string"
             }
           ],
           "stateMutability": "view",
@@ -90,30 +80,12 @@
               "type": "string"
             }
           ],
-          "name": "idToDrop",
+          "name": "dropToPrivateDrop",
           "outputs": [
             {
               "internalType": "string",
-              "name": "id",
-              "type": "string"
-            },
-            {
-              "internalType": "string",
-              "name": "cid",
-              "type": "string"
-            }
-          ],
-          "stateMutability": "view",
-          "type": "function"
-        },
-        {
-          "inputs": [],
-          "name": "numDrops",
-          "outputs": [
-            {
-              "internalType": "uint256",
               "name": "",
-              "type": "uint256"
+              "type": "string"
             }
           ],
           "stateMutability": "view",
@@ -122,8 +94,8 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1629930021620,
-          "str": "Wed, 25 Aug 2021 22:20:21 GMT",
+          "ts": 1630082224202,
+          "str": "Fri, 27 Aug 2021 16:37:04 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/HashDrop.sol"

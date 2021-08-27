@@ -1,5 +1,4 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { v4 as uuid } from "uuid";
 import { Cid } from "../generic/Cid";
 import { ipfsCid } from "../util/ipfsCid";
 import { DataTabs } from "../components/DataTabs";
@@ -18,7 +17,6 @@ const GrayBox: FC = ({ children }) => (
 export function DropOld() {
   const provider = useEthersProvider();
   const [fileOrBlob, setFileOrBlob] = useState<File | Blob | null>(null);
-  const [dropId, setDropId] = useState("");
   const [localCid, setLocalCid] = useState("");
 
   // Encrypted
@@ -28,10 +26,6 @@ export function DropOld() {
     File | Blob | null
   >(null);
   const [encryptedLocalCid, setEncryptedLocalCid] = useState("");
-
-  useEffect(() => {
-    setDropId(uuid());
-  }, []);
 
   const updateLocalCid = useCallback(async (fileOrBlob: File | Blob | null) => {
     setFileOrBlob(fileOrBlob);
@@ -47,9 +41,8 @@ export function DropOld() {
     }
   }, []);
 
-  async function signDropId() {
-    console.log(dropId);
-    const signed = await provider.getSigner().signMessage(dropId);
+  async function signCid() {
+    const signed = await provider.getSigner().signMessage(localCid);
     console.log(signed);
     // alert(signed);
     setGeneratedPassword(signed);
@@ -81,16 +74,14 @@ export function DropOld() {
       <GrayBox>
         Local CID:
         <Cid cid={localCid} />
-        Drop ID:
-        <div>{dropId}</div>
       </GrayBox>
       <div className="pt4" />
-      <button onClick={signDropId}>Sign Drop Id</button>
+      <button onClick={signCid}>Sign CID</button>
       <div className="pt4" />
       <h2 className="mv0">Encrypted</h2>
       <div className="pt4" />
       <GrayBox>
-        Signed Drop ID / Generated Password:
+        Signed CID / Generated Password:
         <div style={{ wordBreak: "break-all" }}>
           {generatedPassword || "N/A"}
         </div>
@@ -119,8 +110,8 @@ export function DropOld() {
       <div className="pt4" />
       <b>HashDrop.sol</b>
       <EthHashDropSubmitButton
-        id={dropId}
-        cid={encryptedLocalCid}
+        cid={localCid}
+        privateCid={encryptedLocalCid}
         onSubmitComplete={() => alert("done!")}
       />
     </div>

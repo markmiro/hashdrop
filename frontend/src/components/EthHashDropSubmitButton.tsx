@@ -10,12 +10,12 @@ import { Disabled } from "../generic/Disabled";
 import { HashDrop as T } from "../typechain";
 
 export function EthHashDropSubmitButton({
-  id,
   cid,
+  privateCid,
   onSubmitComplete,
 }: {
-  id: string;
   cid: string;
+  privateCid: string;
   onSubmitComplete: (tx: ContractTransaction) => void;
 }) {
   const provider = useEthersProvider();
@@ -33,7 +33,7 @@ export function EthHashDropSubmitButton({
       console.log("fetch drop count");
       setLoadingDropCount(true);
       await delay(200);
-      setDropCount((await hashdrop.contract.numDrops()).toNumber());
+      setDropCount((await hashdrop.contract.dropCount()).toNumber());
       setLoadingDropCount(false);
     };
     doAsync();
@@ -49,7 +49,9 @@ export function EthHashDropSubmitButton({
     if (!hashdrop.contract) throw new Error("Contract isn't set yet");
     try {
       const signer = provider.getSigner();
-      const tx = await hashdrop.contract.connect(signer).add({ id, cid });
+      const tx = await hashdrop.contract
+        .connect(signer)
+        .addPrivate(cid, privateCid);
       await tx.wait();
       fetchDropCount();
       onSubmitComplete(tx);

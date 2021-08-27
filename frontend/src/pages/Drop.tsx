@@ -1,7 +1,6 @@
 import aes from "crypto-js/aes";
 import delay from "delay";
 import { FC, useCallback, useState } from "react";
-import { v4 as uuid } from "uuid";
 import { DataTabs } from "../components/DataTabs";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
@@ -21,13 +20,13 @@ function useAdd() {
   const [loading, setLoading] = useState(false);
 
   const add = useCallback(
-    async ({ id, cid }: { id: string; cid: string }) => {
+    async (cid: string) => {
       setSuccess(false);
       setLoading(true);
       if (!hashdrop.contract) throw new Error("Contract isn't set yet");
 
       const signer = provider.getSigner();
-      const tx = await hashdrop.contract.connect(signer).add({ id, cid });
+      const tx = await hashdrop.contract.connect(signer).add(cid);
       await tx.wait();
       setSuccess(true);
 
@@ -36,7 +35,25 @@ function useAdd() {
     [provider, hashdrop]
   );
 
-  return { add, loading, success };
+  const addPrivate = useCallback(
+    async (cid: string, privateCid: string) => {
+      setSuccess(false);
+      setLoading(true);
+      if (!hashdrop.contract) throw new Error("Contract isn't set yet");
+
+      const signer = provider.getSigner();
+      const tx = await hashdrop.contract
+        .connect(signer)
+        .addPrivate(cid, privateCid);
+      await tx.wait();
+      setSuccess(true);
+
+      setLoading(false);
+    },
+    [provider, hashdrop]
+  );
+
+  return { add, addPrivate, loading, success };
 }
 
 async function encryptFileOrBlob(fileOrBlob: File | Blob, password: string) {
@@ -100,6 +117,8 @@ const StatusText: FC<{
 function useHashDrop() {
   const provider = useEthersProvider();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [cid, setCid] = useState("");
+  const [privateCid, setPrivateCid] = useState("");
   const [status, setStatus] = useState<DropStatus>("INITIAL");
   const [error, setError] = useState("");
   const ethAdd = useAdd();
@@ -118,12 +137,12 @@ function useHashDrop() {
         await updateStatus("PROCESSING");
 
         if (!fileOrBlob) throw new Error("Please pick a file.");
-        const dropId = uuid();
         const cid = await ipfsCid(fileOrBlob);
+        setCid(cid);
 
         // Save / upload
         await updateStatus("SENDING_ETH");
-        await ethAdd.add({ cid, id: dropId });
+        await ethAdd.add(cid);
         await updateStatus("SENDING_IPFS");
         const remoteCid = await pinFile(fileOrBlob);
         if (cid !== remoteCid) throw new Error("Internal error.");
@@ -148,16 +167,18 @@ function useHashDrop() {
 
         // Create password
         await updateStatus("ENCRYPTING");
-        const dropId = uuid();
-        const ps = await provider.getSigner().signMessage(dropId);
+        const cid = await ipfsCid(fileOrBlob);
+        setCid(cid);
+        const ps = await provider.getSigner().signMessage(cid);
 
         // Encrypt
         const privateFileOrBlob = await encryptFileOrBlob(fileOrBlob, ps);
         const privateCid = await ipfsCid(privateFileOrBlob);
+        setPrivateCid(privateCid);
 
         // Save / upload
         await updateStatus("SENDING_ETH");
-        await ethAdd.add({ cid: privateCid, id: dropId });
+        await ethAdd.addPrivate(cid, privateCid);
         await updateStatus("SENDING_IPFS");
         const remotePrivateCid = await pinFile(privateFileOrBlob);
         if (privateCid !== remotePrivateCid) throw new Error("Internal error.");
@@ -177,7 +198,17 @@ function useHashDrop() {
     throw new Error("TODO: implement");
   }, []);
 
-  return { add, addPrivate, verify, status, isProcessing, error, resetStatus };
+  return {
+    add,
+    cid,
+    privateCid,
+    addPrivate,
+    verify,
+    status,
+    isProcessing,
+    error,
+    resetStatus,
+  };
 }
 
 export function Drop() {
