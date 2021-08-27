@@ -6,7 +6,7 @@ export function CopyButton({
   className,
 }: {
   toCopy: string;
-  className: string;
+  className?: string;
 }) {
   const [isCopied, setIsCopied] = useState(false);
 
