@@ -36,16 +36,17 @@ export function DropOld() {
     try {
       const cid = await ipfsCid(fileOrBlob);
       setLocalCid(cid);
+      setGeneratedPassword("");
     } catch (err) {
       alert(err.message);
     }
   }, []);
 
   async function signCid() {
-    const signed = await provider.getSigner().signMessage(localCid);
-    console.log(signed);
+    const signedCid = await provider.getSigner().signMessage(localCid);
+    console.log(signedCid);
     // alert(signed);
-    setGeneratedPassword(signed);
+    setGeneratedPassword(signedCid);
   }
 
   useEffect(() => {
