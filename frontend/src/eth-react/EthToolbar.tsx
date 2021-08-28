@@ -51,7 +51,7 @@ export function Inner() {
     );
   }
 
-  const chainInfo = chainIdToInfo(data?.chainId);
+  const chainInfo = data.chainId ? chainIdToInfo(data.chainId) : null;
 
   return (
     <>

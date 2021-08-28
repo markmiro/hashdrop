@@ -11,9 +11,7 @@ export const chainIdToInfoMap = {
 
 type ChainId = keyof typeof chainIdToInfo;
 
-export function chainIdToInfo(chainId?: string) {
-  if (!chainId) return null;
-
+export function chainIdToInfo(chainId: string) {
   if (Object.keys(chainIdToInfoMap).includes(chainId)) {
     return chainIdToInfoMap[chainId as ChainId];
   }
