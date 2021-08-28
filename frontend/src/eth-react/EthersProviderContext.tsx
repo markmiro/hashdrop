@@ -27,6 +27,7 @@ function testProvider(provider: ethers.providers.Web3Provider) {
         resolve(true);
       })
       .catch(connectionError);
+
     setTimeout(() => {
       if (!blockNumber) {
         connectionError();
