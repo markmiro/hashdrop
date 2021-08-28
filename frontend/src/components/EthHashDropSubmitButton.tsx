@@ -61,7 +61,6 @@ export function EthHashDropSubmitButton({
     setIsSubmitting(false);
   };
 
-  if (hashdrop.error) return <ErrorMessage>{hashdrop.error}</ErrorMessage>;
   if (hashdrop.isLoading) return <Loader>Loading contract</Loader>;
   if (!hashdrop.contract) return <>No contract</>;
 

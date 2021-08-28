@@ -1,7 +1,9 @@
 import delay from "delay";
 import { BaseContract, ethers } from "ethers";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { useErrorHandler } from "react-error-boundary";
 import feArtifacts from "../hardhat-frontend-artifacts.json";
+
 import { useEthersProvider } from "./EthersProviderContext";
 
 type FeContractName = keyof typeof feArtifacts.contract;
@@ -16,8 +18,8 @@ export function useContract<T extends BaseContract>(
   contractName: FeContractName,
   onConnect?: OnConnect<T>
 ) {
+  const handleError = useErrorHandler();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | ReactNode>("");
   const [contract, setContract] = useState<T | null>(null);
   const provider = useEthersProvider();
 
@@ -26,7 +28,6 @@ export function useContract<T extends BaseContract>(
 
     const doAsync = async () => {
       console.log("doAsync");
-      // setError(""); // Not doing this because we don't want to flicker between loading and error
       setLoading(true);
 
       const feContract = feArtifacts.contract[contractName];
@@ -36,7 +37,6 @@ export function useContract<T extends BaseContract>(
       {
         const acceptableChainIds = Object.keys(feContract.chainId);
         if (!acceptableChainIds.includes(chainIdString)) {
-          setError("Unsupported network");
           throw new Error(
             `\n\nSelected MetaMask network chainId is: ${chainIdString}.\nContract "${
               feContract.name
@@ -48,7 +48,7 @@ export function useContract<T extends BaseContract>(
       }
       // Assign correct type
       const chainId: FeChainId<typeof contractName> = chainIdString as any;
-      chainIdString = ""; // Make sure this variable doesn't get used
+      chainIdString = "DO_NOT_USE"; // Make sure this variable doesn't get used
 
       const contractAddress = feContract.chainId[chainId].address;
       const contract = new ethers.Contract(
@@ -67,12 +67,11 @@ export function useContract<T extends BaseContract>(
       try {
         await contract.deployed();
       } catch (err) {
-        console.error(err);
-        setError(
-          <div className="f7">
-            Contract '{contractName}' was not found at address: '
-            <span className="ttl">{contractAddress}</span>'
-          </div>
+        // You might not think you want this error to show in the UI in production, but you do. It means something about the deployment went terribly wrong and you should definitely know about it.
+        handleError(
+          new Error(
+            `Contract '${contractName}' was not found at address: ${contractAddress}. This is likely because you're on a test network and need to deploy your contract to it. You're on chain ID: ${chainId}`
+          )
         );
         return;
       }
@@ -82,11 +81,10 @@ export function useContract<T extends BaseContract>(
       // Once we know we can interact with the contract, we update the state.
       setContract(contract);
       await delay(200);
-      setError("");
       setLoading(false);
     };
-    doAsync();
+    doAsync().catch(handleError);
   }, [contractName, onConnect, provider]);
 
-  return { isLoading: loading, error, contract };
+  return { isLoading: loading, contract };
 }
