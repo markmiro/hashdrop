@@ -3,8 +3,22 @@ import { FC, useEffect, useState } from "react";
 import { useErrorHandler } from "react-error-boundary";
 import { ErrorMessage } from "../generic/ErrorMessage";
 import { Loader } from "../generic/Loader";
+import { chainIdToInfo } from "./chainIdToInfo";
 import { useEthersProvider } from "./EthersProviderContext";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
+
+function getProposedChainId() {
+  // https://docs.metamask.io/guide/rpc-api.html#wallet-switchethereumchain
+  // "0x"+(1337).toString(16) === "0x539"
+  let proposedChainId = "0x1"; // Mainnet
+  if (process.env.NODE_ENV === "development") {
+    proposedChainId = "0x539"; // 1337 - localhost
+  } else if (process.env.NODE_ENV === "test") {
+    proposedChainId = "0x3"; // Ropsten
+  }
+
+  return proposedChainId;
+}
 
 // const problems = (provider: ethers.providers.Web3Provider) => ({
 //   WRONG_CHAIN: {
@@ -61,12 +75,14 @@ type Props = {
 
 type Status =
   | "CHECKING"
+  | "NOT_CONNECTED_TO_CHAIN"
   | "OK"
   | "WRONG_CHAIN"
   | "NO_ACCOUNT_CONNECTED"
   | "ZERO_BALANCE";
 
 // TODO: Steal some checks from `EthToolbar` like: checking if connected to wallet (not address) and checking for multiple wallets.
+// TODO: Probably don't allow multiple instances of this component showing errors at once. Best to cover the entire UI and use React Context to ensure only one is displayed at a time.
 export const EnsureConnectionRequirements: FC<Props> = (props) => {
   const { children, ...expect } = props;
   // Need to check chain ID if checking for balance
@@ -83,6 +99,11 @@ export const EnsureConnectionRequirements: FC<Props> = (props) => {
     setStatus("CHECKING");
     const doAsync = async () => {
       try {
+        if (!data.isConnectedToCurrentChain) {
+          setStatus("NOT_CONNECTED_TO_CHAIN");
+          return;
+        }
+
         // It will try again when data is populated.
         if (!data) return;
         if (typeof data.chainId === "undefined") return;
@@ -132,6 +153,7 @@ export const EnsureConnectionRequirements: FC<Props> = (props) => {
     expect.isConnected,
     expect.isNonZeroBalance,
     expect.chainIds,
+    data,
     data.selectedAddress,
     data.selectedAddressBalance,
     data.chainId,
@@ -142,15 +164,9 @@ export const EnsureConnectionRequirements: FC<Props> = (props) => {
     switch (status) {
       case "CHECKING":
         break;
+      case "NOT_CONNECTED_TO_CHAIN":
       case "WRONG_CHAIN":
-        // https://docs.metamask.io/guide/rpc-api.html#wallet-switchethereumchain
-        // "0x"+(1337).toString(16) === "0x539"
-        let proposedChainId = "0x1"; // Mainnet
-        if (process.env.NODE_ENV === "development") {
-          proposedChainId = "0x539"; // 1337 - localhost
-        } else if (process.env.NODE_ENV === "test") {
-          proposedChainId = "0x3"; // Ropsten
-        }
+        const proposedChainId = getProposedChainId();
         await provider.send("wallet_switchEthereumChain", [
           { chainId: proposedChainId },
         ]);
@@ -169,10 +185,23 @@ export const EnsureConnectionRequirements: FC<Props> = (props) => {
     }
   };
 
+  if (status === "NOT_CONNECTED_TO_CHAIN") {
+    const currentChain = data.chainId;
+    if (!currentChain) {
+      return <ErrorMessage>No chain detected.</ErrorMessage>;
+    }
+    return (
+      <ErrorMessage>
+        Not connected to current chain: {chainIdToInfo(currentChain).name}
+      </ErrorMessage>
+    );
+  }
+
   if (loading || status === "CHECKING") {
     return (
       <div>
         <Loader>Checking wallet</Loader>
+        {/* <pre>{JSON.stringify(data, null, "  ")}</pre> */}
       </div>
     );
   }
@@ -182,24 +211,26 @@ export const EnsureConnectionRequirements: FC<Props> = (props) => {
   }
 
   switch (status) {
-    case "WRONG_CHAIN":
+    case "WRONG_CHAIN": {
       return (
         <div>
           <ErrorMessage>
             Wrong chain. Acceptable chains include: (
-            {expect.chainIds?.join(", ")})
+            {expect.chainIds?.join(", ")}).
           </ErrorMessage>
           <button onClick={fixProblem}>Choose Correct Chain</button>
         </div>
       );
-    case "NO_ACCOUNT_CONNECTED":
+    }
+    case "NO_ACCOUNT_CONNECTED": {
       return (
         <div>
           <ErrorMessage>No account connected.</ErrorMessage>
           <button onClick={fixProblem}>Connect Account</button>
         </div>
       );
-    case "ZERO_BALANCE":
+    }
+    case "ZERO_BALANCE": {
       return (
         <div>
           <ErrorMessage>
@@ -208,8 +239,10 @@ export const EnsureConnectionRequirements: FC<Props> = (props) => {
           <button onClick={fixProblem}>Connect Account</button>
         </div>
       );
-    case "OK":
+    }
+    case "OK": {
       return <>{children}</>;
+    }
     default:
       break;
   }
