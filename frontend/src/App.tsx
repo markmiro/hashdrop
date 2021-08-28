@@ -90,7 +90,11 @@ export function App() {
         </div>
       </HashRouter>
       <hr />
-      <DropCount />
+      <EnsureConnectionRequirements
+        chainIds={Object.keys(feArtifacts.contract.HashDrop.chainId)}
+      >
+        <DropCount />
+      </EnsureConnectionRequirements>
     </Layout>
   );
 }
