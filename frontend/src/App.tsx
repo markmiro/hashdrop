@@ -6,6 +6,10 @@ import { Verify } from "./pages/Verify";
 import { DropOld } from "./pages/DropOld";
 import { ShowDrop } from "./components/ShowDrop";
 import { DropCount } from "./components/DropCount";
+import { ErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "./generic/ErrorFallback";
+import { EnsureConnectionRequirements } from "./eth-react/EnsureConnectionRequirements";
+import feArtifacts from "./hardhat-frontend-artifacts.json";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -49,32 +53,40 @@ export function App() {
             </div>
           </nav>
 
-          {/* A <Switch> looks through its children <Route>s and
+          <ErrorBoundary FallbackComponent={ErrorFallback}>
+            {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-          <Switch>
-            <Route path="/encrypt">
-              <Encrypt />
-            </Route>
-            <Route path="/compare">
-              <Compare />
-            </Route>
-            <Route
-              path="/drop/:cid"
-              render={(props) => <ShowDrop cid={props.match.params.cid} />}
-            ></Route>
-            <Route path="/drop">
-              <Drop />
-            </Route>
-            <Route path="/drop-old">
-              <DropOld />
-            </Route>
-            <Route path="/verify">
-              <Verify />
-            </Route>
-            <Route path="/">
-              <Redirect to="/compare" />
-            </Route>
-          </Switch>
+            <Switch>
+              <Route path="/encrypt">
+                <Encrypt />
+              </Route>
+              <Route path="/compare">
+                <Compare />
+              </Route>
+              <Route
+                path="/drop/:cid"
+                render={(props) => <ShowDrop cid={props.match.params.cid} />}
+              ></Route>
+              <Route path="/drop">
+                <EnsureConnectionRequirements
+                  isConnected
+                  isNonZeroBalance
+                  chainIds={Object.keys(feArtifacts.contract.HashDrop.chainId)}
+                >
+                  <Drop />
+                </EnsureConnectionRequirements>
+              </Route>
+              <Route path="/drop-old">
+                <DropOld />
+              </Route>
+              <Route path="/verify">
+                <Verify />
+              </Route>
+              <Route path="/">
+                <Redirect to="/compare" />
+              </Route>
+            </Switch>
+          </ErrorBoundary>
         </div>
       </HashRouter>
       <hr />

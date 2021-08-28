@@ -1,16 +1,33 @@
-import { ethers } from "ethers";
 import detectEthereumProvider from "@metamask/detect-provider";
 import type { BaseProvider } from "@metamask/providers";
 import delay from "delay";
 import { ReactNode, useEffect, useState } from "react";
 import { useErrorHandler } from "react-error-boundary";
 
+type Data = {
+  isConnectedToCurrentChain: boolean;
+  isMetaMask: boolean;
+  chainId: string | undefined;
+  selectedAddress: string | undefined;
+  selectedAddressBalance: string | undefined;
+  blockNumber: string | undefined;
+  gasPrice: string | undefined;
+};
+
 export function useMetaMaskEthereum() {
   const handleError = useErrorHandler();
   const [uiError, setUiError] = useState<string | ReactNode>(""); // User-visible error
   const [ethereum, setEthereum] = useState<BaseProvider | null>(null);
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState<any | null>(null);
+  const [data, setData] = useState<Data>({
+    isConnectedToCurrentChain: false,
+    isMetaMask: false,
+    chainId: undefined,
+    selectedAddress: undefined,
+    selectedAddressBalance: undefined,
+    blockNumber: undefined,
+    gasPrice: undefined,
+  });
 
   // A little based on this:
   // https://docs.metamask.io/guide/ethereum-provider.html#using-the-provider
@@ -41,30 +58,24 @@ export function useMetaMaskEthereum() {
           return;
         }
         setEthereum(ethereum);
-        const chainId = await ethereum.request({ method: "eth_chainId" });
+        const chainId =
+          (await ethereum.request<string>({
+            method: "eth_chainId",
+          })) ?? "";
 
-        const blockNumber = parseInt(
-          (await ethereum.request({
-            method: "eth_blockNumber",
-            params: [],
-          })) as string,
-          16
-        );
-
-        const gasPrice = parseFloat(
-          ethers.utils.formatUnits(
-            (await ethereum.request({
-              method: "eth_gasPrice",
-              params: [],
-            })) as string,
-            "gwei"
-          )
-        ).toFixed(2);
-
-        const addresses = (await ethereum.request({
+        const blockNumber = await ethereum.request<string>({
+          method: "eth_blockNumber",
+          params: [],
+        });
+        const gasPrice = await ethereum.request<string>({
+          method: "eth_gasPrice",
+          params: [],
+        });
+        const addresses = await ethereum.request<string[]>({
           method: "eth_accounts",
-        })) as [string];
-        const selectedAddress = addresses.length ? addresses[0] : null;
+        });
+        const selectedAddress =
+          addresses && addresses.length ? addresses[0] : undefined;
 
         setData({
           // I've had this return false when I start a local hardhat node and
@@ -74,13 +85,14 @@ export function useMetaMaskEthereum() {
           isMetaMask: (ethereum as any).isMetaMask,
           chainId,
           selectedAddress,
-          blockNumber,
-          gasPrice,
+          selectedAddressBalance: undefined,
+          blockNumber: blockNumber ?? undefined,
+          gasPrice: gasPrice ?? undefined,
         });
 
         ethereum.on("accountsChanged", (accounts: [string]) => {
           try {
-            setData((d: any) => ({
+            setData((d: Data) => ({
               ...d,
               selectedAddress: accounts[0],
             }));
@@ -103,20 +115,16 @@ export function useMetaMaskEthereum() {
     if (!data?.selectedAddress) return;
 
     const doAsync = async () => {
-      const selectedAddressBalance = data.selectedAddress
-        ? ((await ethereum.request({
+      const selectedAddressBalance =
+        (data.selectedAddress &&
+          (await ethereum.request<string>({
             method: "eth_getBalance",
             params: [data.selectedAddress, "latest"],
-          })) as string)
-        : 0;
-      setData((d: any) => ({
+          }))) ??
+        undefined;
+      setData((d: Data) => ({
         ...d,
-        selectedAddressBalance: parseFloat(
-          ethers.utils.formatUnits(
-            ethers.BigNumber.from(selectedAddressBalance),
-            "ether"
-          )
-        ).toFixed(4),
+        selectedAddressBalance: selectedAddressBalance,
       }));
     };
 

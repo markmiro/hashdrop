@@ -40,7 +40,6 @@ function useAdd() {
       setLoading(true);
       if (!hashdrop.contract) throw new Error("Contract isn't set yet");
 
-      await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
       const tx = await hashdrop.contract.connect(signer).add(cid);
       await tx.wait();
@@ -57,7 +56,6 @@ function useAdd() {
       setLoading(true);
       if (!hashdrop.contract) throw new Error("Contract isn't set yet");
 
-      await provider.send("eth_requestAccounts", []);
       const signer = provider.getSigner();
       const tx = await hashdrop.contract
         .connect(signer)
@@ -186,7 +184,6 @@ function useHashDrop() {
         await updateStatus("ENCRYPTING");
         const cid = await ipfsCid(fileOrBlob);
         setCid(cid);
-        await provider.send("eth_requestAccounts", []);
         const signer = provider.getSigner();
         const ps = await signer.signMessage(cid);
 
