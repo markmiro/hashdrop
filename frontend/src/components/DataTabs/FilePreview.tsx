@@ -12,7 +12,7 @@ export function FilePreview({
   file,
   dataUrl,
 }: {
-  file: File | null;
+  file: File | Blob | null;
   dataUrl: string;
 }) {
   const previewRef = useRef<HTMLIFrameElement>(null);
