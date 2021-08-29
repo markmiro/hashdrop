@@ -20,14 +20,16 @@ export default async (req: VercelRequest, res: VercelResponse) => {
 
   const { file, pinataMetadata } = await new Promise<{
     file: File;
-    pinataMetadata: PinMetadata;
+    pinataMetadata?: PinMetadata;
   }>((resolve) => {
     form.parse(req, async (err, fields, files) => {
       const file = files.file as File;
-      const metadata = JSON.parse(
-        fields.pinataMetadata as string
-      ) as PinMetadata;
-
+      let pinataMetadata;
+      if (fields.pinataMetadata) {
+        pinataMetadata = JSON.parse(
+          fields.pinataMetadata as string
+        ) as PinMetadata;
+      }
       resolve({
         file,
         pinataMetadata,
