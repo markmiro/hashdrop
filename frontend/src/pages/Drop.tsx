@@ -142,7 +142,7 @@ function useHashDrop() {
 
   const updateStatus = async (status: DropStatus) => {
     setStatus(status);
-    await delay(1000);
+    // await delay(1000);
   };
 
   const resetStatus = () => setStatus("INITIAL");
