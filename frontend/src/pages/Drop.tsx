@@ -1,4 +1,3 @@
-import aes from "crypto-js/aes";
 import delay from "delay";
 import queryString from "query-string";
 import { FC, useCallback, useState } from "react";
@@ -10,10 +9,10 @@ import { CopyButton } from "../generic/CopyButton";
 import { Cover } from "../generic/Cover";
 import { Loader } from "../generic/Loader";
 import { HashDrop as T } from "../typechain";
-import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";
 import { ipfsCid } from "../util/ipfsCid";
 import { pinFile } from "../util/pinata";
-import { textToBlob } from "../util/textToBlob";
+import { encryptFileOrBlob } from "../util/encrypt";
+import { useErrorHandler } from "react-error-boundary";
 
 // const DROP_ORIGIN = `https://ipfs.io/ipfs/${HASHDROP_DEPLOY_CID}`;
 const DROP_ORIGIN = window.location.origin;
@@ -28,6 +27,7 @@ const tweetUrl = (dropId: string) =>
   })}`;
 
 function useAdd() {
+  const handleError = useErrorHandler();
   const provider = useEthersProvider();
   const hashdrop = useContract<T>("HashDrop");
 
@@ -36,46 +36,48 @@ function useAdd() {
 
   const add = useCallback(
     async (cid: string) => {
-      setSuccess(false);
-      setLoading(true);
-      if (!hashdrop.contract) throw new Error("Contract isn't set yet");
+      try {
+        setSuccess(false);
+        setLoading(true);
+        if (!hashdrop.contract) throw new Error("Contract isn't set yet");
 
-      const signer = provider.getSigner();
-      const tx = await hashdrop.contract.connect(signer).add(cid);
-      await tx.wait();
-      setSuccess(true);
+        const signer = provider.getSigner();
+        const tx = await hashdrop.contract.connect(signer).add(cid);
+        await tx.wait();
+        setSuccess(true);
 
-      setLoading(false);
+        setLoading(false);
+      } catch (err) {
+        handleError(err);
+      }
     },
     [provider, hashdrop]
   );
 
   const addPrivate = useCallback(
     async (cid: string, privateCid: string) => {
-      setSuccess(false);
-      setLoading(true);
-      if (!hashdrop.contract) throw new Error("Contract isn't set yet");
+      try {
+        setSuccess(false);
+        setLoading(true);
+        if (!hashdrop.contract) throw new Error("Contract isn't set yet");
 
-      const signer = provider.getSigner();
-      const tx = await hashdrop.contract
-        .connect(signer)
-        .addPrivate(cid, privateCid);
-      await tx.wait();
-      setSuccess(true);
+        const signer = provider.getSigner();
+        const tx = await hashdrop.contract
+          .connect(signer)
+          .addPrivate(cid, privateCid);
+        await tx.wait();
 
-      setLoading(false);
+        setSuccess(true);
+
+        setLoading(false);
+      } catch (err) {
+        handleError(err);
+      }
     },
     [provider, hashdrop]
   );
 
   return { add, addPrivate, loading, success };
-}
-
-async function encryptFileOrBlob(fileOrBlob: File | Blob, password: string) {
-  const dataUrl = await fileOrBlobAsDataUrl(fileOrBlob);
-  const encrypted = aes.encrypt(dataUrl, password).toString();
-  const pFileOrBlob = textToBlob(encrypted);
-  return pFileOrBlob;
 }
 
 type DropStatus =

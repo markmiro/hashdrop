@@ -5,7 +5,7 @@
       "name": "HashDrop",
       "chainId": {
         "1337": {
-          "address": "0x8A791620dd6260079BF849Dc5567aDC3F2FdC318"
+          "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
         }
       },
       "abi": [
@@ -94,8 +94,8 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1630102554512,
-          "str": "Fri, 27 Aug 2021 22:15:54 GMT",
+          "ts": 1630189702494,
+          "str": "Sat, 28 Aug 2021 22:28:22 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/HashDrop.sol"

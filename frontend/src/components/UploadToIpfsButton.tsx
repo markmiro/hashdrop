@@ -1,4 +1,5 @@
 import { ReactNode, useState } from "react";
+import { Cid } from "../generic/Cid";
 import { Loader } from "../generic/Loader";
 import { pinFile } from "../util/pinata";
 
@@ -11,6 +12,7 @@ export function UploadToIpfsButton({
   onUpload?: (cid: string) => void;
   children: ReactNode;
 }) {
+  const [remoteCid, setRemoteCid] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   async function submitPinataUpload() {
@@ -23,6 +25,7 @@ export function UploadToIpfsButton({
     // const remoteHash = await pinFile(apiKey, apiSecret, fileOrBlob);
     try {
       const cid = await pinFile(fileOrBlob);
+      setRemoteCid(cid);
       onUpload && onUpload(cid);
     } catch (err) {
       alert("Error uploading file");
@@ -31,10 +34,15 @@ export function UploadToIpfsButton({
   }
 
   return (
-    <button onClick={submitPinataUpload} disabled={isLoading}>
-      {isLoading ? <Loader /> : children}
-      <div className="pt1" />
-      <div className="f6 gray">(from above section)</div>
-    </button>
+    <>
+      <button onClick={submitPinataUpload} disabled={isLoading}>
+        {isLoading ? <Loader /> : children}
+        <div className="pt1" />
+        <div className="f6 gray">(from above section)</div>
+      </button>
+      <div>
+        Remote CID: <Cid cid={remoteCid} />
+      </div>
+    </>
   );
 }
