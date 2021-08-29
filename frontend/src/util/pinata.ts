@@ -6,7 +6,7 @@ import FormData from "form-data";
  * @returns Pinata Gateway IPFS url CID
  */
 export const cidToUrl = (cid: string) =>
-  `https://find.mypinata.cloud/ipfs/${cid}`;
+  `https://${process.env.REACT_APP_IPFS_GATEWAY}/ipfs/${cid}`;
 
 // Returns IPFS hash (CID)
 export async function pinFile(file: File | Blob) {
