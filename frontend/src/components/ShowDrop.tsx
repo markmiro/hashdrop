@@ -22,7 +22,6 @@ function CheckOwner({ cid }: { cid: string }) {
       setLoading(true);
       await delay(500);
       const privateCid = await hashdrop.contract?.cidToPrivateCid(cid);
-      debugger;
 
       // This means the cid doesn't have a private file associated with it
       if (!privateCid) {
@@ -41,18 +40,17 @@ function CheckOwner({ cid }: { cid: string }) {
       const ps = await signer.signMessage(cid);
       const dataUrl = await decryptFileString(encrypted, ps);
       setDataUrl(dataUrl);
-      debugger;
       setLoading(false);
     };
     doAsync();
-  }, [provider, cid, hashdrop.contract]);
+  }, [provider, cid, !!hashdrop.contract]);
 
   const publish = async (dataUrl: string) => {
     const fileOrBlob = await base64ToBlob(dataUrl);
     const remoteCid = await pinFile(fileOrBlob);
-    debugger;
     if (remoteCid === cid) {
       alert("Success!");
+      window.location.reload();
     } else {
       alert("Failed!");
     }
@@ -89,6 +87,7 @@ export function ShowDrop({ cid }: { cid: string }) {
     try {
       setLoading(true);
       await delay(1000);
+      // TODO: add timeout with a try again button
       const res = await fetch(cidToUrl(cid));
       if (res.status === 404) {
         throw new Error("Not found");
