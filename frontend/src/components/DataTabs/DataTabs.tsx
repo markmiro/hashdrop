@@ -5,6 +5,7 @@ import { FileTab } from "./FileTab";
 
 type ContentTab = "TEXT" | "FILE";
 
+// TODO: Make this a controlled component by adding `fileOrBlob` prop so it's possible for parent component to reset it.
 export function DataTabs({
   onFileOrBlobChange,
   cid,

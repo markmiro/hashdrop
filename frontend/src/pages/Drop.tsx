@@ -1,6 +1,6 @@
 import delay from "delay";
 import queryString from "query-string";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import { DataTabs } from "../components/DataTabs/DataTabs";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
@@ -10,7 +10,7 @@ import { Cover } from "../generic/Cover";
 import { Loader } from "../generic/Loader";
 import { HashDrop as T } from "../typechain";
 import { ipfsCid } from "../util/ipfsCid";
-import { pinFile } from "../util/pinata";
+import { pinFile, unpin } from "../util/pinata";
 import { encryptFileOrBlob } from "../util/encrypt";
 import { useErrorHandler } from "react-error-boundary";
 
@@ -145,7 +145,13 @@ function useHashDrop() {
     // await delay(1000);
   };
 
-  const resetStatus = () => setStatus("INITIAL");
+  const reset = () => {
+    setIsProcessing(false);
+    setCid("");
+    setPrivateCid("");
+    setError("");
+    setStatus("INITIAL");
+  };
 
   const add = useCallback(
     async (fileOrBlob: File | Blob | null) => {
@@ -225,7 +231,7 @@ function useHashDrop() {
     status,
     isProcessing,
     error,
-    resetStatus,
+    reset,
   };
 }
 
@@ -261,23 +267,49 @@ export function Drop() {
             <StatusText
               status={hashdrop.status}
               error={hashdrop.error}
-              onReset={hashdrop.resetStatus}
+              onReset={() => {
+                hashdrop.reset();
+                setFileOrBlob(null);
+              }}
             />
+            {hashdrop.status === "SUCCESS" && hashdrop.cid && (
+              <div className="tl">
+                <div className="flex" style={{ gap: ".5em" }}>
+                  {/* https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/guides/web-intent */}
+                  <a
+                    href={tweetUrl(hashdrop.cid)}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Tweet
+                  </a>
+                  <a
+                    href={dropUrl(hashdrop.cid)}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    See Drop
+                  </a>
+                  {process.env.NODE_ENV === "development" && (
+                    <button
+                      className="red"
+                      onClick={() =>
+                        unpin(hashdrop.privateCid).then(() => {
+                          alert("Unpin success!");
+                          setFileOrBlob(null);
+                          hashdrop.reset();
+                        })
+                      }
+                    >
+                      Unpin
+                    </button>
+                  )}
+                </div>
+                <Cid cid={hashdrop.cid} />
+              </div>
+            )}
           </div>
         </Cover>
-      )}
-      {!hashdrop.isProcessing && hashdrop.cid && (
-        <>
-          <div className="flex" style={{ gap: ".5em" }}>
-            <CopyButton toCopy={dropUrl(hashdrop.cid)} />
-            {/* https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/guides/web-intent */}
-            <a href={tweetUrl(hashdrop.cid)}>Tweet</a>
-            <a href={dropUrl(hashdrop.cid)} target="_blank" rel="noreferrer">
-              See Drop
-            </a>
-          </div>
-          <Cid cid={hashdrop.cid} />
-        </>
       )}
       <p>
         <a href="https://www.kalzumeus.com/essays/dropping-hashes">
