@@ -51,7 +51,7 @@ function useAdd() {
         handleError(err);
       }
     },
-    [provider, hashdrop]
+    [provider, hashdrop, handleError]
   );
 
   const addPrivate = useCallback(
@@ -74,7 +74,7 @@ function useAdd() {
         handleError(err);
       }
     },
-    [provider, hashdrop]
+    [provider, hashdrop, handleError]
   );
 
   return { add, addPrivate, loading, success };

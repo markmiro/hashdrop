@@ -84,7 +84,7 @@ export function useContract<T extends BaseContract>(
       setLoading(false);
     };
     doAsync().catch(handleError);
-  }, [contractName, onConnect, provider]);
+  }, [contractName, onConnect, provider, handleError]);
 
   return { isLoading: loading, contract };
 }

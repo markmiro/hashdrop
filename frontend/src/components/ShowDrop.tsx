@@ -45,7 +45,7 @@ function CheckOwner({ cid }: { cid: string }) {
       setLoading(false);
     };
     doAsync();
-  }, [cid, !!hashdrop.contract]);
+  }, [provider, cid, hashdrop.contract]);
 
   const publish = async (dataUrl: string) => {
     const fileOrBlob = await base64ToBlob(dataUrl);
