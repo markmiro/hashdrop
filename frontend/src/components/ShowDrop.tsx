@@ -47,7 +47,7 @@ function CheckOwner({ cid }: { cid: string }) {
 
   const publish = async (dataUrl: string) => {
     const fileOrBlob = await base64ToBlob(dataUrl);
-    const remoteCid = await pinFile(fileOrBlob);
+    const remoteCid = await pinFile(fileOrBlob, { name: "decrypted" });
     if (remoteCid === cid) {
       alert("Success!");
       window.location.reload();

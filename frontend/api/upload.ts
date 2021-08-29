@@ -1,6 +1,6 @@
+import { PinMetadata } from "./../src/types.d";
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import axios from "axios";
-import { Blob } from "buffer";
 import FormData from "form-data";
 import formidable, { File } from "formidable";
 import fs from "fs";
@@ -13,36 +13,38 @@ export default async (req: VercelRequest, res: VercelResponse) => {
     return;
   }
 
-  const file = await getFile(req);
+  const form = new formidable.IncomingForm({
+    multiples: false,
+    keepExtensions: true,
+  });
+
+  const { file, pinataMetadata } = await new Promise<{
+    file: File;
+    pinataMetadata: PinMetadata;
+  }>((resolve) => {
+    form.parse(req, async (err, fields, files) => {
+      const file = files.file as File;
+      const metadata = JSON.parse(
+        fields.pinataMetadata as string
+      ) as PinMetadata;
+
+      resolve({
+        file,
+        pinataMetadata,
+      });
+    });
+  });
 
   try {
-    const cid = await pinFile(file);
-    res.status(200).json({ cid });
+    const cid = await pinFile(file, pinataMetadata);
+    res.status(200).json({ cid, pinataMetadata });
   } catch (err) {
     console.log(err);
     res.status(500).json({ cid: "" });
   }
 };
 
-// ---------------------------------------------
-
-async function getFile(req: VercelRequest) {
-  const form = new formidable.IncomingForm({
-    multiples: false,
-    keepExtensions: true,
-  });
-
-  const file = await new Promise((resolve) => {
-    form.parse(req, async (err, fields, files) => {
-      // console.log(files.file.name);
-      resolve(files.file);
-    });
-  });
-
-  return file;
-}
-
-async function pinFile(file: File | Blob) {
+async function pinFile(file: File, pinataMetadata?: PinMetadata) {
   // We gather a local file for this example, but any valid readStream source will work here.
   let data = new FormData();
   // https://github.com/form-data/form-data/issues/220
@@ -53,15 +55,12 @@ async function pinFile(file: File | Blob) {
     console.log(err);
   }
 
-  // You'll need to make sure that the metadata is in the form of a JSON object that's been convered to a string
+  // You'll need to make sure that the metadata is in the form of a JSON object that's been converted to a string
   // metadata is optional
-  const metadata = JSON.stringify({
-    name: "test-upload",
-    // keyvalues: {
-    //   exampleKey: "exampleValue"
-    // }
-  });
-  data.append("pinataMetadata", metadata);
+  if (pinataMetadata) {
+    const metadata = JSON.stringify(pinataMetadata);
+    data.append("pinataMetadata", metadata);
+  }
 
   // pinataOptions are optional
   const pinataOptions = JSON.stringify({

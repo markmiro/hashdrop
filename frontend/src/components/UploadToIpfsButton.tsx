@@ -24,7 +24,7 @@ export function UploadToIpfsButton({
     // const file = new Blob([str], { type: "plain" });
     // const remoteHash = await pinFile(apiKey, apiSecret, fileOrBlob);
     try {
-      const cid = await pinFile(fileOrBlob);
+      const cid = await pinFile(fileOrBlob, { name: "test-upload" });
       setRemoteCid(cid);
       onUpload && onUpload(cid);
     } catch (err) {
