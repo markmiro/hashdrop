@@ -43,6 +43,10 @@ export function App() {
                 Compare
               </NavLink>
               {" | "}
+              <NavLink activeClassName="bg-black white" to="/drop-old">
+                Drop Old
+              </NavLink>
+              {" | "}
               <NavLink activeClassName="bg-black white" to="/drop">
                 Drop
               </NavLink>
