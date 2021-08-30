@@ -9,14 +9,14 @@ import { EthToolbar } from "./eth-react/EthToolbar";
 import { EthersProviderProvider } from "./eth-react/EthersProviderContext";
 import { reloadOnChainChanged } from "./eth-react/reloadOnChainChanged";
 import { ErrorBoundary } from "react-error-boundary";
-import { ErrorFallback } from "./generic/ErrorFallback";
+import { EthErrorFallback } from "./eth-react/EthErrorFallback";
 
 reloadOnChainChanged();
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
   <StrictMode>
-    <ErrorBoundary FallbackComponent={ErrorFallback}>
+    <ErrorBoundary FallbackComponent={EthErrorFallback}>
       <EthersProviderProvider>
         <App />
       </EthersProviderProvider>

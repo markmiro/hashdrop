@@ -1,15 +1,15 @@
-import { HashRouter, Switch, Route, Redirect, NavLink } from "react-router-dom";
-import { Drop } from "./pages/Drop";
+import { ErrorBoundary } from "react-error-boundary";
+import { HashRouter, NavLink, Redirect, Route, Switch } from "react-router-dom";
+import { DropCount } from "./components/DropCount";
+import { ShowDrop } from "./components/ShowDrop/ShowDrop";
+import { EnsureConnectionRequirements } from "./eth-react/EnsureConnectionRequirements";
+import { EthErrorFallback } from "./eth-react/EthErrorFallback";
+import feArtifacts from "./hardhat-frontend-artifacts.json";
 import { Compare } from "./pages/Compare";
+import { Drop } from "./pages/Drop";
+import { DropOld } from "./pages/DropOld";
 import { Encrypt } from "./pages/Encrypt";
 import { Verify } from "./pages/Verify";
-import { DropOld } from "./pages/DropOld";
-import { ShowDrop } from "./components/ShowDrop";
-import { DropCount } from "./components/DropCount";
-import { ErrorBoundary } from "react-error-boundary";
-import { ErrorFallback } from "./generic/ErrorFallback";
-import { EnsureConnectionRequirements } from "./eth-react/EnsureConnectionRequirements";
-import feArtifacts from "./hardhat-frontend-artifacts.json";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -57,7 +57,7 @@ export function App() {
             </div>
           </nav>
 
-          <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <ErrorBoundary FallbackComponent={EthErrorFallback}>
             {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
             <Switch>
