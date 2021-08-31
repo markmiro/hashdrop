@@ -37,8 +37,8 @@ export function useDecrypter() {
   async function publish() {
     if (!dataUrl || !cid) throw new Error("File not decrypted yet.");
     setState("PUBLISHING");
-    const fileOrBlob = await base64ToBlob(dataUrl);
-    const remoteCid = await pinFile(fileOrBlob, { name: "decrypted" });
+    const fob = await base64ToBlob(dataUrl);
+    const remoteCid = await pinFile(fob, { name: "decrypted" });
     // This should never fail, but just inn case
     if (cid !== remoteCid) {
       throw new Error("Uploaded file CID doesn't match the expected CID.");

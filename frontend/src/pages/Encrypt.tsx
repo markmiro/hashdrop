@@ -1,7 +1,7 @@
 import aes from "crypto-js/aes";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";
+import { fobAsDataUrl } from "../util/fobAsDataUrl";
 
 const id = ethers.utils.hexlify(ethers.utils.randomBytes(12));
 
@@ -9,7 +9,7 @@ const id = ethers.utils.hexlify(ethers.utils.randomBytes(12));
 const toDataURL = (url: string) =>
   fetch(url)
     .then((response) => response.blob())
-    .then(fileOrBlobAsDataUrl);
+    .then(fobAsDataUrl);
 
 export function Encrypt() {
   const [url, setUrl] = useState("");

@@ -8,7 +8,7 @@ import { Cid } from "../generic/Cid";
 import { Cover } from "../generic/Cover";
 import { Loader } from "../generic/Loader";
 import { HashDrop as T } from "../typechain";
-import { encryptFileOrBlob } from "../util/encrypt";
+import { encryptFob } from "../util/encrypt";
 import { ipfsCid } from "../util/ipfsCid";
 import { pinFile, unpin } from "../util/pinata";
 
@@ -152,20 +152,20 @@ function useHashDrop() {
   };
 
   const add = useCallback(
-    async (fileOrBlob: File | Blob | null) => {
+    async (fob: File | Blob | null) => {
       try {
         setIsProcessing(true);
         await updateStatus("PROCESSING");
 
-        if (!fileOrBlob) throw new Error("Please pick a file.");
-        const cid = await ipfsCid(fileOrBlob);
+        if (!fob) throw new Error("Please pick a file.");
+        const cid = await ipfsCid(fob);
         setCid(cid);
 
         // Save / upload
         await updateStatus("SENDING_ETH");
         await ethAdd.add(cid);
         await updateStatus("SENDING_IPFS");
-        const remoteCid = await pinFile(fileOrBlob);
+        const remoteCid = await pinFile(fob);
         if (cid !== remoteCid) throw new Error("Internal error.");
         await updateStatus("SUCCESS");
         setIsProcessing(false);
@@ -180,29 +180,29 @@ function useHashDrop() {
   );
 
   const addPrivate = useCallback(
-    async (fileOrBlob: File | Blob | null) => {
+    async (fob: File | Blob | null) => {
       try {
         setStatus("PROCESSING");
         setIsProcessing(true);
-        if (!fileOrBlob) throw new Error("Please pick a file.");
+        if (!fob) throw new Error("Please pick a file.");
 
         // Create password
         await updateStatus("ENCRYPTING");
-        const cid = await ipfsCid(fileOrBlob);
+        const cid = await ipfsCid(fob);
         setCid(cid);
         const signer = provider.getSigner();
         const ps = await signer.signMessage(cid);
 
         // Encrypt
-        const privateFileOrBlob = await encryptFileOrBlob(fileOrBlob, ps);
-        const privateCid = await ipfsCid(privateFileOrBlob);
+        const privateFob = await encryptFob(fob, ps);
+        const privateCid = await ipfsCid(privateFob);
         setPrivateCid(privateCid);
 
         // Save / upload
         await updateStatus("SENDING_ETH");
         await ethAdd.addPrivate(cid, privateCid);
         await updateStatus("SENDING_IPFS");
-        const remotePrivateCid = await pinFile(privateFileOrBlob);
+        const remotePrivateCid = await pinFile(privateFob);
         if (privateCid !== remotePrivateCid) throw new Error("Internal error.");
         setStatus("SUCCESS");
         setIsProcessing(false);
@@ -216,7 +216,7 @@ function useHashDrop() {
     [provider, ethAdd]
   );
 
-  const verify = useCallback(async (fileOrBlob: File | Blob | null, cid) => {
+  const verify = useCallback(async (fob: File | Blob | null, cid) => {
     throw new Error("TODO: implement");
   }, []);
 
@@ -234,7 +234,7 @@ function useHashDrop() {
 }
 
 export function Drop() {
-  const [fileOrBlob, setFileOrBlob] = useState<File | Blob | null>(null);
+  const [fob, setFob] = useState<File | Blob | null>(null);
   const hashdrop = useHashDrop();
 
   return (
@@ -242,20 +242,20 @@ export function Drop() {
       <div className="pt4" />
       <h1 className="mv0">Drop</h1>
       <div className="pt4" />
-      <DataTabs onFileOrBlobChange={setFileOrBlob} />
+      <DataTabs onFobChange={setFob} />
       <div className="pt4" />
       {/* <button
         className="pa2 w-100"
-        disabled={!fileOrBlob}
-        onClick={() => hashdrop.add(fileOrBlob)}
+        disabled={!fob}
+        onClick={() => hashdrop.add(fob)}
       >
         Add
       </button> */}
       {/* <div className="pt2" /> */}
       <button
         className="pa2 w-100"
-        disabled={!fileOrBlob}
-        onClick={() => hashdrop.addPrivate(fileOrBlob)}
+        disabled={!fob}
+        onClick={() => hashdrop.addPrivate(fob)}
       >
         Add Private
       </button>
@@ -267,7 +267,7 @@ export function Drop() {
               error={hashdrop.error}
               onReset={() => {
                 hashdrop.reset();
-                setFileOrBlob(null);
+                setFob(null);
               }}
             />
             {hashdrop.status === "SUCCESS" && hashdrop.cid && (
@@ -294,7 +294,7 @@ export function Drop() {
                       onClick={() =>
                         unpin(hashdrop.privateCid).then(() => {
                           alert("Unpin success!");
-                          setFileOrBlob(null);
+                          setFob(null);
                           hashdrop.reset();
                         })
                       }

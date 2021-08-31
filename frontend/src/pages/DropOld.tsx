@@ -5,7 +5,7 @@ import { DataTabs } from "../components/DataTabs/DataTabs";
 import aes from "crypto-js/aes";
 import utf8Enc from "crypto-js/enc-utf8";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
-import { fileOrBlobAsDataUrl } from "../util/fileOrBlobAsDataUrl";
+import { fobAsDataUrl } from "../util/fobAsDataUrl";
 import { textToBlob } from "../util/textToBlob";
 import { DownloadButton } from "../components/DownloadButton";
 import { UploadToIpfsButton } from "../components/UploadToIpfsButton";
@@ -18,16 +18,14 @@ const GrayBox: FC = ({ children }) => (
 
 export function DropOld() {
   const provider = useEthersProvider();
-  const [fileOrBlob, setFileOrBlob] = useState<File | Blob | null>(null);
+  const [fob, setFob] = useState<File | Blob | null>(null);
   const [dataUrl, setDataUrl] = useState<string | null>(null);
   const [localCid, setLocalCid] = useState("");
 
   // Encrypted
   const [generatedPassword, setGeneratedPassword] = useState("");
   const [encrypted, setEncrypted] = useState<string | null>(null);
-  const [encryptedFileOrBlob, setEncryptedFileOrBlob] = useState<
-    File | Blob | null
-  >(null);
+  const [encryptedFob, setEncryptedFob] = useState<File | Blob | null>(null);
   const [encryptedLocalCid, setEncryptedLocalCid] = useState("");
 
   const [downloadedEncrypted, setDownloadedEncrypted] = useState<string | null>(
@@ -37,14 +35,14 @@ export function DropOld() {
     string | null
   >(null);
 
-  const updateLocalCid = useCallback(async (fileOrBlob: File | Blob | null) => {
-    setFileOrBlob(fileOrBlob);
-    if (!fileOrBlob) {
+  const updateLocalCid = useCallback(async (fob: File | Blob | null) => {
+    setFob(fob);
+    if (!fob) {
       setLocalCid("");
       return;
     }
     try {
-      const cid = await ipfsCid(fileOrBlob);
+      const cid = await ipfsCid(fob);
       setLocalCid(cid);
       setGeneratedPassword("");
     } catch (err) {
@@ -60,24 +58,24 @@ export function DropOld() {
   }
 
   useEffect(() => {
-    if (!fileOrBlob || !generatedPassword) {
+    if (!fob || !generatedPassword) {
       setDataUrl(null);
       setEncrypted(null);
       setEncryptedLocalCid("");
       return;
     }
     const doAsync = async () => {
-      const dataUrl = await fileOrBlobAsDataUrl(fileOrBlob);
+      const dataUrl = await fobAsDataUrl(fob);
       setDataUrl(dataUrl);
       const encrypted = aes.encrypt(dataUrl, generatedPassword).toString();
       setEncrypted(encrypted);
-      const encryptedFileOrBlob = textToBlob(encrypted);
-      setEncryptedFileOrBlob(encryptedFileOrBlob);
-      const cid = await ipfsCid(encryptedFileOrBlob);
+      const encryptedFob = textToBlob(encrypted);
+      setEncryptedFob(encryptedFob);
+      const cid = await ipfsCid(encryptedFob);
       setEncryptedLocalCid(cid);
     };
     doAsync();
-  }, [fileOrBlob, generatedPassword]);
+  }, [fob, generatedPassword]);
 
   const downloadEncryptedFile = async () => {
     const res = await fetch(cidToUrl(encryptedLocalCid));
@@ -98,7 +96,7 @@ export function DropOld() {
       <div className="pt4" />
       <h1 className="mv0">Drop</h1>
       <div className="pt4" />
-      <DataTabs onFileOrBlobChange={updateLocalCid} />
+      <DataTabs onFobChange={updateLocalCid} />
       <GrayBox>
         Local CID:
         <Cid cid={localCid} />
@@ -129,7 +127,7 @@ export function DropOld() {
       </GrayBox>
       <div className="pt4" />
       <UploadToIpfsButton
-        fileOrBlob={encryptedFileOrBlob}
+        fob={encryptedFob}
         onUpload={() => alert("Upload worked!")}
       >
         Upload Encrypted File

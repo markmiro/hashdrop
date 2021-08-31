@@ -5,12 +5,12 @@ import { FileTab } from "./FileTab";
 
 type ContentTab = "TEXT" | "FILE";
 
-// TODO: Make this a controlled component by adding `fileOrBlob` prop so it's possible for parent component to reset it.
+// TODO: Make this a controlled component by adding `fob` prop so it's possible for parent component to reset it.
 export function DataTabs({
-  onFileOrBlobChange,
+  onFobChange,
   cid,
 }: {
-  onFileOrBlobChange: (fob: File | Blob | null) => void;
+  onFobChange: (fob: File | Blob | null) => void;
   cid?: string;
 }) {
   const [contentTab, setContentTab] = useState<ContentTab>("TEXT");
@@ -18,10 +18,10 @@ export function DataTabs({
   return (
     <Tabs<ContentTab> value={contentTab} onChange={setContentTab}>
       <Tab label="Text" value="TEXT">
-        <TextTab onBlobChange={onFileOrBlobChange} cid={cid} />
+        <TextTab onBlobChange={onFobChange} cid={cid} />
       </Tab>
       <Tab label="File" value="FILE">
-        <FileTab onFileChange={onFileOrBlobChange} />
+        <FileTab onFileChange={onFobChange} />
       </Tab>
     </Tabs>
   );

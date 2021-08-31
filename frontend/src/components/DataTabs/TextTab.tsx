@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { fileOrBlobAsText } from "../../util/fileOrBlobAsText";
+import { fobAsText } from "../../util/fobAsText";
 import { resetFileInput } from "../../util/resetFileInput";
 import { textTypes } from "../../util/textTypes";
 import { textToBlob } from "../../util/textToBlob";
@@ -30,7 +30,7 @@ export function TextTab({
   const updateTextFile = useCallback(async (file: null | File | Blob) => {
     if (!file) return;
     if (textTypes.includes(file.type)) {
-      const text = await fileOrBlobAsText(file);
+      const text = await fobAsText(file);
       setText(text);
     } else {
       setText("");

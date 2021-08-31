@@ -1,6 +1,6 @@
 const Hash = require("ipfs-only-hash");
 
-async function fileToUint8Array(fileOrBlob: File | Blob) {
+async function fileToUint8Array(fob: File | Blob) {
   return new Promise((resolve, reject) => {
     try {
       const reader = new FileReader();
@@ -11,16 +11,16 @@ async function fileToUint8Array(fileOrBlob: File | Blob) {
           resolve(array);
         }
       };
-      reader.readAsArrayBuffer(fileOrBlob);
+      reader.readAsArrayBuffer(fob);
     } catch (err) {
       reject(err);
     }
   });
 }
 
-export async function ipfsCid(fileOrBlob: File | Blob): Promise<string> {
+export async function ipfsCid(fob: File | Blob): Promise<string> {
   // options: https://github.com/ipfs-inactive/js-ipfs-unixfs-importer#api
-  const byteArr = await fileToUint8Array(fileOrBlob);
+  const byteArr = await fileToUint8Array(fob);
   const cid = await Hash.of(byteArr, {
     cidVersion: 1,
     rawLeaves: true,

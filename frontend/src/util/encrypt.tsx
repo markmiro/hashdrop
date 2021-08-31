@@ -1,13 +1,10 @@
 import aes from "crypto-js/aes";
-import { fileOrBlobAsDataUrl } from "./fileOrBlobAsDataUrl";
+import { fobAsDataUrl } from "./fobAsDataUrl";
 import { textToBlob } from "./textToBlob";
 import utf8Enc from "crypto-js/enc-utf8";
 
-export async function encryptFileOrBlob(
-  fileOrBlob: File | Blob,
-  password: string
-) {
-  const dataUrl = await fileOrBlobAsDataUrl(fileOrBlob);
+export async function encryptFob(fob: File | Blob, password: string) {
+  const dataUrl = await fobAsDataUrl(fob);
   const encrypted = aes.encrypt(dataUrl, password).toString();
   const blob = textToBlob(encrypted);
   return blob;
