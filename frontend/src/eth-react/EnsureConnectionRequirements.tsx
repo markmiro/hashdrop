@@ -96,60 +96,55 @@ export const EnsureConnectionRequirements: FC<Props> = (props) => {
   const handleError = useErrorHandler();
 
   useEffect(() => {
-    setStatus("CHECKING");
     const doAsync = async () => {
-      try {
-        if (!data.isConnectedToCurrentChain) {
-          setStatus("NOT_CONNECTED_TO_CHAIN");
+      // setStatus("CHECKING");
+      if (!data.isConnectedToCurrentChain) {
+        setStatus("NOT_CONNECTED_TO_CHAIN");
+        return;
+      }
+
+      // It will try again when data is populated.
+      if (!data) return;
+      if (typeof data.chainId === "undefined") return;
+      if (typeof data.selectedAddressBalance === "undefined") return;
+
+      if (expect.chainIds) {
+        if (expect.chainIds.length === 0) {
+          throw new Error(
+            "If you want to require a set of chain acceptable ids, don't make the variable an empty array."
+          );
+        }
+        if (!data.chainId) {
+          throw new Error("Can't connect to network.");
+        }
+        if (!expect.chainIds.includes(parseInt(data.chainId, 16).toString())) {
+          setStatus("WRONG_CHAIN");
           return;
         }
-
-        // It will try again when data is populated.
-        if (!data) return;
-        if (typeof data.chainId === "undefined") return;
-        if (typeof data.selectedAddressBalance === "undefined") return;
-
-        if (expect.chainIds) {
-          if (expect.chainIds.length === 0) {
-            throw new Error(
-              "If you want to require a set of chain acceptable ids, don't make the variable an empty array."
-            );
-          }
-          if (!data.chainId) {
-            throw new Error("Can't connect to network.");
-          }
-          if (
-            !expect.chainIds.includes(parseInt(data.chainId, 16).toString())
-          ) {
-            setStatus("WRONG_CHAIN");
-            return;
-          }
-        }
-
-        // Connect if we're not connected already
-        if (expect.isConnected) {
-          if (!data?.selectedAddress) {
-            setStatus("NO_ACCOUNT_CONNECTED");
-            return;
-          }
-        }
-
-        // Make sure there's some balance on that account
-        if (expect.isNonZeroBalance) {
-          const isEmpty = BigNumber.from(data.selectedAddressBalance).isZero();
-          if (isEmpty) {
-            setStatus("ZERO_BALANCE");
-            return;
-          }
-        }
-
-        setStatus("OK");
-      } catch (err) {
-        handleError(err);
       }
+
+      // Connect if we're not connected already
+      if (expect.isConnected) {
+        if (!data?.selectedAddress) {
+          setStatus("NO_ACCOUNT_CONNECTED");
+          return;
+        }
+      }
+
+      // Make sure there's some balance on that account
+      if (expect.isNonZeroBalance) {
+        const isEmpty = BigNumber.from(data.selectedAddressBalance).isZero();
+        if (isEmpty) {
+          setStatus("ZERO_BALANCE");
+          return;
+        }
+      }
+
+      setStatus("OK");
     };
-    doAsync();
+    doAsync().catch(handleError);
   }, [
+    status,
     expect.isConnected,
     expect.isNonZeroBalance,
     expect.chainIds,
