@@ -80,7 +80,6 @@ export function DropOld() {
   }, [fileOrBlob, generatedPassword]);
 
   const downloadEncryptedFile = async () => {
-    debugger;
     const res = await fetch(cidToUrl(encryptedLocalCid));
     if (res.status === 404) {
       throw new Error("Not found");

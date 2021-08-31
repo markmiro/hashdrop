@@ -1,18 +1,16 @@
-import delay from "delay";
 import queryString from "query-string";
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useState } from "react";
+import { useErrorHandler } from "react-error-boundary";
 import { DataTabs } from "../components/DataTabs/DataTabs";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
 import { Cid } from "../generic/Cid";
-import { CopyButton } from "../generic/CopyButton";
 import { Cover } from "../generic/Cover";
 import { Loader } from "../generic/Loader";
 import { HashDrop as T } from "../typechain";
+import { encryptFileOrBlob } from "../util/encrypt";
 import { ipfsCid } from "../util/ipfsCid";
 import { pinFile, unpin } from "../util/pinata";
-import { encryptFileOrBlob } from "../util/encrypt";
-import { useErrorHandler } from "react-error-boundary";
 
 // const DROP_ORIGIN = `https://ipfs.io/ipfs/${HASHDROP_DEPLOY_CID}`;
 const DROP_ORIGIN = window.location.origin;

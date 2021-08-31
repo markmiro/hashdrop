@@ -24,6 +24,8 @@ function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
+const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId);
+
 export function App() {
   return (
     <Layout>
@@ -69,13 +71,20 @@ export function App() {
               </Route>
               <Route
                 path="/drop/:cid"
-                render={(props) => <ShowDrop cid={props.match.params.cid} />}
+                render={(props) => (
+                  <EnsureConnectionRequirements
+                    isConnected
+                    chainIds={goodChainIds}
+                  >
+                    <ShowDrop cid={props.match.params.cid} />
+                  </EnsureConnectionRequirements>
+                )}
               ></Route>
               <Route path="/drop">
                 <EnsureConnectionRequirements
                   isConnected
                   isNonZeroBalance
-                  chainIds={Object.keys(feArtifacts.contract.HashDrop.chainId)}
+                  chainIds={goodChainIds}
                 >
                   <Drop />
                 </EnsureConnectionRequirements>
