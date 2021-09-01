@@ -2,6 +2,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { HashRouter, NavLink, Redirect, Route, Switch } from "react-router-dom";
 import { DropCount } from "./components/DropCount";
 import { ShowDrop } from "./components/ShowDrop/ShowDrop";
+import { ChainOptions } from "./eth-react/ChainOptions";
 import { EthEnsure } from "./eth-react/EthEnsure";
 import { EthErrorFallback } from "./eth-react/EthErrorFallback";
 import feArtifacts from "./hardhat-frontend-artifacts.json";
@@ -101,6 +102,7 @@ export function App() {
       <EthEnsure chainIds={goodChainIds}>
         <DropCount />
       </EthEnsure>
+      <ChainOptions chainIds={goodChainIds} />
     </Layout>
   );
 }

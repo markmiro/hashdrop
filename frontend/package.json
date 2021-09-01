@@ -5,6 +5,7 @@
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
+    "@headlessui/react": "1.4.1",
     "@metamask/detect-provider": "^1.2.0",
     "axios": "0.21.1",
     "base64-blob": "1.4.1",
@@ -12,6 +13,7 @@
     "crypto-js": "4.1.1",
     "date-fns": "2.23.0",
     "delay": "5.0.0",
+    "eth-chains": "0.3.5",
     "ethers": "5.4.5",
     "form-data": "4.0.0",
     "formidable": "^1.2.2",
@@ -21,6 +23,7 @@
     "react-blockies": "1.4.1",
     "react-dom": "17.0.2",
     "react-error-boundary": "3.1.3",
+    "react-json-view": "1.21.3",
     "react-router-dom": "5.2.0",
     "tachyons": "4.12.0"
   },
