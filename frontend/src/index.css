@@ -17,8 +17,3 @@ hr {
   width: 100%;
   opacity: 0.2;
 }
-
-label {
-  /* See Tachyons .f7 class */
-  font-size: 0.75em;
-}
