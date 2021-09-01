@@ -52,6 +52,18 @@ const config: HardhatUserConfig = {
       url: `https://eth-mainnet.alchemyapi.io/v2/mKZMh3c3jyQRxZ0FM0c2Td9WwvFNYd3Z`,
       accounts: [`0x${process.env.MAINNET_PRIVATE_KEY}`],
     },
+    // https://developer.offchainlabs.com/docs/contract_deployment#hardhat
+    arbitrum: {
+      url: `https://arb-mainnet.g.alchemy.com/v2/TycfEw932RND0MaiwwBB6AADeCH1tQ4u`,
+      accounts: [`0x${process.env.MAINNET_PRIVATE_KEY}`],
+    },
+    arbtest: {
+      url: `https://arb-rinkeby.g.alchemy.com/v2/TycfEw932RND0MaiwwBB6AADeCH1tQ4u`,
+      accounts: [
+        `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`,
+      ],
+      gasPrice: 0,
+    },
   },
   // https://hardhat.org/plugins/hardhat-gas-reporter.html#configuration
   gasReporter: {

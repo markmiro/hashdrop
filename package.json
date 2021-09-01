@@ -8,6 +8,8 @@
     "test": "hardhat test",
     "build": "hardhat compile",
     "deploy:local": "hardhat run scripts/deploy.js --network localhost",
+    "deploy:arbtest": "hardhat run scripts/deploy.js --network arbtest",
+    "deploy:arbitrum": "hardhat run scripts/deploy.js --network arbitrum",
     "deploy:ropsten": "hardhat run scripts/deploy.js --network ropsten",
     "deploy:mainnet": "hardhat run scripts/deploy.js --network mainnet"
   },

@@ -5,11 +5,11 @@ import { ShowDrop } from "./components/ShowDrop/ShowDrop";
 import { EthEnsure } from "./eth-react/EthEnsure";
 import { EthErrorFallback } from "./eth-react/EthErrorFallback";
 import feArtifacts from "./hardhat-frontend-artifacts.json";
+import { Arbitrum } from "./pages/Arbitrum";
 import { Compare } from "./pages/Compare";
 import { Drop } from "./pages/Drop";
 import { DropOld } from "./pages/DropOld";
 import { Encrypt } from "./pages/Encrypt";
-import { Verify } from "./pages/Verify";
 
 function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -56,6 +56,10 @@ export function App() {
               <NavLink activeClassName="bg-black white" to="/verify">
                 Verify
               </NavLink>
+              {" | "}
+              <NavLink activeClassName="bg-black white" to="/arbitrum">
+                Arbitrum
+              </NavLink>
             </div>
           </nav>
 
@@ -81,8 +85,8 @@ export function App() {
               <Route path="/drop-old">
                 <DropOld />
               </Route>
-              <Route path="/verify">
-                <Verify />
+              <Route path="/arbitrum">
+                <Arbitrum />
               </Route>
               <Route path="/">
                 <Redirect to="/compare" />
