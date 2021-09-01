@@ -5,66 +5,8 @@ import { ErrorMessage } from "../generic/ErrorMessage";
 import { Loader } from "../generic/Loader";
 import { chainIdToInfo } from "./chainIdToInfo";
 import { useEthersProvider } from "./EthersProviderContext";
+import { getProposedChainId } from "./getProposedChainId";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
-
-function getProposedChainId() {
-  // https://docs.metamask.io/guide/rpc-api.html#wallet-switchethereumchain
-  // "0x"+(1337).toString(16) === "0x539"
-  let proposedChainId = "0x1"; // Mainnet
-  if (process.env.NODE_ENV === "development") {
-    proposedChainId = "0x539"; // 1337 - localhost
-  } else if (process.env.NODE_ENV === "test") {
-    proposedChainId = "0x3"; // Ropsten
-  }
-
-  return proposedChainId;
-}
-
-// const problems = (provider: ethers.providers.Web3Provider) => ({
-//   WRONG_CHAIN: {
-//     check: () => {},
-//     fix: async () => {
-//       // TODO: Make user select one
-//       await provider.send("wallet_switchEthereumChain", [{ chainId: "0x1" }]);
-//     },
-//     render: (fix: any) => (
-//       <div>
-//         <ErrorMessage>Wrong chain.</ErrorMessage>
-//         <button onClick={fix}>Choose Correct Chain</button>
-//       </div>
-//     ),
-//   },
-//   NO_ACCOUNT_CONNECTED: {
-//     check: async () => {
-//       const addresses = await provider.listAccounts();
-//       debugger;
-//       return addresses.length === 0;
-//     },
-//     fix: async () => {
-//       await provider.send("eth_requestAccounts", []);
-//     },
-//     render: (fix: any) => (
-//       <div>
-//         <ErrorMessage>No account connected.</ErrorMessage>
-//         <button onClick={fix}>Connect Account</button>
-//       </div>
-//     ),
-//   },
-//   ZERO_BALANCE: {
-//     check: async () => {},
-//     fix: async () => {
-//       await provider.send("wallet_requestPermissions", [{ eth_accounts: {} }]);
-//     },
-//     render: (fix: any) => (
-//       <div>
-//         <ErrorMessage>
-//           Please choose an account with a non-zero balance.
-//         </ErrorMessage>
-//         <button onClick={fix}>Connect Account</button>
-//       </div>
-//     ),
-//   },
-// });
 
 type Props = {
   /** A '0x' prefixed chain */
@@ -90,7 +32,7 @@ export const EnsureConnectionRequirements: FC<Props> = (props) => {
   // Need to check connection if checking for balance
   if (expect.isNonZeroBalance) expect.isConnected = true;
 
-  const { loading, uiError, data } = useMetaMaskEthereum();
+  const { loading, data } = useMetaMaskEthereum();
   const provider = useEthersProvider();
   const [status, setStatus] = useState<Status>("CHECKING");
   const handleError = useErrorHandler();
@@ -156,6 +98,7 @@ export const EnsureConnectionRequirements: FC<Props> = (props) => {
   ]);
 
   const fixProblem = async () => {
+    if (!provider) return;
     switch (status) {
       case "CHECKING":
         break;
@@ -199,10 +142,6 @@ export const EnsureConnectionRequirements: FC<Props> = (props) => {
         {/* <pre>{JSON.stringify(data, null, "  ")}</pre> */}
       </div>
     );
-  }
-
-  if (uiError) {
-    return <ErrorMessage>⚠️ Error: {uiError}</ErrorMessage>;
   }
 
   switch (status) {

@@ -10,6 +10,7 @@ import { EthersProviderProvider } from "./eth-react/EthersProviderContext";
 import { reloadOnChainChanged } from "./eth-react/reloadOnChainChanged";
 import { ErrorBoundary } from "react-error-boundary";
 import { EthErrorFallback } from "./eth-react/EthErrorFallback";
+import { MetaMaskProvider } from "./eth-react/useMetaMaskEthereum";
 
 reloadOnChainChanged();
 
@@ -17,11 +18,13 @@ const rootElement = document.getElementById("root");
 ReactDOM.render(
   <StrictMode>
     <ErrorBoundary FallbackComponent={EthErrorFallback}>
-      <EthersProviderProvider>
-        <App />
-      </EthersProviderProvider>
+      <MetaMaskProvider>
+        <EthersProviderProvider>
+          <App />
+        </EthersProviderProvider>
+        <EthToolbar />
+      </MetaMaskProvider>
     </ErrorBoundary>
-    <EthToolbar />
   </StrictMode>,
   rootElement
 );

@@ -10,6 +10,7 @@ export const EthErrorFallback: FC<FallbackProps> = ({
   error,
   resetErrorBoundary,
 }) => {
+  // Consider using this: https://www.npmjs.com/package/eth-rpc-errors
   let message: ReactNode;
   if (ensureError(error)) {
     message = error.message;

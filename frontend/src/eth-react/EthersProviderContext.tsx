@@ -1,7 +1,6 @@
 import { ethers } from "ethers";
 import { createContext, FC, useContext, useEffect, useState } from "react";
 import { useErrorHandler } from "react-error-boundary";
-import { ErrorMessage } from "../generic/ErrorMessage";
 import { Loader } from "../generic/Loader";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 
@@ -41,7 +40,7 @@ const EthersProviderContext =
 
 export const EthersProviderProvider: FC = ({ children }) => {
   const handleError = useErrorHandler();
-  const { loading, uiError, ethereum } = useMetaMaskEthereum();
+  const { loading, ethereum } = useMetaMaskEthereum();
   const [provider, setProvider] =
     useState<ethers.providers.Web3Provider | null>(null);
 
@@ -58,9 +57,8 @@ export const EthersProviderProvider: FC = ({ children }) => {
   }, [ethereum, handleError]);
 
   if (loading) return <Loader />;
-  if (uiError) return <ErrorMessage>{uiError}</ErrorMessage>;
-  // Doing this for redundancy, but window.ethereum should always exist after loading is done
-  if (!ethereum) throw new Error("window.ethereum is missing.");
+
+  if (!provider) <></>;
 
   return (
     <EthersProviderContext.Provider value={provider}>

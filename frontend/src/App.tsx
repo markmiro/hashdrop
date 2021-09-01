@@ -2,7 +2,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { HashRouter, NavLink, Redirect, Route, Switch } from "react-router-dom";
 import { DropCount } from "./components/DropCount";
 import { ShowDrop } from "./components/ShowDrop/ShowDrop";
-import { EnsureConnectionRequirements } from "./eth-react/EnsureConnectionRequirements";
+import { EthEnsure } from "./eth-react/EthEnsure";
 import { EthErrorFallback } from "./eth-react/EthErrorFallback";
 import feArtifacts from "./hardhat-frontend-artifacts.json";
 import { Compare } from "./pages/Compare";
@@ -71,23 +71,12 @@ export function App() {
               </Route>
               <Route
                 path="/drop/:cid"
-                render={(props) => (
-                  <EnsureConnectionRequirements
-                    isConnected
-                    chainIds={goodChainIds}
-                  >
-                    <ShowDrop cid={props.match.params.cid} />
-                  </EnsureConnectionRequirements>
-                )}
+                render={(props) => <ShowDrop cid={props.match.params.cid} />}
               ></Route>
               <Route path="/drop">
-                <EnsureConnectionRequirements
-                  isConnected
-                  isNonZeroBalance
-                  chainIds={goodChainIds}
-                >
+                <EthEnsure isConnected isNonZeroBalance chainIds={goodChainIds}>
                   <Drop />
-                </EnsureConnectionRequirements>
+                </EthEnsure>
               </Route>
               <Route path="/drop-old">
                 <DropOld />
@@ -103,11 +92,9 @@ export function App() {
         </div>
       </HashRouter>
       <hr />
-      <EnsureConnectionRequirements
-        chainIds={Object.keys(feArtifacts.contract.HashDrop.chainId)}
-      >
+      <EthEnsure chainIds={goodChainIds}>
         <DropCount />
-      </EnsureConnectionRequirements>
+      </EthEnsure>
     </Layout>
   );
 }

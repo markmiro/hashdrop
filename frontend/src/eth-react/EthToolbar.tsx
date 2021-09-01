@@ -9,6 +9,8 @@ import {
   prettyGasPrice,
 } from "./utils";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
+import { InstallMetaMaskMessage } from "./InstallMetaMaskMessage";
+import { MultipleWalletsMessage } from "./MultipleWalletsMessage";
 
 const Layout: FC = ({ children }) => (
   <>
@@ -26,20 +28,11 @@ const Layout: FC = ({ children }) => (
 export function Inner() {
   const handleError = useErrorHandler();
   // Not using useEthersProvider because I want to make EthToolbar possible to embed without the ProviderProvider
-  const { loading, uiError, data, ethereum } = useMetaMaskEthereum();
+  const { loading, data, ethereum } = useMetaMaskEthereum();
 
   function connectAccount() {
     if (!ethereum) return; // Note: should always exist, but types fail
     ethereum.request({ method: "eth_requestAccounts" }).catch(handleError);
-  }
-
-  if (uiError) {
-    return (
-      <>
-        <div className="flex-auto" />
-        <span className="light-red">⚠️ Error: {uiError}</span>
-      </>
-    );
   }
 
   if (loading) {
@@ -47,6 +40,28 @@ export function Inner() {
       <>
         <div className="flex-auto" />
         <Loader />
+      </>
+    );
+  }
+
+  if (!data.isWalletInstalled) {
+    return (
+      <>
+        <div className="flex-auto" />
+        <span className="light-red">
+          ⚠️ Error: <InstallMetaMaskMessage />
+        </span>
+      </>
+    );
+  }
+
+  if (data.hasMultipleWallets) {
+    return (
+      <>
+        <div className="flex-auto" />
+        <span className="light-red">
+          ⚠️ Error: <MultipleWalletsMessage />
+        </span>
       </>
     );
   }

@@ -94,8 +94,8 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1630362957254,
-          "str": "Mon, 30 Aug 2021 22:35:57 GMT",
+          "ts": 1630452711377,
+          "str": "Tue, 31 Aug 2021 23:31:51 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/HashDrop.sol"

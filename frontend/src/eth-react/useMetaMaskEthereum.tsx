@@ -1,10 +1,12 @@
 import detectEthereumProvider from "@metamask/detect-provider";
 import type { BaseProvider } from "@metamask/providers";
 import delay from "delay";
-import { ReactNode, useEffect, useState } from "react";
+import { createContext, FC, useContext, useEffect, useState } from "react";
 import { useErrorHandler } from "react-error-boundary";
 
 type Data = {
+  isWalletInstalled: boolean;
+  hasMultipleWallets: boolean;
   isConnectedToCurrentChain: boolean;
   isMetaMask: boolean;
   chainId: string | undefined;
@@ -14,12 +16,21 @@ type Data = {
   gasPrice: string | undefined;
 };
 
-export function useMetaMaskEthereum() {
+type MetaMaskType = {
+  loading: boolean;
+  data: Data;
+  ethereum: BaseProvider | null;
+};
+
+const MetaMaskContext = createContext<MetaMaskType | null>(null);
+
+export const MetaMaskProvider: FC = ({ children }) => {
   const handleError = useErrorHandler();
-  const [uiError, setUiError] = useState<string | ReactNode>(""); // User-visible error
   const [ethereum, setEthereum] = useState<BaseProvider | null>(null);
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<Data>({
+    isWalletInstalled: false,
+    hasMultipleWallets: false,
     isConnectedToCurrentChain: false,
     isMetaMask: false,
     chainId: undefined,
@@ -32,37 +43,24 @@ export function useMetaMaskEthereum() {
   // A little based on this:
   // https://docs.metamask.io/guide/ethereum-provider.html#using-the-provider
   useEffect(() => {
-    setUiError("");
     setLoading(true);
     const doAsync = async () => {
       try {
         const ethereum = (await detectEthereumProvider()) as BaseProvider;
+        setEthereum(ethereum);
+
         if (!ethereum) {
-          setUiError(
-            <span>
-              Please{" "}
-              <a
-                className="link underline"
-                style={{ color: "inherit" }}
-                href="https://metamask.io/download"
-              >
-                Install MetaMask
-              </a>
-            </span>
-          );
+          setData((d) => ({
+            ...d,
+            isWalletInstalled: !!ethereum,
+          }));
           setLoading(false);
           return;
         }
-        if (ethereum !== window.ethereum) {
-          setUiError("Do you have multiple wallets installed?");
-          return;
-        }
-        setEthereum(ethereum);
-        const chainId =
-          (await ethereum.request<string>({
-            method: "eth_chainId",
-          })) ?? "";
 
+        const chainId = await ethereum.request<string>({
+          method: "eth_chainId",
+        });
         const blockNumber = await ethereum.request<string>({
           method: "eth_blockNumber",
           params: [],
@@ -78,12 +76,14 @@ export function useMetaMaskEthereum() {
           addresses && addresses.length ? addresses[0] : undefined;
 
         setData({
-          // I've had this return false when I start a local hardhat node and
+          isWalletInstalled: !!ethereum,
+          hasMultipleWallets: ethereum !== window.ethereum,
+          // TODO: I've had this return false when I start a local hardhat node and
           // the frontend picks up the connection, but MetaMask continues to hang
           // until I disconnect from the localhost chain and connect back.
           isConnectedToCurrentChain: ethereum.isConnected(),
           isMetaMask: (ethereum as any).isMetaMask,
-          chainId,
+          chainId: chainId ?? undefined,
           selectedAddress,
           selectedAddressBalance: undefined,
           blockNumber: blockNumber ?? undefined,
@@ -116,20 +116,33 @@ export function useMetaMaskEthereum() {
 
     const doAsync = async () => {
       const selectedAddressBalance =
-        (data.selectedAddress &&
-          (await ethereum.request<string>({
-            method: "eth_getBalance",
-            params: [data.selectedAddress, "latest"],
-          }))) ??
-        undefined;
+        data.selectedAddress &&
+        (await ethereum.request<string>({
+          method: "eth_getBalance",
+          params: [data.selectedAddress, "latest"],
+        }));
       setData((d: Data) => ({
         ...d,
-        selectedAddressBalance: selectedAddressBalance,
+        selectedAddressBalance: selectedAddressBalance ?? undefined,
       }));
     };
 
     doAsync();
   }, [ethereum, data]);
 
-  return { loading, uiError, data, ethereum };
+  return (
+    <MetaMaskContext.Provider value={{ loading, data, ethereum }}>
+      {children}
+    </MetaMaskContext.Provider>
+  );
+};
+
+export function useMetaMaskEthereum(): MetaMaskType {
+  const mm = useContext(MetaMaskContext);
+  if (!mm) {
+    throw new Error(
+      "`useMetaMaskEthereum()` Should have <MetaMaskProvider /> above it somewhere."
+    );
+  }
+  return mm;
 }
