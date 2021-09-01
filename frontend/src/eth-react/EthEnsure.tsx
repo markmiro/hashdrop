@@ -1,9 +1,9 @@
-import { BigNumber } from "ethers";
+import { BigNumber, ethers } from "ethers";
 import { FC } from "react";
 import { useErrorHandler } from "react-error-boundary";
 import { ErrorMessage } from "../generic/ErrorMessage";
 import { Loader } from "../generic/Loader";
-import { getProposedChainId } from "./getProposedChainId";
+import { chainIdToInfo } from "./chainIdToInfo";
 import { InstallMetaMaskMessage } from "./InstallMetaMaskMessage";
 import { MultipleWalletsMessage } from "./MultipleWalletsMessage";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
@@ -88,20 +88,32 @@ export const EthEnsure: FC<Props> = (props) => {
       );
     }
     if (!expect.chainIds.includes(parseInt(data.chainId, 16).toString())) {
-      const fixChain = async () => {
-        const proposedChainId = getProposedChainId();
+      const fixChain = async (chainId: string) => {
         await ethereum
           .request({
             method: "wallet_switchEthereumChain",
-            params: [{ chainId: proposedChainId }],
+            params: [{ chainId }],
           })
-          .catch(handleError);
+          .catch((err) => alert(err.message));
       };
       return (
         <ErrorMessage>
-          Wrong chain. Acceptable chains include: ({expect.chainIds?.join(", ")}
-          ).
-          <button onClick={fixChain}>Choose Correct Chain</button>
+          Please choose a different chain:
+          {expect.chainIds.map((chainId: string) => {
+            const chainIdBn = BigNumber.from(chainId);
+            const hexChainId = ethers.utils.hexStripZeros(
+              chainIdBn.toHexString()
+            );
+            const isSelected =
+              data.chainId &&
+              parseInt(data.chainId, 16).toString() === hexChainId;
+            if (isSelected) return null;
+            return (
+              <button className="db" onClick={() => fixChain(hexChainId)}>
+                {chainIdToInfo(hexChainId).name}
+              </button>
+            );
+          })}
         </ErrorMessage>
       );
     }
@@ -121,7 +133,9 @@ export const EthEnsure: FC<Props> = (props) => {
   }
 
   if (expect.isNonZeroBalance) {
-    const isEmpty = BigNumber.from(data.selectedAddressBalance).isZero();
+    const isEmpty =
+      !data.selectedAddressBalance ||
+      BigNumber.from(data.selectedAddressBalance).isZero();
     if (isEmpty) {
       const connect = () => {
         ethereum
