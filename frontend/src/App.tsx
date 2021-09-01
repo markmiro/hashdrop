@@ -24,7 +24,9 @@ function Layout({ children }: { children: React.ReactNode }) {
   );
 }
 
-const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId);
+const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
+  (id) => parseInt(id)
+);
 
 export function App() {
   return (

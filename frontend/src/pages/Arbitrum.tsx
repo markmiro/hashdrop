@@ -1,3 +1,4 @@
+import { utils } from "ethers";
 import { useErrorHandler } from "react-error-boundary";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 
@@ -11,7 +12,7 @@ export function Arbitrum() {
       .send("wallet_addEthereumChain", [
         {
           chainName: "Arbitrum Testnet Rinkeby",
-          chainId: "0x" + (421611).toString(16),
+          chainId: utils.hexValue(421611),
           nativeCurrency: {
             name: "Arbitrum Rinkeby Ether",
             symbol: "ARETH",
@@ -34,7 +35,7 @@ export function Arbitrum() {
       .send("wallet_addEthereumChain", [
         {
           chainName: "Arbitrum One",
-          chainId: "0x" + (42161).toString(16),
+          chainId: utils.hexValue(42161),
           nativeCurrency: {
             name: "Arbitrum Ether",
             symbol: "AETH",

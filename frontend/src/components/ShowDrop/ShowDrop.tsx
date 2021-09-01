@@ -14,7 +14,9 @@ import { IFramePreview } from "../IFramePreview";
 import { ShowMyPrivateDrop } from "./ShowPrivateDrop";
 import { useCheckIpfsCidExists } from "./useCheckIpfsCidExists";
 
-const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId);
+const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
+  (id) => parseInt(id)
+);
 
 /** Query Ethereum network for a hash drop with a given cid */
 function useEthDrop(cid: string) {

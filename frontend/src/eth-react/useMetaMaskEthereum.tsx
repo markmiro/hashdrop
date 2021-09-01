@@ -9,7 +9,7 @@ type Data = {
   hasMultipleWallets: boolean;
   isConnectedToCurrentChain: boolean;
   isMetaMask: boolean;
-  chainId: string | undefined;
+  chainId: number | undefined;
   selectedAddress: string | undefined;
   selectedAddressBalance: string | undefined;
   blockNumber: string | undefined;
@@ -83,7 +83,7 @@ export const MetaMaskProvider: FC = ({ children }) => {
           // until I disconnect from the localhost chain and connect back.
           isConnectedToCurrentChain: ethereum.isConnected(),
           isMetaMask: (ethereum as any).isMetaMask,
-          chainId: chainId ?? undefined,
+          chainId: chainId ? parseInt(chainId) : undefined,
           selectedAddress,
           selectedAddressBalance: undefined,
           blockNumber: blockNumber ?? undefined,

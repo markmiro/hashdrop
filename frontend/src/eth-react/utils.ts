@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, utils } from "ethers";
 
 export function prettyBlockNumber(hex?: string) {
   if (!hex) return "-";
@@ -7,14 +7,10 @@ export function prettyBlockNumber(hex?: string) {
 
 export function prettyGasPrice(hex?: string) {
   if (!hex) return "-";
-  return parseFloat(
-    ethers.utils.formatUnits(BigNumber.from(hex), "gwei")
-  ).toFixed(2);
+  return parseFloat(utils.formatUnits(BigNumber.from(hex), "gwei")).toFixed(2);
 }
 
 export function prettyAccountBalance(hex?: string) {
   if (!hex) return "-";
-  return parseFloat(
-    ethers.utils.formatUnits(BigNumber.from(hex), "ether")
-  ).toFixed(4);
+  return parseFloat(utils.formatUnits(BigNumber.from(hex), "ether")).toFixed(4);
 }

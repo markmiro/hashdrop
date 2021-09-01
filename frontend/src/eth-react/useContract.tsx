@@ -31,7 +31,7 @@ export function useContract<T extends BaseContract>(
       setLoading(true);
 
       const feContract = feArtifacts.contract[contractName];
-      let chainIdString = (await provider.getNetwork()).chainId.toString();
+      let chainIdString = provider.network.chainId.toString();
 
       // Check for correct type
       {

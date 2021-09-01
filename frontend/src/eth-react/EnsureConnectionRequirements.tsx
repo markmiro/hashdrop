@@ -59,7 +59,9 @@ export const EnsureConnectionRequirements: FC<Props> = (props) => {
         if (!data.chainId) {
           throw new Error("Can't connect to network.");
         }
-        if (!expect.chainIds.includes(parseInt(data.chainId, 16).toString())) {
+        if (
+          !expect.chainIds.includes(BigNumber.from(data.chainId).toString())
+        ) {
           setStatus("WRONG_CHAIN");
           return;
         }

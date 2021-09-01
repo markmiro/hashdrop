@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ethers, utils } from "ethers";
 import { FC } from "react";
 import { useErrorHandler } from "react-error-boundary";
 import { ErrorMessage } from "../generic/ErrorMessage";
@@ -10,8 +10,7 @@ import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 
 type Props = {
   isConnectedToChain?: boolean;
-  /** A '0x' prefixed chain */
-  chainIds?: string[];
+  chainIds?: number[];
   isConnected?: boolean;
   isNonZeroBalance?: boolean;
 };
@@ -87,30 +86,26 @@ export const EthEnsure: FC<Props> = (props) => {
         </ErrorMessage>
       );
     }
-    if (!expect.chainIds.includes(parseInt(data.chainId, 16).toString())) {
-      const fixChain = async (chainId: string) => {
+    if (!expect.chainIds.includes(data.chainId)) {
+      const fixChain = async (chainId: number) => {
         await ethereum
           .request({
             method: "wallet_switchEthereumChain",
-            params: [{ chainId }],
+            params: [{ chainId: utils.hexValue(chainId) }],
           })
           .catch((err) => alert(err.message));
       };
       return (
         <ErrorMessage>
           Please choose a different chain:
-          {expect.chainIds.map((chainId: string) => {
-            const chainIdBn = BigNumber.from(chainId);
-            const hexChainId = ethers.utils.hexStripZeros(
-              chainIdBn.toHexString()
-            );
-            const isSelected =
-              data.chainId &&
-              parseInt(data.chainId, 16).toString() === hexChainId;
-            if (isSelected) return null;
+          {expect.chainIds.map((chainId) => {
             return (
-              <button className="db" onClick={() => fixChain(hexChainId)}>
-                {chainIdToInfo(hexChainId).name}
+              <button
+                key={chainId}
+                className="db"
+                onClick={() => fixChain(chainId)}
+              >
+                {chainIdToInfo(chainId).name}
               </button>
             );
           })}
