@@ -34,19 +34,22 @@ function IFramePreview2({
   const decrypter = useDecrypter();
 
   return (
-    <div>
-      <button onClick={() => decrypter.decrypt(cid, privateCid)}>
+    <div className="flex flex-col gap-2">
+      <button
+        className="btn-light"
+        onClick={() => decrypter.decrypt(cid, privateCid)}
+      >
         Show Your Encrypted File
       </button>
       {decrypter.dataUrl && (
-        <div>
+        <>
           <IFramePreview src={decrypter.dataUrl} />
-          <button className="pa2 w-100" onClick={decrypter.publish}>
+          <button className="btn-blue p-2 w-full" onClick={decrypter.publish}>
             Publish
           </button>
-        </div>
+        </>
       )}
-      <div className="pa1 bg-black-05 flex" style={{ gap: "0.5em" }}>
+      <div className="p-1 bg-black bg-opacity-5 flex gap-2">
         Status: <StateText state={decrypter.state} />
       </div>
     </div>
@@ -70,7 +73,9 @@ export function ShowMyPrivateDrop({
       {cidChecker.state === "NOT_FOUND" && (
         <ErrorMessage>
           Couldn't find the document.{" "}
-          <button onClick={cidChecker.checkAgain}>Try Again</button>
+          <button className="btn-red" onClick={cidChecker.checkAgain}>
+            Try Again
+          </button>
         </ErrorMessage>
       )}
       {cidChecker.state === "FOUND" && (

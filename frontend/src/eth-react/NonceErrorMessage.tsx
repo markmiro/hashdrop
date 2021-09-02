@@ -5,7 +5,7 @@ export function NonceErrorMessage({
 }) {
   return (
     <div>
-      <div className="db bg-washed-red pa2 tc">
+      <div className="block bg-red-100 p-2 text-center">
         <b>
           Transaction failed.{" "}
           <a href="https://metamask.zendesk.com/hc/en-us/articles/360015488891-How-to-reset-your-wallet">
@@ -18,7 +18,7 @@ export function NonceErrorMessage({
           Account. Then refresh the page.
         </div>
       </div>
-      <div>Original error message: ${originalMessage}</div>
+      <div>Original error message: {originalMessage}</div>
     </div>
   );
 }

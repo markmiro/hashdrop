@@ -32,7 +32,7 @@ export function FileTab({
   if (file) {
     return (
       <FilePreviewWithInfo file={file} dataUrl={fileDataUrl}>
-        <button onClick={resetFile} disabled={!file}>
+        <button className="btn-light" onClick={resetFile} disabled={!file}>
           ✖️ Remove
         </button>
       </FilePreviewWithInfo>
@@ -40,21 +40,14 @@ export function FileTab({
   }
 
   return (
-    <>
-      <div className="relative br2 ba b--dashed bg-black-05 pa4 tc">
-        <input
-          ref={fileRef}
-          type="file"
-          className="absolute top-0 left-0 w-100 h-100 o-0"
-          onChange={(e) => updateFile(e.target?.files?.[0] ?? null)}
-        />
-        <div className="">📄 Choose a file</div>
-      </div>
-      {file && (
-        <>
-          <div className="pt2" />
-        </>
-      )}
-    </>
+    <div className="relative rounded-sm border border-dashed hover:bg-black hover:bg-opacity-5 p-4 text-center">
+      <input
+        ref={fileRef}
+        type="file"
+        className="absolute top-0 left-0 w-full h-full opacity-0"
+        onChange={(e) => updateFile(e.target?.files?.[0] ?? null)}
+      />
+      <div>📄 Choose a file</div>
+    </div>
   );
 }

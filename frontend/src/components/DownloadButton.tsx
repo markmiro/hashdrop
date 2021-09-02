@@ -7,10 +7,9 @@ export function formatDate(date: Date) {
 export function DownloadButton({ cid, text }: { cid?: string; text: string }) {
   return (
     <a
-      className={`dib ba br2 ph2 no-underline black flex-shrink-0 ${
-        !text && "o-40"
+      className={`btn-light text-black flex-shrink-0 no-underline ${
+        !text && "opacity-40 pointer-events-none"
       }`}
-      style={{ pointerEvents: text ? "all" : "none" }}
       download={`${cid ?? "hashdrop-" + formatDate(new Date())}.txt`}
       href={"data:text/plain," + encodeURIComponent(text)}
     >

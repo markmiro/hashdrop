@@ -6,7 +6,7 @@ export function IFramePreview({ src }: { src: string }) {
     <iframe
       width="100%"
       title="file preview"
-      className="db ba"
+      className="block border"
       style={{ height: "20vh" }}
       src={src}
     />

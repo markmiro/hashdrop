@@ -11,16 +11,16 @@ export const FilePreviewWithInfo: FC<{
   return (
     <div>
       <div>
-        <div className="ba b--black-10 bw2 bg-white flex flex-column justify-center">
+        <div className="border flex flex-col">
           <FilePreview file={file} dataUrl={dataUrl} />
         </div>
-        <div className="bg-black-10 pa2 f7 flex">
-          <div>
-            <div className="truncate b">{fileName}</div>
-            {file?.type && <div className="o-50">{file.type}</div>}
+        <div className="bg-black bg-opacity-5 p-2 text-sm flex">
+          <div className="overflow-hidden">
+            <div className="font-semibold truncate">{fileName}</div>
+            {file?.type && <div className="opacity-50">{file.type}</div>}
           </div>
           <div className="flex-auto" />
-          {children}
+          <div className="flex-shrink-0">{children}</div>
         </div>
       </div>
     </div>

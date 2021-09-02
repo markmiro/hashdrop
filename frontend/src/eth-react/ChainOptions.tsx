@@ -32,19 +32,18 @@ export function ChainOptions({ chainIds }: { chainIds: number[] }) {
   }
 
   return (
-    <div className="flex items-center" style={{ gap: "1em" }}>
+    <div className="flex flex-col sm:flex-row sm:gap-2">
       <div className="">Available chains:</div>
       <RadioGroup
-        className="flex"
-        style={{ gap: "1em" }}
+        className="flex flex-col sm:flex-row sm:gap-2"
         value={chainId}
         onChange={updateChainId}
       >
         {chainIds.map((chainId) => (
           <RadioGroup.Option key={chainId} value={chainId}>
             {({ checked }) => (
-              <span className="pointer">
-                <span className="blue f3">{checked ? "⦿" : "⦾"}</span>{" "}
+              <span className="cursor-default bg-black bg-opacity-0 hover:bg-opacity-10">
+                <span className="text-black">{checked ? "⦿" : "⦾"}</span>{" "}
                 {chainIdToInfo(chainId).name}
               </span>
             )}

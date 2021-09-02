@@ -2,6 +2,7 @@ import aes from "crypto-js/aes";
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import { fobAsDataUrl } from "../util/fobAsDataUrl";
+import styles from "../generic/styles.module.css";
 
 const id = ethers.utils.hexlify(ethers.utils.randomBytes(12));
 
@@ -29,46 +30,57 @@ export function Encrypt() {
   }, [url]);
 
   return (
-    <div>
-      <div>
-        <label className="db">ID</label>
-        <input disabled readOnly className="w-100" value={id} />
-      </div>
-      <div>
-        <label className="db">URL</label>
-        <input
-          className="w-100"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-        />
-        <button onClick={() => setUrl("./examples/file.txt")}>file.txt</button>
-        <button onClick={() => setUrl("./examples/bitcoin.pdf")}>
+    <div className={`flex flex-col gap-2 ${styles.body}`}>
+      <label>ID</label>
+      <input type="text" disabled readOnly value={id} />
+      <label>URL</label>
+      <input
+        type="text"
+        className="w-full"
+        value={url}
+        onChange={(e) => setUrl(e.target.value)}
+      />
+      <div className="flex gap-1">
+        <button
+          className="btn-light"
+          onClick={() => setUrl("./examples/file.txt")}
+        >
+          file.txt
+        </button>
+        <button
+          className="btn-light"
+          onClick={() => setUrl("./examples/bitcoin.pdf")}
+        >
           bitcoin.pdf
         </button>
-        <button onClick={() => setUrl("./examples/molecule.svg")}>
+        <button
+          className="btn-light"
+          onClick={() => setUrl("./examples/molecule.svg")}
+        >
           molecule.svg
         </button>
       </div>
-      <div>
-        <label className="db">Message</label>
-        <textarea
-          className="w-100"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
+
+      <label>Message</label>
+      <textarea
+        className="w-full"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+
+      <div className="text-xs text-right opacity-60 font-mono">
+        <div>Message length: {message.length}</div>
+        <div>Encrypted length: {enc.length}</div>
+        <div>
+          Difference: {Math.round((enc.length / message.length) * 100)}%
+        </div>
       </div>
-      <div className="f7 tr o-60">Message length: {message.length}</div>
-      <div className="f7 tr o-60">Encrypted length: {enc.length}</div>
-      <div className="f7 tr o-60">
-        Difference: {Math.round((enc.length / message.length) * 100)}%
-      </div>
-      <iframe title="content" src={url} width="100%" />
-      <div>
-        Encrypted
-        <div
-          className="f7 h4 overflow-scroll ba"
-          style={{ wordBreak: "break-all" }}
-        >
+
+      <iframe title="content" src={url} width="100%" className="border" />
+
+      <label>Encrypted</label>
+      <div className="px-6 py-2 bg-black bg-opacity-10 font-mono">
+        <div className="border text-xs overflow-scroll break-all max-h-screen">
           {enc || "N/A"}
         </div>
       </div>

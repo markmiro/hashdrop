@@ -2,11 +2,12 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ipfsCid } from "../util/ipfsCid";
 import { pinFile, unpin } from "../util/pinata";
 import { Tab, Tabs } from "../generic/Tabs";
-import { VStack } from "../generic/VStack";
 import { fobAsText } from "../util/fobAsText";
 import { textTypes } from "../util/textTypes";
-import { Cid } from "../generic/Cid";
+import { Cid } from "../eth-react/Cid";
 import { resetFileInput } from "../util/resetFileInput";
+import { Loader } from "../generic/Loader";
+import styles from "../generic/styles.module.css";
 
 type ContentTab = "TEXT" | "FILE";
 type ExpectedTab = "STRING" | "PINATA";
@@ -127,10 +128,10 @@ export function Compare() {
   }, [contentTab, text, textFile, file]);
 
   return (
-    <div>
-      <div className="pt4" />
-      <h1 className="ma0">Compare CIDs</h1>
-      <p className="mv0 f6 black-60">
+    <div className={`font-mono ${styles.body}`}>
+      <div className="pt-4" />
+      <h1 className="font-bold">Compare CIDs</h1>
+      <p className="text-black text-opacity-60">
         Compare locally calculated CID against an expected CID.{" "}
         <a
           href="https://docs.ipfs.io/concepts/content-addressing/"
@@ -139,61 +140,58 @@ export function Compare() {
           Learn more →
         </a>
       </p>
-      <div className="pt4" />
+      <div className="pt-4" />
       <Tabs<ContentTab> value={contentTab} onChange={setContentTab}>
         <Tab label="Text" value="TEXT">
           <textarea
             autoFocus
             placeholder="Type here..."
-            className="ba br2 b--black bg-washed-yellow pa2 db w-100 h4"
+            className="border min-w-full h-24"
             value={text}
             onChange={(e) => updateText(e.target.value)}
           />
-          <div className="pt2" />
-          <div className="flex">
+          <div className="pt-2" />
+          <div className="flex gap-2 items-center">
             <input
               ref={fileRef}
               type="file"
-              className="db w-100"
+              className="block flex-grow"
               accept={textTypes.join(",")}
               onChange={(e) => updateTextFile(e.target?.files?.[0] ?? null)}
             />
-            <div className="pl2" />
             <a
-              className={`dib ba br2 ph2 no-underline bg-washed-yellow black flex-shrink-0 ${
-                !text && "o-40"
+              className={`btn-light flex-shrink-0 no-underline ${
+                !text && "opacity-40 pointer-events-none"
               }`}
-              style={{ pointerEvents: text ? "all" : "none" }}
               download={`${localHash}.txt`}
               href={"data:text/plain," + encodeURIComponent(text)}
             >
-              ⇣ Download
+              <span className="text-black">⇣ Download</span>
             </a>
-            <div className="pl2" />
-            <button onClick={resetText} disabled={!text}>
+            <button className="btn-light" onClick={resetText} disabled={!text}>
               Clear
             </button>
           </div>
         </Tab>
         <Tab label="File" value="FILE">
-          <div className="relative br2 ba b--dashed bg-washed-yellow pa4 tc">
+          <div className="relative border border-dashed p-4 text-center hover:bg-black hover:bg-opacity-5">
             <input
               ref={fileRef}
               type="file"
-              className="absolute top-0 left-0 w-100 h-100 o-0"
+              className="absolute top-0 left-0 min-w-full min-h-full opacity-0"
               onChange={(e) => updateFile(e.target?.files?.[0] ?? null)}
             />
             <div className="">🖼 Choose a file</div>
           </div>
           {file && (
             <>
-              <div className="pv1" />
+              <div className="pt-1" />
               <div>
                 {"File: " + ("name" in file ? file.name : file)}
                 {", "}
                 {"MIME Type: " + file.type}
               </div>
-              <div className="pv1" />
+              <div className="pt-1" />
               <iframe
                 ref={previewRef}
                 width="100%"
@@ -202,9 +200,13 @@ export function Compare() {
                 style={{ height: "20vh" }}
                 src={window.URL.createObjectURL(file)}
               />
-              <div className="pt2" />
-              <div className="tr">
-                <button onClick={resetFile} disabled={!file}>
+              <div className="pt-2" />
+              <div className="text-right">
+                <button
+                  className="btn-light"
+                  onClick={resetFile}
+                  disabled={!file}
+                >
                   Clear
                 </button>
               </div>
@@ -212,12 +214,12 @@ export function Compare() {
           )}
         </Tab>
       </Tabs>
-      <div className="db pa2 bg-black-05">
+      <div className="block p-2 bg-black bg-opacity-5">
         Local CID:
         <Cid cid={localHash} />
       </div>
 
-      <div className="tc f5 pv2">
+      <div className="text-center py-2">
         <div>|</div>
         COMPARE LOCAL CID TO:
         <div>↓</div>
@@ -229,20 +231,23 @@ export function Compare() {
             Expected CID:
             <div className="flex">
               <input
-                className="ba br2 b--black bg-washed-yellow pa1 db w-100"
+                type="text"
+                className="w-full"
                 value={expectedHash}
                 onChange={(e) => setExpectedHash(e.target.value)}
               />
-              <div className="pl2" />
-              <button onClick={() => setExpectedHash("")}>Clear</button>
+              <div className="pl-2" />
+              <button className="btn-light" onClick={() => setExpectedHash("")}>
+                Clear
+              </button>
             </div>
           </label>
-          <div className="pt2" />
-          <div className="gray tc f7">
+          <div className="pt-2" />
+          <div className="text-opacity-60 text-center text-sm">
             See{" "}
             <a
               href="https://docs.ipfs.io/concepts/content-addressing"
-              className="link black underline pointer"
+              className="text-black underline"
               rel="noreferrer"
               target="_blank"
             >
@@ -252,23 +257,24 @@ export function Compare() {
           </div>
         </Tab>
         <Tab<ExpectedTab> label="Pinata Upload" value="PINATA">
-          <div className="tc">
+          <div className="text-center">
             <button
               onClick={submitPinataUpload}
-              className="ba br2 b--black bg-washed-yellow ph2 pv1"
+              className="btn-light"
               disabled={!localHash || isLoading}
             >
               {isLoading ? "Loading..." : "Upload " + contentTab}
-              <div className="pt1" />
-              <div className="f6 gray">(from above section)</div>
+              <div className="text-sm opacity-60 font-normal">
+                (from above section)
+              </div>
             </button>
 
-            <div className="pt2" />
-            <div className="gray f7">
+            <div className="pt-2" />
+            <div className="text-opacity-60 text-sm">
               Learn more about{" "}
               <a
                 href="https://pinata.cloud"
-                className="link black underline pointer"
+                className="text-black underline"
                 rel="noreferrer"
                 target="_blank"
               >
@@ -279,12 +285,13 @@ export function Compare() {
           </div>
         </Tab>
       </Tabs>
-      <div className="db pa2 bg-black-05">
+      <div className="block p-2 bg-black bg-opacity-5">
         Expected CID:
         <Cid cid={expectedHash} />
-        <div className="pt2" />
-        <div className="tr">
+        <div className="pt-2" />
+        <div className="text-right">
           <button
+            className="btn-light"
             onClick={() => setExpectedHash("")}
             disabled={!expectedHash || isLoading}
           >
@@ -293,46 +300,52 @@ export function Compare() {
         </div>
       </div>
 
-      <div className="tc f5 pv2">
+      <div className="text-center py-2">
         <div>|</div>
         RESULTS:
         <div>↓</div>
       </div>
 
-      <div className="ba pa2">
-        <VStack space={2}>
+      <div className="border border-black p-2">
+        <div className="flex flex-col gap-2">
           {isLoading ? (
-            <div className="pa4 tc bg-black-05">Loading...</div>
+            <Loader>Loading</Loader>
           ) : localHash && expectedHash ? (
             localHash === expectedHash ? (
-              <div className="pa4 tc bg-light-green">
+              <div className="p-4 text-center bg-green-200">
                 <div>😎</div>
                 CIDs match
               </div>
             ) : (
-              <div className="pa4 tc bg-washed-red red">
+              <div className="p-4 text-center bg-red-100 text-red-500">
                 <div>😵</div>
                 CIDs don't match
               </div>
             )
           ) : (
-            <div className="pa4 tc bg-light-blue">
-              <div className="bb mb2">NOTE:</div>
+            <div className="p-4 text-center bg-blue-200">
+              <div className="border-b border-black mb-2">NOTE:</div>
               Please upload a file or type some text
-              <div className="tc">
-                <span className="br4 bg-black-20 ph2">AND</span>
+              <div className="text-center">
+                <span className="rounded-full bg-black bg-opacity-10 px-3">
+                  AND
+                </span>
               </div>
               enter an expected CID or upload your file to Pinata.
             </div>
           )}
-        </VStack>
+        </div>
       </div>
 
-      <hr className="w-100 mv4 bt b--black-20" style={{ borderBottom: 0 }} />
+      <hr className="w-full my-4 border-t border-black border-opacity-20" />
 
-      <div className="tc">
-        <button onClick={reset}>↺ Reset</button>
+      <div className="text-center">
+        <button className="btn-red" onClick={reset}>
+          ↺ Reset
+        </button>
       </div>
+
+      <div className="pt-4" />
     </div>
   );
 }

@@ -51,23 +51,22 @@ export function TextTab({
       <textarea
         autoFocus
         placeholder="Type here..."
-        className="ba br2 b--black pa2 db w-100 h4"
+        className="w-full"
+        style={{ height: "20vh" }}
         value={text}
         onChange={(e) => updateText(e.target.value)}
       />
-      <div className="pt2" />
-      <div className="flex">
+      <div className="pt-1" />
+      <div className="flex items-center gap-2">
         <input
           ref={fileRef}
           type="file"
-          className="db w-100"
+          className="block w-full"
           accept={textTypes.join(",")}
           onChange={(e) => updateTextFile(e.target?.files?.[0] ?? null)}
         />
-        <div className="pl2" />
         <DownloadButton cid={cid} text={text} />
-        <div className="pl2" />
-        <button onClick={resetText} disabled={!text}>
+        <button className="btn-light" onClick={resetText} disabled={!text}>
           Clear
         </button>
       </div>

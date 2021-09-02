@@ -5,12 +5,10 @@ export const GenericError: FC<{ tryAgain: () => void }> = ({
   children,
 }) => {
   return (
-    <div className="red f7 overflow-scroll">
+    <div className="text-red-500 text-sm overflow-scroll flex flex-col items-start">
       <b>⚠️ Something went wrong.</b>
-      <div className="pt1" />
-      <pre className="mv0 ws-normal">{children}</pre>
-      <div className="pt1" />
-      <button className="f7" onClick={tryAgain}>
+      <pre className="whitespace-normal">{children}</pre>
+      <button className="btn-red" onClick={tryAgain}>
         Try Again
       </button>
     </div>

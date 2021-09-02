@@ -4,13 +4,14 @@ import { useErrorHandler } from "react-error-boundary";
 import { DataTabs } from "../components/DataTabs/DataTabs";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
-import { Cid } from "../generic/Cid";
+import { Cid } from "../eth-react/Cid";
 import { Cover } from "../generic/Cover";
 import { Loader } from "../generic/Loader";
 import { HashDrop as T } from "../typechain";
 import { encryptFob } from "../util/encrypt";
 import { ipfsCid } from "../util/ipfsCid";
 import { pinFile, unpin } from "../util/pinata";
+import styles from "../generic/styles.module.css";
 
 // const DROP_ORIGIN = `https://ipfs.io/ipfs/${HASHDROP_DEPLOY_CID}`;
 const DROP_ORIGIN = window.location.origin;
@@ -105,21 +106,21 @@ const StatusText: FC<{
       return <Loader>Saving to Ethereum blockchain</Loader>;
     case "SUCCESS":
       return (
-        <div className="pa4 tc bg-light-green">
+        <div className="p-4 text-center bg-green-200">
           <div>😎</div>
           Success
-          <button className="w-100 mt2 pa2" onClick={onReset}>
+          <button className="btn-light w-full mt-2 p-2" onClick={onReset}>
             OK
           </button>
         </div>
       );
     case "ERROR":
       return (
-        <div className="pa4 tc bg-washed-red red">
+        <div className="p-4 text-center bg-red-100 text-red-500">
           <div>😵</div>
           Error
-          {error && <div className="f6">{error}</div>}
-          <button className="w-100 mt2 pa2" onClick={onReset}>
+          {error && <div className="text-sm">{error}</div>}
+          <button className="btn-red w-full mt-2 p-2" onClick={onReset}>
             OK
           </button>
         </div>
@@ -238,12 +239,11 @@ export function Drop() {
   const hashdrop = useHashDrop();
 
   return (
-    <div>
-      <div className="pt4" />
-      <h1 className="mv0">Drop</h1>
-      <div className="pt4" />
+    <div className={`${styles.body} flex flex-col gap-4`}>
+      <h1 className="font-bold">Drop</h1>
+
       <DataTabs onFobChange={setFob} />
-      <div className="pt4" />
+
       {/* <button
         className="pa2 w-100"
         disabled={!fob}
@@ -253,7 +253,7 @@ export function Drop() {
       </button> */}
       {/* <div className="pt2" /> */}
       <button
-        className="pa2 w-100"
+        className="btn-blue p-2 w-full"
         disabled={!fob}
         onClick={() => hashdrop.addPrivate(fob)}
       >
@@ -261,7 +261,7 @@ export function Drop() {
       </button>
       {hashdrop.status !== "INITIAL" && (
         <Cover>
-          <div className="shadow-4 ba measure w-100 tc bg-white pa2">
+          <div className="bg-white border shadow-lg p-2 text-center w-full max-w-md">
             <StatusText
               status={hashdrop.status}
               error={hashdrop.error}
@@ -271,8 +271,8 @@ export function Drop() {
               }}
             />
             {hashdrop.status === "SUCCESS" && hashdrop.cid && (
-              <div className="tl">
-                <div className="flex" style={{ gap: ".5em" }}>
+              <div className="text-left">
+                <div className="flex gap-2">
                   {/* https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/guides/web-intent */}
                   <a
                     href={tweetUrl(hashdrop.cid)}
@@ -290,7 +290,7 @@ export function Drop() {
                   </a>
                   {process.env.NODE_ENV === "development" && (
                     <button
-                      className="red"
+                      className="btn-red"
                       onClick={() =>
                         unpin(hashdrop.privateCid).then(() => {
                           alert("Unpin success!");

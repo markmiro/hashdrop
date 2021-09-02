@@ -8,6 +8,7 @@
     "@craco/craco": "6.2.0",
     "@headlessui/react": "1.4.1",
     "@metamask/detect-provider": "^1.2.0",
+    "@tailwindcss/forms": "0.3.3",
     "axios": "0.21.1",
     "base64-blob": "1.4.1",
     "copy-to-clipboard": "^3.3.1",
@@ -46,6 +47,7 @@
     "typescript": "^4.3.2"
   },
   "scripts": {
+    "dev": "vercel dev",
     "start": "craco start",
     "build": "craco build",
     "test": "craco test --env=jsdom",

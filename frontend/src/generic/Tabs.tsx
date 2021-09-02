@@ -15,17 +15,13 @@ function TabButton({
   onClick: () => void;
   children: React.ReactNode;
 }) {
-  const classes = {
-    inactive: "pa2 mr2 bg-black-05 b--none",
-    active: "pa2 mr2 bg-white bl br bt",
-  };
-
   return (
     <button
-      className={isActive ? classes.active : classes.inactive}
-      style={{
-        borderBottom: 0,
-      }}
+      className={
+        isActive
+          ? "font-medium cursor-default  px-2 mr-1 bg-white border-t border-l border-r  border-black"
+          : "font-medium cursor-default px-2 mr-1 bg-black border-t border-l border-r bg-opacity-5 border-black border-opacity-0 hover:border-opacity-20"
+      }
       onClick={() => onClick()}
     >
       {children}
@@ -56,8 +52,10 @@ export function Tabs<T extends string>({
   const tabsProps = React.Children.map(children, (c) => c?.props);
 
   return (
-    <div>
-      <div className="relative z-1" style={{ marginBottom: -1 }}>
+    <div
+      className="relative z-0" /* new stacking context using 'relative z-0' */
+    >
+      <div className="relative z-10" style={{ marginBottom: -1 }}>
         {tabsProps.map((p) => {
           if (p === null) return null;
           return (
@@ -71,7 +69,7 @@ export function Tabs<T extends string>({
           );
         })}
       </div>
-      <div className="pa2 ba">
+      <div className="p-2 border border-black">
         {tabsProps.find((props) => props?.value === value)?.children}
       </div>
     </div>

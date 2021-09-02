@@ -1,6 +1,7 @@
 import { utils } from "ethers";
 import { useErrorHandler } from "react-error-boundary";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
+import styles from "../generic/styles.module.css";
 
 export function Arbitrum() {
   const handleError = useErrorHandler();
@@ -50,10 +51,16 @@ export function Arbitrum() {
   };
 
   return (
-    <div>
-      Arbitrum
-      <button onClick={connectRinkeby}>Connect to Arbitrum Rinkeby</button>
-      <button onClick={connect}>Connect to Arbitrum</button>
+    <div className={styles.body}>
+      <div className="flex gap-2 ">
+        Arbitrum
+        <button className="btn-light" onClick={connectRinkeby}>
+          Connect to Arbitrum Rinkeby
+        </button>
+        <button className="btn-light" onClick={connect}>
+          Connect to Arbitrum
+        </button>
+      </div>
     </div>
   );
 }

@@ -11,16 +11,13 @@ import { Compare } from "./pages/Compare";
 import { Drop } from "./pages/Drop";
 import { DropOld } from "./pages/DropOld";
 import { Encrypt } from "./pages/Encrypt";
+import { Sink } from "./pages/Sink";
 
-function Layout({ children }: { children: React.ReactNode }) {
+function Body({ children }: { children: React.ReactNode }) {
   return (
-    // Global styles
-    <div className="code pv4 ph2 lh-copy">
-      {/* Container */}
-      <div className="ml-auto mr-auto" style={{ maxWidth: "72ch" }}>
-        {/* Layout */}
-        <div className="flex flex-column items-stretch">{children}</div>
-      </div>
+    <div className="px-2 py-1">
+      {/* Layout */}
+      <div className="flex flex-col items-stretch">{children}</div>
     </div>
   );
 }
@@ -31,45 +28,67 @@ const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
 
 export function App() {
   return (
-    <Layout>
+    <>
       {/* https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/HashRouter.md */}
       <HashRouter hashType="slash">
-        <div>
-          <nav className="flex justify-between bg-black-05 pa2">
-            <NavLink to="/" className="no-underline black">
-              <b>HASH💧</b>
+        <nav className="z-10 px-2 sticky top-0 flex justify-between gap-3 shadow-md bg-white bg-opacity-80 backdrop-filter backdrop-blur-sm">
+          <NavLink to="/" className="no-underline black flex-shrink-0">
+            <b>HASH💧</b>
+          </NavLink>
+          <div className="flex flex-wrap gap-4">
+            <NavLink
+              className="text-black no-underline"
+              activeClassName="bg-black text-white"
+              to="/sink"
+            >
+              Kitchen Sink
             </NavLink>
-            <div>
-              <NavLink activeClassName="bg-black white" to="/encrypt">
-                Encrypt
-              </NavLink>
-              {" | "}
-              <NavLink activeClassName="bg-black white" to="/compare">
-                Compare
-              </NavLink>
-              {" | "}
-              <NavLink activeClassName="bg-black white" to="/drop-old">
-                Drop Old
-              </NavLink>
-              {" | "}
-              <NavLink activeClassName="bg-black white" to="/drop">
-                Drop
-              </NavLink>
-              {" | "}
-              <NavLink activeClassName="bg-black white" to="/verify">
-                Verify
-              </NavLink>
-              {" | "}
-              <NavLink activeClassName="bg-black white" to="/arbitrum">
-                Arbitrum
-              </NavLink>
-            </div>
-          </nav>
+            <NavLink
+              className="text-black no-underline"
+              activeClassName="bg-black text-white"
+              to="/encrypt"
+            >
+              Encrypt
+            </NavLink>
+            <NavLink
+              className="text-black no-underline"
+              activeClassName="bg-black text-white"
+              to="/compare"
+            >
+              Compare
+            </NavLink>
+            <NavLink
+              className="text-black no-underline"
+              activeClassName="bg-black text-white"
+              to="/drop-old"
+            >
+              Drop Old
+            </NavLink>
+            <NavLink
+              className="text-black no-underline"
+              activeClassName="bg-black text-white"
+              to="/drop"
+            >
+              Drop
+            </NavLink>
+            <NavLink
+              className="text-black no-underline"
+              activeClassName="bg-black text-white"
+              to="/arbitrum"
+            >
+              Arbitrum
+            </NavLink>
+          </div>
+        </nav>
 
+        <Body>
           <ErrorBoundary FallbackComponent={EthErrorFallback}>
             {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
             <Switch>
+              <Route path="/sink">
+                <Sink />
+              </Route>
               <Route path="/encrypt">
                 <Encrypt />
               </Route>
@@ -96,13 +115,13 @@ export function App() {
               </Route>
             </Switch>
           </ErrorBoundary>
-        </div>
+          <hr />
+          <EthEnsure chainIds={goodChainIds}>
+            <DropCount />
+          </EthEnsure>
+          <ChainOptions chainIds={goodChainIds} />
+        </Body>
       </HashRouter>
-      <hr />
-      <EthEnsure chainIds={goodChainIds}>
-        <DropCount />
-      </EthEnsure>
-      <ChainOptions chainIds={goodChainIds} />
-    </Layout>
+    </>
   );
 }

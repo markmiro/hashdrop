@@ -1,9 +1,9 @@
-import { BigNumber, ethers, utils } from "ethers";
+import { BigNumber } from "ethers";
 import { FC } from "react";
 import { useErrorHandler } from "react-error-boundary";
 import { ErrorMessage } from "../generic/ErrorMessage";
 import { Loader } from "../generic/Loader";
-import { chainIdToInfo } from "./chainIdToInfo";
+import { ChainOptions } from "./ChainOptions";
 import { InstallMetaMaskMessage } from "./InstallMetaMaskMessage";
 import { MultipleWalletsMessage } from "./MultipleWalletsMessage";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
@@ -87,28 +87,10 @@ export const EthEnsure: FC<Props> = (props) => {
       );
     }
     if (!expect.chainIds.includes(data.chainId)) {
-      const fixChain = async (chainId: number) => {
-        await ethereum
-          .request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: utils.hexValue(chainId) }],
-          })
-          .catch((err) => alert(err.message));
-      };
       return (
         <ErrorMessage>
           Please choose a different chain:
-          {expect.chainIds.map((chainId) => {
-            return (
-              <button
-                key={chainId}
-                className="db"
-                onClick={() => fixChain(chainId)}
-              >
-                {chainIdToInfo(chainId).name}
-              </button>
-            );
-          })}
+          <ChainOptions chainIds={expect.chainIds} />
         </ErrorMessage>
       );
     }

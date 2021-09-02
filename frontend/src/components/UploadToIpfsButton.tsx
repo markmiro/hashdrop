@@ -1,5 +1,5 @@
 import { ReactNode, useState } from "react";
-import { Cid } from "../generic/Cid";
+import { Cid } from "../eth-react/Cid";
 import { Loader } from "../generic/Loader";
 import { pinFile } from "../util/pinata";
 
@@ -34,15 +34,20 @@ export function UploadToIpfsButton({
   }
 
   return (
-    <>
-      <button onClick={submitPinataUpload} disabled={isLoading}>
+    <div className="flex flex-col">
+      <button
+        className="btn-blue p-2"
+        onClick={submitPinataUpload}
+        disabled={isLoading}
+      >
         {isLoading ? <Loader /> : children}
-        <div className="pt1" />
-        <div className="f6 gray">(from above section)</div>
+        <div className="text-xs font-normal text-white text-opacity-60">
+          (from above section)
+        </div>
       </button>
-      <div>
+      <label>
         Remote CID: <Cid cid={remoteCid} />
-      </div>
-    </>
+      </label>
+    </div>
   );
 }

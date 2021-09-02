@@ -14,11 +14,8 @@ import { MultipleWalletsMessage } from "./MultipleWalletsMessage";
 
 const Layout: FC = ({ children }) => (
   <>
-    <div className="h4" />
-    <div
-      className="bg-black white ph2 fixed bottom-0 right-0 f7 flex items-center flex-wrap justify-end"
-      style={{ lineHeight: "2", gap: ".3em" }}
-    >
+    <div className="h-4" />
+    <div className="bg-black text-white px-1 fixed bottom-0 right-0 text-xs flex gap-1 items-center flex-wrap justify-end">
       <span>eth-toolbar</span>
       {children}
     </div>
@@ -48,7 +45,7 @@ export function Inner() {
     return (
       <>
         <div className="flex-auto" />
-        <span className="light-red">
+        <span className="text-red-300">
           ⚠️ Error: <InstallMetaMaskMessage />
         </span>
       </>
@@ -59,7 +56,7 @@ export function Inner() {
     return (
       <>
         <div className="flex-auto" />
-        <span className="light-red">
+        <span className="text-red-300">
           ⚠️ Error: <MultipleWalletsMessage />
         </span>
       </>
@@ -73,13 +70,13 @@ export function Inner() {
       {data?.isMetaMask ? (
         <span title="MetaMask">🦊</span>
       ) : (
-        <span className="red">Not MetaMask!</span>
+        <span className="text-red-300">Not MetaMask!</span>
       )}
       <span>/</span>
       {chainInfo && (
         <>
           <span
-            className="h1 w1 br-pill"
+            className="h-2 w-2 rounded-full"
             style={{
               background: chainInfo?.color || "transparent",
             }}
@@ -95,10 +92,10 @@ export function Inner() {
       <div title="Block number">Gas:{prettyGasPrice(data?.gasPrice)}</div>
       <span>–</span>
       {!data?.isConnectedToCurrentChain && (
-        <span className="light-red">Not Connected</span>
+        <span className="text-red-300">Not Connected</span>
       )}
       {data?.selectedAddress ? (
-        <div className="flex items-center" style={{ gap: ".3em" }}>
+        <div className="flex items-center gap-1">
           {data?.selectedAddressBalance && (
             <div>{prettyAccountBalance(data?.selectedAddressBalance)} ETH</div>
           )}
@@ -114,7 +111,7 @@ export function Inner() {
 export const EthToolbar = () => (
   <Layout>
     <ErrorBoundary
-      fallback={<div className="light-red">⚠️ Something went wrong.</div>}
+      fallback={<div className="text-red-300">⚠️ Something went wrong.</div>}
     >
       <Inner />
     </ErrorBoundary>

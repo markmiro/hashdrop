@@ -1,5 +1,5 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { Cid } from "../generic/Cid";
+import { Cid } from "../eth-react/Cid";
 import { ipfsCid } from "../util/ipfsCid";
 import { DataTabs } from "../components/DataTabs/DataTabs";
 import aes from "crypto-js/aes";
@@ -11,9 +11,10 @@ import { DownloadButton } from "../components/DownloadButton";
 import { UploadToIpfsButton } from "../components/UploadToIpfsButton";
 import { EthHashDropSubmitButton } from "../components/EthHashDropSubmitButton";
 import { cidToUrl } from "../util/pinata";
+import styles from "../generic/styles.module.css";
 
 const GrayBox: FC = ({ children }) => (
-  <div className="db pa2 bg-black-05">{children}</div>
+  <div className="block p-2 bg-black bg-opacity-5">{children}</div>
 );
 
 export function DropOld() {
@@ -92,82 +93,94 @@ export function DropOld() {
   };
 
   return (
-    <div>
-      <div className="pt4" />
-      <h1 className="mv0">Drop</h1>
-      <div className="pt4" />
-      <DataTabs onFobChange={updateLocalCid} />
+    <div className={`${styles.body} space-y-4 py-4`}>
+      <h2 className="text-2xl">Drop</h2>
+
+      <div>
+        <DataTabs onFobChange={updateLocalCid} />
+        <GrayBox>
+          <label>Local CID:</label>
+          <Cid cid={localCid} />
+        </GrayBox>
+      </div>
+      <button className="btn-blue p-2 w-full" onClick={signCid}>
+        Sign CID
+      </button>
+
+      <h2 className="text-2xl">Encrypted</h2>
+
       <GrayBox>
-        Local CID:
-        <Cid cid={localCid} />
+        <div className="flex flex-col gap-2">
+          <label>Signed CID / Generated Password:</label>
+          <div className="font-mono text-xs break-all">
+            {generatedPassword || "N/A"}
+          </div>
+          <label>Encrypted:</label>
+          <div
+            className="border bg-black bg-opacity-5 px-4 py-2 text-xs font-mono overflow-scroll break-all"
+            style={{ height: "20vh" }}
+          >
+            {encrypted || "N/A"}
+          </div>
+          <label>Data URL:</label>
+          <textarea
+            className="break-all text-xs font-mono"
+            readOnly
+            value={dataUrl || "N/A"}
+          />
+          <div>
+            <DownloadButton text={encrypted ?? ""} cid={encryptedLocalCid} />
+          </div>
+          <label>Local CID:</label>
+          <Cid cid={encryptedLocalCid} />
+        </div>
       </GrayBox>
-      <div className="pt4" />
-      <button onClick={signCid}>Sign CID</button>
-      <div className="pt4" />
-      <h2 className="mv0">Encrypted</h2>
-      <div className="pt4" />
-      <GrayBox>
-        Signed CID / Generated Password:
-        <div style={{ wordBreak: "break-all" }}>
-          {generatedPassword || "N/A"}
-        </div>
-        Encrypted:
-        <div
-          className="f7 h4 overflow-scroll ba"
-          style={{ wordBreak: "break-all" }}
-        >
-          {encrypted || "N/A"}
-        </div>
-        <textarea readOnly value={dataUrl || "N/A"} />
-        <div>
-          <DownloadButton text={encrypted ?? ""} cid={encryptedLocalCid} />
-        </div>
-        Local CID:
-        <Cid cid={encryptedLocalCid} />
-      </GrayBox>
-      <div className="pt4" />
+
       <UploadToIpfsButton
         fob={encryptedFob}
         onUpload={() => alert("Upload worked!")}
       >
         Upload Encrypted File
       </UploadToIpfsButton>
-      <div className="pt4" />
-      <h2 className="mv0">Ethereum</h2>
-      <div className="pt4" />
-      <b>HashDrop.sol</b>
-      <EthHashDropSubmitButton
-        cid={localCid}
-        privateCid={encryptedLocalCid}
-        onSubmitComplete={() => alert("done!")}
-      />
-      <div className="pt4" />
-      <h2 className="mv0">Download and show encrypted file</h2>
-      <button onClick={downloadEncryptedFile}>Download file</button>
+
+      <h2 className="text-2xl">Ethereum</h2>
+
+      <div className="border p-2">
+        <label>HashDrop.sol</label>
+        <EthHashDropSubmitButton
+          cid={localCid}
+          privateCid={encryptedLocalCid}
+          onSubmitComplete={() => alert("done!")}
+        />
+      </div>
+
+      <h2 className="text-2xl">Download and show encrypted file</h2>
+      <button className="btn-blue p-2 w-full" onClick={downloadEncryptedFile}>
+        Download file
+      </button>
       <GrayBox>
-        Encrypted:
+        <label>Encrypted:</label>
         <div
-          className="f7 h4 overflow-scroll ba"
-          style={{ wordBreak: "break-all" }}
+          className="p-4 bg-black bg-opacity-5 text-xs overflow-scroll break-all font-mono"
+          style={{ height: "20vh" }}
         >
           {downloadedEncrypted || "N/A"}
         </div>
-        <textarea readOnly value={downloadedPrivateDataUrl || "N/A"} />
+        <textarea
+          className="w-full font-mono"
+          readOnly
+          value={downloadedPrivateDataUrl || "N/A"}
+        />
       </GrayBox>
       {downloadedPrivateDataUrl && (
         <iframe
           width="100%"
           title="ipfs preview"
-          className="db ba"
+          className="block border"
           style={{ height: "20vh" }}
           src={downloadedPrivateDataUrl}
         />
       )}
-      <div className="pt4" />
-
-      <div className="pt4" />
-      <h2 className="mv0">TODO: Show decrypted file</h2>
-      <div className="pt4" />
     </div>
   );
 }

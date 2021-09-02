@@ -65,24 +65,28 @@ export function EthHashDropSubmitButton({
   if (!hashdrop.contract) return <>No contract</>;
 
   return (
-    <>
+    <div>
       <AddressLink address={hashdrop.contract?.address} />
-      <div className="w-100">
-        <Disabled className="w-100" disabled={isSubmitting}>
+      <div className="w-full">
+        <Disabled className="w-full" disabled={isSubmitting}>
           <form onSubmit={handleSubmit}>
-            <button type="submit">Submit</button>
-            <div className="flex flex-column" style={{ gap: ".5em" }}>
+            <button className="btn-blue" type="submit">
+              Submit
+            </button>
+            <div className="flex flex-col gap-2">
               <ErrorMessage>{submitError}</ErrorMessage>
               {!submitError && submitSuccess && (
-                <div className="green">Hash drop added successfully!</div>
+                <div className="text-green-500">
+                  Hash drop added successfully!
+                </div>
               )}
-              <div className="f7">
+              <div className="text-xs">
                 Total drops: {loadingDropCount ? <Loader /> : dropCount}
               </div>
             </div>
           </form>
         </Disabled>
       </div>
-    </>
+    </div>
   );
 }

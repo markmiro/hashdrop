@@ -4,7 +4,7 @@ import { useErrorHandler } from "react-error-boundary";
 import { EthEnsure } from "../../eth-react/EthEnsure";
 import { useEthersProvider } from "../../eth-react/EthersProviderContext";
 import { useContract } from "../../eth-react/useContract";
-import { Cid } from "../../generic/Cid";
+import { Cid } from "../../eth-react/Cid";
 import { ErrorMessage } from "../../generic/ErrorMessage";
 import { Loader } from "../../generic/Loader";
 import feArtifacts from "../../hardhat-frontend-artifacts.json";
@@ -81,8 +81,8 @@ function EthShow({ cid, checkAgain }: { cid: string; checkAgain: () => void }) {
   const connectToAddress = useConnectToAddress(ethDrop.dropperAddress);
 
   return (
-    <div>
-      <pre>{JSON.stringify(ethDrop, null, "  ")}</pre>
+    <div className="flex flex-col gap-2">
+      {/* <pre>{JSON.stringify(ethDrop, null, "  ")}</pre> */}
       {ethDrop.loading && <Loader>Checking Ethereum blockchain</Loader>}
       {!ethDrop.loading && (
         <>
@@ -136,7 +136,9 @@ export function ShowDrop({ cid }: { cid: string }) {
           <ErrorMessage>
             The file hasn't been published yet. Check back here when the author
             has published the file.{" "}
-            <button onClick={cidChecker.checkAgain}>Try Again</button>
+            <button className="btn-light" onClick={cidChecker.checkAgain}>
+              Try Again
+            </button>
           </ErrorMessage>
           <EthEnsure isConnected chainIds={goodChainIds}>
             <EthShow cid={cid} checkAgain={cidChecker.checkAgain} />
