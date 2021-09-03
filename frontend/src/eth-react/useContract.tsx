@@ -38,7 +38,7 @@ export function useContract<T extends BaseContract>(
         const acceptableChainIds = Object.keys(feContract.chainId);
         if (!acceptableChainIds.includes(chainIdString)) {
           throw new Error(
-            `\n\nSelected MetaMask network chainId is: ${chainIdString}.\nContract "${
+            `Selected MetaMask network chainId is: ${chainIdString}.\nContract "${
               feContract.name
             }" is only deployed to these: ${acceptableChainIds
               .map((s) => "\n- " + s)

@@ -6,18 +6,12 @@ export const GenericError: FC<{ tryAgain?: () => void }> = ({
   children,
 }) => {
   return (
-    <Flex
-      color="red.500"
-      textAlign="center"
-      overflow="scroll"
-      flexDir="column"
-      alignItems="start"
-    >
+    <Flex color="red.500" overflow="scroll" flexDir="column" alignItems="start">
       <Flex fontWeight="semibold" flexWrap="wrap" alignItems="center">
         {/* <WarningIcon boxSize=".75em" color="red.500" mr="1" /> */}
         ⚠️ Something went wrong.
       </Flex>
-      <Text fontFamily="mono" whiteSpace="normal">
+      <Text as="pre" fontFamily="mono">
         {children}
       </Text>
       {tryAgain && (
