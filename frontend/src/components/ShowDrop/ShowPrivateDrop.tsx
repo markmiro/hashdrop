@@ -1,3 +1,4 @@
+import { Box, Button, HStack, VStack } from "@chakra-ui/react";
 import { FC } from "react";
 import { ErrorMessage } from "../../generic/ErrorMessage";
 import { Loader } from "../../generic/Loader";
@@ -34,25 +35,27 @@ function IFramePreview2({
   const decrypter = useDecrypter();
 
   return (
-    <div className="flex flex-col gap-2">
-      <button
-        className="btn-light"
+    <VStack align="stretch" spacing={2}>
+      <Button
+        colorScheme="blue"
         onClick={() => decrypter.decrypt(cid, privateCid)}
       >
         Show Your Encrypted File
-      </button>
+      </Button>
       {decrypter.dataUrl && (
         <>
-          <IFramePreview src={decrypter.dataUrl} />
-          <button className="btn-blue p-2 w-full" onClick={decrypter.publish}>
+          <Box borderWidth={1} w="full">
+            <IFramePreview src={decrypter.dataUrl} />
+          </Box>
+          <Button colorScheme="green" onClick={decrypter.publish}>
             Publish
-          </button>
+          </Button>
         </>
       )}
-      <div className="p-1 bg-black bg-opacity-5 flex gap-2">
+      <HStack p={2} spacing={2} bg="blackAlpha.100">
         Status: <StateText state={decrypter.state} />
-      </div>
-    </div>
+      </HStack>
+    </VStack>
   );
 }
 
@@ -73,9 +76,13 @@ export function ShowMyPrivateDrop({
       {cidChecker.state === "NOT_FOUND" && (
         <ErrorMessage>
           Couldn't find the document.{" "}
-          <button className="btn-red" onClick={cidChecker.checkAgain}>
+          <Button
+            variant="link"
+            colorScheme="blue"
+            onClick={cidChecker.checkAgain}
+          >
             Try Again
-          </button>
+          </Button>
         </ErrorMessage>
       )}
       {cidChecker.state === "FOUND" && (

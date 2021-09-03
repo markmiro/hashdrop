@@ -13,6 +13,7 @@ import { cidToUrl } from "../../util/pinata";
 import { IFramePreview } from "../IFramePreview";
 import { ShowMyPrivateDrop } from "./ShowPrivateDrop";
 import { useCheckIpfsCidExists } from "./useCheckIpfsCidExists";
+import { Box, Button, Flex, VStack } from "@chakra-ui/react";
 
 const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
   (id) => parseInt(id)
@@ -81,14 +82,15 @@ function EthShow({ cid, checkAgain }: { cid: string; checkAgain: () => void }) {
   const connectToAddress = useConnectToAddress(ethDrop.dropperAddress);
 
   return (
-    <div className="flex flex-col gap-2">
+    <VStack spacing="2" alignItems="stretch">
       {/* <pre>{JSON.stringify(ethDrop, null, "  ")}</pre> */}
       {ethDrop.loading && <Loader>Checking Ethereum blockchain</Loader>}
       {!ethDrop.loading && (
         <>
           {process.env.NODE_ENV === "development" && (
             <div>
-              Private CID:
+              <label>Private CID:</label>
+              <br />
               <Cid cid={ethDrop.privateCid} />
             </div>
           )}
@@ -108,12 +110,14 @@ function EthShow({ cid, checkAgain }: { cid: string; checkAgain: () => void }) {
           ) : (
             <ErrorMessage>
               Couldn't find the document.{" "}
-              <button onClick={checkAgain}>Try Again</button>
+              <Button colorScheme="blue" variant="link" onClick={checkAgain}>
+                Try Again
+              </Button>
             </ErrorMessage>
           )}
         </>
       )}
-    </div>
+    </VStack>
   );
 }
 
@@ -121,13 +125,8 @@ export function ShowDrop({ cid }: { cid: string }) {
   const cidChecker = useCheckIpfsCidExists(cid);
 
   return (
-    <div>
-      <h1>Show Drop</h1>
-      {process.env.NODE_ENV === "development" && (
-        <div>
-          <Cid cid={cid} />
-        </div>
-      )}
+    <>
+      {process.env.NODE_ENV === "development" && <Cid cid={cid} />}
       {cidChecker.state === "LOADING" && (
         <Loader>Searching IPFS for file</Loader>
       )}
@@ -136,9 +135,13 @@ export function ShowDrop({ cid }: { cid: string }) {
           <ErrorMessage>
             The file hasn't been published yet. Check back here when the author
             has published the file.{" "}
-            <button className="btn-light" onClick={cidChecker.checkAgain}>
+            <Button
+              variant="link"
+              colorScheme="blue"
+              onClick={cidChecker.checkAgain}
+            >
               Try Again
-            </button>
+            </Button>
           </ErrorMessage>
           <EthEnsure isConnected chainIds={goodChainIds}>
             <EthShow cid={cid} checkAgain={cidChecker.checkAgain} />
@@ -150,9 +153,11 @@ export function ShowDrop({ cid }: { cid: string }) {
           {/* TODO: show date of decrypted file? If encrypted file shows up in
               plaintext then it's because your hashdrop was already dropped by
               someone else. */}
-          <IFramePreview src={cidToUrl(cid)} />
+          <Box borderWidth={1} w="100%">
+            <IFramePreview src={cidToUrl(cid)} style={{ height: "60vh" }} />
+          </Box>
         </>
       )}
-    </div>
+    </>
   );
 }

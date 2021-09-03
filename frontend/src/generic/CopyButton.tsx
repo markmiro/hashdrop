@@ -1,32 +1,34 @@
+import { CopyIcon } from "@chakra-ui/icons";
+import { Link, LinkProps, useToast } from "@chakra-ui/react";
 import copy from "copy-to-clipboard";
-import React, { useCallback, useState } from "react";
+import React, { FC, useCallback } from "react";
 
-export function CopyButton({
-  toCopy,
-  className,
-}: {
-  toCopy: string;
-  className?: string;
-}) {
-  const [isCopied, setIsCopied] = useState(false);
+export const CopyButton: FC<
+  LinkProps & {
+    toCopy: string;
+  }
+> = ({ toCopy, ...rest }) => {
+  const toast = useToast();
 
   const handleCopy = useCallback(() => {
-    setIsCopied(true);
     copy(toCopy);
-  }, [toCopy]);
-
-  const handleCopied = useCallback(() => {
-    setIsCopied(false);
-  }, []);
+    toast({
+      title: "Copied.",
+      duration: 1000,
+    });
+  }, [toCopy, toast]);
 
   return (
-    <button
+    <Link
+      as="button"
+      variant="link"
       title={toCopy}
       onClick={handleCopy}
-      onMouseLeave={handleCopied}
-      className={className}
+      _hover={{ opacity: "50%" }}
+      transform="translate(0px, -1px)"
+      {...rest}
     >
-      {isCopied ? "Copied" : "Copy"}
-    </button>
+      <CopyIcon />
+    </Link>
   );
-}
+};

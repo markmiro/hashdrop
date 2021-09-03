@@ -11,10 +11,22 @@ import { DownloadButton } from "../components/DownloadButton";
 import { UploadToIpfsButton } from "../components/UploadToIpfsButton";
 import { EthHashDropSubmitButton } from "../components/EthHashDropSubmitButton";
 import { cidToUrl } from "../util/pinata";
-import styles from "../generic/styles.module.css";
+import { IFramePreview } from "../components/IFramePreview";
+import { Box, Button, Heading, VStack } from "@chakra-ui/react";
+import { MonoText } from "../generic/MonoText";
 
 const GrayBox: FC = ({ children }) => (
-  <div className="block p-2 bg-black bg-opacity-5">{children}</div>
+  <Box p={2} background="blackAlpha.100">
+    <VStack spacing={2} align="stretch">
+      {children}
+    </VStack>
+  </Box>
+);
+
+const Data: FC = ({ children }) => (
+  <Box maxH="20vh" overflow="scroll" fontSize="xs">
+    <MonoText>{children || "N/A"}</MonoText>
+  </Box>
 );
 
 export function DropOld() {
@@ -93,9 +105,7 @@ export function DropOld() {
   };
 
   return (
-    <div className={`${styles.body} space-y-4 py-4`}>
-      <h2 className="text-2xl">Drop</h2>
-
+    <VStack spacing={8} align="stretch">
       <div>
         <DataTabs onFobChange={updateLocalCid} />
         <GrayBox>
@@ -103,37 +113,25 @@ export function DropOld() {
           <Cid cid={localCid} />
         </GrayBox>
       </div>
-      <button className="btn-blue p-2 w-full" onClick={signCid}>
-        Sign CID
-      </button>
 
-      <h2 className="text-2xl">Encrypted</h2>
+      <Button colorScheme="blue" onClick={signCid}>
+        Sign CID
+      </Button>
+
+      <Heading as="h3" fontSize="2xl">
+        Encrypted
+      </Heading>
 
       <GrayBox>
-        <div className="flex flex-col gap-2">
-          <label>Signed CID / Generated Password:</label>
-          <div className="font-mono text-xs break-all">
-            {generatedPassword || "N/A"}
-          </div>
-          <label>Encrypted:</label>
-          <div
-            className="border bg-black bg-opacity-5 px-4 py-2 text-xs font-mono overflow-scroll break-all"
-            style={{ height: "20vh" }}
-          >
-            {encrypted || "N/A"}
-          </div>
-          <label>Data URL:</label>
-          <textarea
-            className="break-all text-xs font-mono"
-            readOnly
-            value={dataUrl || "N/A"}
-          />
-          <div>
-            <DownloadButton text={encrypted ?? ""} cid={encryptedLocalCid} />
-          </div>
-          <label>Local CID:</label>
-          <Cid cid={encryptedLocalCid} />
-        </div>
+        <label>Signed CID / Generated Password:</label>
+        <Data>{generatedPassword}</Data>
+        <label>Encrypted:</label>
+        <Data>{encrypted}</Data>
+        <label>Data URL:</label>
+        <Data>{dataUrl}</Data>
+        <DownloadButton text={encrypted ?? ""} cid={encryptedLocalCid} />
+        <label>Local CID:</label>
+        <Cid cid={encryptedLocalCid} />
       </GrayBox>
 
       <UploadToIpfsButton
@@ -143,44 +141,37 @@ export function DropOld() {
         Upload Encrypted File
       </UploadToIpfsButton>
 
-      <h2 className="text-2xl">Ethereum</h2>
+      <Heading as="h3" fontSize="2xl">
+        Ethereum
+      </Heading>
 
-      <div className="border p-2">
+      <Box p={2} borderWidth={1}>
         <label>HashDrop.sol</label>
         <EthHashDropSubmitButton
           cid={localCid}
           privateCid={encryptedLocalCid}
           onSubmitComplete={() => alert("done!")}
         />
-      </div>
+      </Box>
 
-      <h2 className="text-2xl">Download and show encrypted file</h2>
-      <button className="btn-blue p-2 w-full" onClick={downloadEncryptedFile}>
+      <Heading as="h3" fontSize="2xl">
+        Download and show encrypted file
+      </Heading>
+
+      <Button colorScheme="blue" onClick={downloadEncryptedFile}>
         Download file
-      </button>
+      </Button>
+
       <GrayBox>
         <label>Encrypted:</label>
-        <div
-          className="p-4 bg-black bg-opacity-5 text-xs overflow-scroll break-all font-mono"
-          style={{ height: "20vh" }}
-        >
-          {downloadedEncrypted || "N/A"}
-        </div>
-        <textarea
-          className="w-full font-mono"
-          readOnly
-          value={downloadedPrivateDataUrl || "N/A"}
-        />
+        <Data>{downloadedEncrypted}</Data>
+        <Data>{downloadedPrivateDataUrl}</Data>
       </GrayBox>
       {downloadedPrivateDataUrl && (
-        <iframe
-          width="100%"
-          title="ipfs preview"
-          className="block border"
-          style={{ height: "20vh" }}
-          src={downloadedPrivateDataUrl}
-        />
+        <Box borderWidth={1}>
+          <IFramePreview src={downloadedPrivateDataUrl} />
+        </Box>
       )}
-    </div>
+    </VStack>
   );
 }

@@ -1,3 +1,4 @@
+import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
 import { FC } from "react";
 import { FilePreview } from "./FilePreview";
 
@@ -10,19 +11,23 @@ export const FilePreviewWithInfo: FC<{
 
   return (
     <div>
-      <div>
-        <div className="border flex flex-col">
-          <FilePreview file={file} dataUrl={dataUrl} />
+      <Box borderWidth={1}>
+        <FilePreview file={file} dataUrl={dataUrl} />
+      </Box>
+      <Flex bg="blackAlpha.100" p={2}>
+        <div style={{ overflow: "hidden" }}>
+          <Text fontWeight="semibold" isTruncated>
+            {fileName}
+          </Text>
+          {file?.type && (
+            <Text fontSize="xs" color="blackAlpha.700">
+              {file.type}
+            </Text>
+          )}
         </div>
-        <div className="bg-black bg-opacity-5 p-2 text-sm flex">
-          <div className="overflow-hidden">
-            <div className="font-semibold truncate">{fileName}</div>
-            {file?.type && <div className="opacity-50">{file.type}</div>}
-          </div>
-          <div className="flex-auto" />
-          <div className="flex-shrink-0">{children}</div>
-        </div>
-      </div>
+        <Spacer />
+        <Box flexShrink={0}>{children}</Box>
+      </Flex>
     </div>
   );
 };

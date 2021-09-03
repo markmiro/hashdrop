@@ -1,4 +1,6 @@
-import { useEffect, useRef } from "react";
+import { Box, Image, ScaleFade } from "@chakra-ui/react";
+import { useEffect, useRef, useState } from "react";
+import { IFramePreview } from "../IFramePreview";
 
 // RESOURCES
 // ---
@@ -15,36 +17,49 @@ export function FilePreview({
   file: File | Blob | null;
   dataUrl: string;
 }) {
+  const [loaded, setLoaded] = useState(false);
   const previewRef = useRef<HTMLIFrameElement>(null);
 
   // Clear preview when file changes
   useEffect(() => {
     if (file === null && previewRef && previewRef.current) {
       previewRef.current.src = "";
+      setLoaded(false);
     }
   }, [file, previewRef]);
 
   if (!file) return null;
 
   if (!file.type || !dataUrl) {
-    return <div className="pa2 tc b bg-black-05 w-100 f1">📄</div>;
+    return (
+      <Box
+        p={2}
+        textAlign="center"
+        fontWeight="medium"
+        w="100%"
+        fontSize="xxx-large"
+      >
+        📄
+      </Box>
+    );
   }
 
   const isFileImage = file.type.includes("image");
   if (isFileImage) {
     return (
-      <img className="db h5 mr-auto ml-auto" src={dataUrl} alt="uploaded" />
+      <ScaleFade initialScale={1.1} in={loaded}>
+        <Image
+          boxSize="sm"
+          objectFit="contain"
+          margin="auto"
+          src={dataUrl}
+          onLoad={() => setLoaded(true)}
+          opacity={loaded ? 1 : 0}
+          alt="uploaded"
+        />
+      </ScaleFade>
     );
   }
 
-  return (
-    <iframe
-      ref={previewRef}
-      width="100%"
-      title="ipfs preview"
-      className="db b--none"
-      style={{ height: "20vh" }}
-      src={dataUrl}
-    />
-  );
+  return <IFramePreview src={dataUrl} />;
 }

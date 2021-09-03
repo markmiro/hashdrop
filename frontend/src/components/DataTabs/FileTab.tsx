@@ -1,6 +1,35 @@
+import { DeleteIcon } from "@chakra-ui/icons";
+import { Box, Button, Center } from "@chakra-ui/react";
+import { FC } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { resetFileInput } from "../../util/resetFileInput";
 import { FilePreviewWithInfo } from "./FilePreviewWithInfo";
+
+const fillAndHide: React.CSSProperties = {
+  position: "absolute",
+  left: 0,
+  top: 0,
+  width: "100%",
+  height: "100%",
+  opacity: 0,
+};
+
+const DropArea: FC = ({ children }) => (
+  <Center
+    position="relative"
+    fontWeight="medium"
+    rounded="md"
+    border={1}
+    borderStyle="dashed"
+    borderColor="blackAlpha.300"
+    _hover={{ bg: "blackAlpha.100" }}
+    textAlign="center"
+    h="20vh"
+    p="4"
+  >
+    {children}
+  </Center>
+);
 
 export function FileTab({
   onFileChange,
@@ -32,22 +61,22 @@ export function FileTab({
   if (file) {
     return (
       <FilePreviewWithInfo file={file} dataUrl={fileDataUrl}>
-        <button className="btn-light" onClick={resetFile} disabled={!file}>
-          ✖️ Remove
-        </button>
+        <Button onClick={resetFile} disabled={!file} leftIcon={<DeleteIcon />}>
+          Remove
+        </Button>
       </FilePreviewWithInfo>
     );
   }
 
   return (
-    <div className="relative rounded-sm border border-dashed hover:bg-black hover:bg-opacity-5 p-4 text-center">
+    <DropArea>
       <input
         ref={fileRef}
         type="file"
-        className="absolute top-0 left-0 w-full h-full opacity-0"
+        style={fillAndHide}
         onChange={(e) => updateFile(e.target?.files?.[0] ?? null)}
       />
-      <div>📄 Choose a file</div>
-    </div>
+      📄 Choose a file
+    </DropArea>
   );
 }

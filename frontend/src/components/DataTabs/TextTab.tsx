@@ -1,8 +1,10 @@
+import { Box, Button, HStack, Spacer, Textarea } from "@chakra-ui/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useConfirm } from "../../generic/Confirm";
 import { fobAsText } from "../../util/fobAsText";
-import { resetFileInput } from "../../util/resetFileInput";
-import { textTypes } from "../../util/textTypes";
 import { textToBlob } from "../../util/textToBlob";
+import { textTypes } from "../../util/textTypes";
+import { FileInput } from "../FileInput";
 import { DownloadButton } from "./../DownloadButton";
 
 export function TextTab({
@@ -12,22 +14,24 @@ export function TextTab({
   cid?: string;
   onBlobChange: (blob: Blob | null) => void;
 }) {
-  const fileRef = useRef<HTMLInputElement>(null);
+  const confirm = useConfirm();
+  const textRef = useRef<HTMLTextAreaElement>(null);
   const [text, setText] = useState("");
-  const [textBlob, setTextBlob] = useState<Blob | null>(null);
+  const [fob, setFob] = useState<File | Blob | null>(null);
 
   const updateText = useCallback(async (text) => {
     setText(text);
     const blob = textToBlob(text);
-    setTextBlob(blob);
+    setFob(blob);
   }, []);
 
   const resetText = () => {
     setText("");
-    if (fileRef?.current) resetFileInput(fileRef.current);
+    setFob(null);
+    setTimeout(() => textRef.current?.focus(), 200);
   };
 
-  const updateTextFile = useCallback(async (file: null | File | Blob) => {
+  const updateTextFile = useCallback(async (file: File | Blob | null) => {
     if (!file) return;
     if (textTypes.includes(file.type)) {
       const text = await fobAsText(file);
@@ -35,41 +39,54 @@ export function TextTab({
     } else {
       setText("");
     }
-    setTextBlob(file);
+    setFob(file);
   }, []);
 
   useEffect(() => {
-    if (!text) setTextBlob(null);
+    if (!text) setFob(null);
   }, [text]);
 
   useEffect(() => {
-    onBlobChange(textBlob);
-  }, [onBlobChange, textBlob]);
+    onBlobChange(fob);
+  }, [onBlobChange, fob]);
 
   return (
-    <>
-      <textarea
+    <div>
+      <Textarea
+        ref={textRef}
         autoFocus
         placeholder="Type here..."
-        className="w-full"
         style={{ height: "20vh" }}
         value={text}
         onChange={(e) => updateText(e.target.value)}
       />
-      <div className="pt-1" />
-      <div className="flex items-center gap-2">
-        <input
-          ref={fileRef}
-          type="file"
-          className="block w-full"
-          accept={textTypes.join(",")}
-          onChange={(e) => updateTextFile(e.target?.files?.[0] ?? null)}
+      <Box pt={2} />
+      <HStack alignItems="center" spacing={2}>
+        <FileInput
+          label="Open File"
+          acceptTypes={textTypes}
+          file={fob instanceof File ? fob : null}
+          keepFile={!!text}
+          buttonProps={{
+            isDisabled: !!text,
+            pointerEvents: !!text ? "none" : undefined,
+          }}
+          onFileChange={updateTextFile}
         />
-        <DownloadButton cid={cid} text={text} />
-        <button className="btn-light" onClick={resetText} disabled={!text}>
+        <Spacer />
+        <DownloadButton cid={cid} text={text} flex="0 0 auto" />
+        <Button
+          onClick={() =>
+            confirm(resetText, {
+              title: "Are you sure you want to clear the text?",
+            })
+          }
+          isDisabled={!text}
+          flex="0 0 auto"
+        >
           Clear
-        </button>
-      </div>
-    </>
+        </Button>
+      </HStack>
+    </div>
   );
 }

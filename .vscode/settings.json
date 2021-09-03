@@ -5,5 +5,8 @@
         "hashdrop",
         "ipfs",
         "multihashing"
+    ],
+    "cSpell.ignoreWords": [
+        "chakra"
     ]
 }

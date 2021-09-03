@@ -1,4 +1,18 @@
-import { RadioGroup } from "@headlessui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import {
+  Badge,
+  Box,
+  Button,
+  ButtonProps,
+  Circle,
+  Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Spacer,
+  useToast,
+} from "@chakra-ui/react";
 import { utils } from "ethers";
 import { useState } from "react";
 import { ErrorMessage } from "../generic/ErrorMessage";
@@ -6,7 +20,36 @@ import { chainIdToInfo } from "./chainIdToInfo";
 import { InstallMetaMaskMessage } from "./InstallMetaMaskMessage";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 
-export function ChainOptions({ chainIds }: { chainIds: number[] }) {
+const ChainDisplay = ({ chainId }: { chainId: number }) => {
+  const info = chainIdToInfo(chainId);
+
+  return (
+    <Flex alignItems="center" width="100%">
+      <Circle size="1em" bg={info.color} boxShadow="xs" mr="2" />
+      {info.name}
+      <Spacer />
+      <Box
+        fontSize="xs"
+        mr="2"
+        fontWeight="normal"
+        opacity="50%"
+        display="inline"
+      >
+        ID: {chainId}
+      </Box>
+      {info.type === "test" && <Badge variant="outline">test</Badge>}
+    </Flex>
+  );
+};
+
+export function ChainOptions({
+  chainIds,
+  buttonProps,
+}: {
+  chainIds: number[];
+  buttonProps?: ButtonProps;
+}) {
+  const toast = useToast();
   const { ethereum, data } = useMetaMaskEthereum();
   const [chainId, setChainId] = useState(data.chainId);
 
@@ -20,7 +63,7 @@ export function ChainOptions({ chainIds }: { chainIds: number[] }) {
         params: [{ chainId: hexChainId }],
       })
       .then(() => setChainId(chainId))
-      .catch((err) => alert(err.message));
+      .catch((err) => toast({ title: err.message, status: "error" }));
   };
 
   if (!ethereum) {
@@ -32,24 +75,24 @@ export function ChainOptions({ chainIds }: { chainIds: number[] }) {
   }
 
   return (
-    <div className="flex flex-col sm:flex-row sm:gap-2">
-      <div className="">Available chains:</div>
-      <RadioGroup
-        className="flex flex-col sm:flex-row sm:gap-2"
-        value={chainId}
-        onChange={updateChainId}
+    <Menu>
+      <MenuButton
+        as={Button}
+        variant="outline"
+        textAlign="left"
+        rightIcon={<ChevronDownIcon />}
+        isFullWidth
+        {...buttonProps}
       >
+        {chainId ? <ChainDisplay chainId={chainId} /> : "Choose a chain"}
+      </MenuButton>
+      <MenuList minW="sm">
         {chainIds.map((chainId) => (
-          <RadioGroup.Option key={chainId} value={chainId}>
-            {({ checked }) => (
-              <span className="cursor-default bg-black bg-opacity-0 hover:bg-opacity-10">
-                <span className="text-black">{checked ? "⦿" : "⦾"}</span>{" "}
-                {chainIdToInfo(chainId).name}
-              </span>
-            )}
-          </RadioGroup.Option>
+          <MenuItem key={chainId} onClick={() => updateChainId(chainId)}>
+            <ChainDisplay chainId={chainId} />
+          </MenuItem>
         ))}
-      </RadioGroup>
-    </div>
+      </MenuList>
+    </Menu>
   );
 }

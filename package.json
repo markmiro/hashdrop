@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "node": "hardhat node",
-    "frontend": "cd frontend && npm run dev",
+    "frontend": "cd frontend && vercel dev",
     "test": "hardhat test",
     "build": "hardhat compile",
     "deploy:local": "hardhat run scripts/deploy.js --network localhost",

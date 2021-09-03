@@ -1,26 +1,16 @@
 import { ErrorBoundary } from "react-error-boundary";
-import { HashRouter, NavLink, Redirect, Route, Switch } from "react-router-dom";
-import { DropCount } from "./components/DropCount";
+import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
 import { ShowDrop } from "./components/ShowDrop/ShowDrop";
-import { ChainOptions } from "./eth-react/ChainOptions";
 import { EthEnsure } from "./eth-react/EthEnsure";
 import { EthErrorFallback } from "./eth-react/EthErrorFallback";
 import feArtifacts from "./hardhat-frontend-artifacts.json";
+import { Nav, NavLink, PageBody, PageTitle } from "./components/PageLayout";
 import { Arbitrum } from "./pages/Arbitrum";
-import { Compare } from "./pages/Compare";
 import { Drop } from "./pages/Drop";
 import { DropOld } from "./pages/DropOld";
 import { Encrypt } from "./pages/Encrypt";
 import { Sink } from "./pages/Sink";
-
-function Body({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="px-2 py-1">
-      {/* Layout */}
-      <div className="flex flex-col items-stretch">{children}</div>
-    </div>
-  );
-}
+import { Box, HStack } from "@chakra-ui/react";
 
 const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
   (id) => parseInt(id)
@@ -31,96 +21,73 @@ export function App() {
     <>
       {/* https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/HashRouter.md */}
       <HashRouter hashType="slash">
-        <nav className="z-10 px-2 sticky top-0 flex justify-between gap-3 shadow-md bg-white bg-opacity-80 backdrop-filter backdrop-blur-sm">
-          <NavLink to="/" className="no-underline black flex-shrink-0">
-            <b>HASH💧</b>
-          </NavLink>
-          <div className="flex flex-wrap gap-4">
-            <NavLink
-              className="text-black no-underline"
-              activeClassName="bg-black text-white"
-              to="/sink"
-            >
-              Kitchen Sink
-            </NavLink>
-            <NavLink
-              className="text-black no-underline"
-              activeClassName="bg-black text-white"
-              to="/encrypt"
-            >
-              Encrypt
-            </NavLink>
-            <NavLink
-              className="text-black no-underline"
-              activeClassName="bg-black text-white"
-              to="/compare"
-            >
-              Compare
-            </NavLink>
-            <NavLink
-              className="text-black no-underline"
-              activeClassName="bg-black text-white"
-              to="/drop-old"
-            >
-              Drop Old
-            </NavLink>
-            <NavLink
-              className="text-black no-underline"
-              activeClassName="bg-black text-white"
-              to="/drop"
-            >
-              Drop
-            </NavLink>
-            <NavLink
-              className="text-black no-underline"
-              activeClassName="bg-black text-white"
-              to="/arbitrum"
-            >
-              Arbitrum
-            </NavLink>
-          </div>
-        </nav>
+        <Nav>
+          <NavLink to="/drop">Drop</NavLink>
+        </Nav>
 
-        <Body>
-          <ErrorBoundary FallbackComponent={EthErrorFallback}>
-            {/* A <Switch> looks through its children <Route>s and
+        <Route path="/debug">
+          <HStack borderBottomWidth={1} overflow="scroll" w="full">
+            <NavLink to="/debug">Debug</NavLink>
+            <NavLink to="/debug/sink">Kitchen Sink</NavLink>
+            <NavLink to="/debug/encrypt">Encrypt</NavLink>
+            <NavLink to="/debug/drop-old">Drop Old</NavLink>
+            <NavLink to="/debug/arbitrum">Arbitrum</NavLink>
+          </HStack>
+        </Route>
+
+        <ErrorBoundary FallbackComponent={EthErrorFallback}>
+          {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-            <Switch>
-              <Route path="/sink">
-                <Sink />
-              </Route>
-              <Route path="/encrypt">
-                <Encrypt />
-              </Route>
-              <Route path="/compare">
-                <Compare />
-              </Route>
-              <Route
-                path="/drop/:cid"
-                render={(props) => <ShowDrop cid={props.match.params.cid} />}
-              ></Route>
-              <Route path="/drop">
+          <Switch>
+            <Route
+              path="/drop/:cid"
+              render={(props) => (
+                <PageBody>
+                  <PageTitle>Show Drop</PageTitle>
+                  <ShowDrop cid={props.match.params.cid} />
+                </PageBody>
+              )}
+            />
+            <Route path="/drop">
+              <PageBody>
+                <PageTitle>Drop</PageTitle>
                 <EthEnsure isConnected isNonZeroBalance chainIds={goodChainIds}>
                   <Drop />
                 </EthEnsure>
-              </Route>
-              <Route path="/drop-old">
+              </PageBody>
+            </Route>
+
+            <Route path="/debug/sink">
+              <PageBody isFullWidth>
+                <PageTitle>Kitchen Sink</PageTitle>
+                <Sink />
+              </PageBody>
+            </Route>
+            <Route path="/debug/drop-old">
+              <PageBody>
+                <PageTitle>Drop Old</PageTitle>
                 <DropOld />
-              </Route>
-              <Route path="/arbitrum">
+              </PageBody>
+            </Route>
+            <Route path="/debug/encrypt">
+              <PageBody>
+                <PageTitle>Encrypt</PageTitle>
+                <Encrypt />
+              </PageBody>
+            </Route>
+            <Route path="/debug/arbitrum">
+              <PageBody>
+                <PageTitle>Arbitrum</PageTitle>
                 <Arbitrum />
-              </Route>
-              <Route path="/">
-                <Redirect to="/compare" />
-              </Route>
-            </Switch>
-          </ErrorBoundary>
-          <hr />
-          <EthEnsure chainIds={goodChainIds}>
-            <DropCount />
-          </EthEnsure>
-          <ChainOptions chainIds={goodChainIds} />
-        </Body>
+              </PageBody>
+            </Route>
+            <Route path="/debug"></Route>
+
+            <Route path="/">
+              <Redirect to="/drop" />
+            </Route>
+          </Switch>
+        </ErrorBoundary>
       </HashRouter>
     </>
   );

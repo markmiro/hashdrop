@@ -1,6 +1,8 @@
 import { FC, useEffect, useState } from "react";
 import { CopyButton } from "../generic/CopyButton";
 import { useEthersProvider } from "./EthersProviderContext";
+import { Anchor } from "../generic/Anchor";
+import { MonoText } from "../generic/MonoText";
 
 const availableNetworks = [
   "mainnet",
@@ -11,6 +13,8 @@ const availableNetworks = [
 ] as const;
 
 type EtherscanNetwork = typeof availableNetworks[number];
+
+const truncate = (str: string) => str.slice(0, 6) + "..." + str.slice(-4);
 
 type NetworkOrState =
   | "loading"
@@ -37,37 +41,31 @@ export const AddressLink: FC<{ address?: string }> = ({ address }) => {
 
   const disabled = network === "loading";
 
-  // if (!address) return <div className="font-mono lowercase">No address</div>;
-  if (!address) address = "0xxxxxxxx";
-
-  // Truncate so it's easier to compare
-  const clampedAddress = address.slice(0, 6) + "..." + address.slice(-4);
+  if (!address) {
+    return <MonoText isDisabled>{truncate("0x00000000000000000000")}</MonoText>;
+  }
 
   if (network === "unknown") {
     return (
-      <div className="opacity-60 font-mono lowercase">
-        {clampedAddress}{" "}
-        <CopyButton className="ml-2 btn-light text-sm" toCopy={address} />
-      </div>
+      <span>
+        <MonoText isDisabled>{truncate(address)}</MonoText>
+        <CopyButton ml="2" toCopy={address} />
+      </span>
     );
   }
 
   const subdomain = network === "mainnet" ? "www" : network;
 
   return (
-    <div>
-      <a
-        href={`https://${subdomain}.etherscan.io/address/${address}`}
-        className={`inline-block font-mono lowercase no-underline ${
-          disabled && "opacity-60 pointer-events-auto"
-        }`}
-        target="_blank"
-        rel="noreferrer"
+    <span>
+      <Anchor
+        to={`https://${subdomain}.etherscan.io/address/${address}`}
+        isExternal
+        isDisabled={disabled}
       >
-        {clampedAddress}
-        <span className="font-sans opacity-40 text-sm">↗</span>
-      </a>
-      <CopyButton className="ml-2 btn-light text-sm" toCopy={address} />
-    </div>
+        <MonoText textTransform="lowercase">{truncate(address)}</MonoText>
+      </Anchor>
+      <CopyButton ml="2" toCopy={address} />
+    </span>
   );
 };

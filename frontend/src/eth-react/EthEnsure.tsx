@@ -1,3 +1,4 @@
+import { Button } from "@chakra-ui/react";
 import { BigNumber } from "ethers";
 import { FC } from "react";
 import { useErrorHandler } from "react-error-boundary";
@@ -53,7 +54,7 @@ export const EthEnsure: FC<Props> = (props) => {
     return (
       <ErrorMessage>
         Not connected to wallet.{" "}
-        <button onClick={() => window.location.reload()}>Reload</button>
+        <Button onClick={() => window.location.reload()}>Reload</Button>
       </ErrorMessage>
     );
   }
@@ -66,7 +67,7 @@ export const EthEnsure: FC<Props> = (props) => {
       return (
         <ErrorMessage>
           Can't connect to network.{" "}
-          <button onClick={() => window.location.reload()}>Reload</button>
+          <Button onClick={() => window.location.reload()}>Reload</Button>
         </ErrorMessage>
       );
     }
@@ -82,7 +83,7 @@ export const EthEnsure: FC<Props> = (props) => {
       return (
         <ErrorMessage>
           Not connected to wallet.{" "}
-          <button onClick={() => window.location.reload()}>Reload</button>
+          <Button onClick={() => window.location.reload()}>Reload</Button>
         </ErrorMessage>
       );
     }
@@ -103,7 +104,7 @@ export const EthEnsure: FC<Props> = (props) => {
       };
       return (
         <ErrorMessage>
-          <button onClick={connect}>Connect Account</button>
+          <Button onClick={connect}>Connect Account</Button>
         </ErrorMessage>
       );
     }
@@ -125,7 +126,7 @@ export const EthEnsure: FC<Props> = (props) => {
       return (
         <ErrorMessage>
           Please choose an account with a non-zero balance.{" "}
-          <button onClick={connect}>Connect Account</button>
+          <Button onClick={connect}>Connect Account</Button>
         </ErrorMessage>
       );
     }

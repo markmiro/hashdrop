@@ -8,6 +8,7 @@ import { ErrorMessage } from "../generic/ErrorMessage";
 import { Loader } from "../generic/Loader";
 import { Disabled } from "../generic/Disabled";
 import { HashDrop as T } from "../typechain";
+import { Alert, Button, Text, VStack } from "@chakra-ui/react";
 
 export function EthHashDropSubmitButton({
   cid,
@@ -41,8 +42,7 @@ export function EthHashDropSubmitButton({
 
   useEffect(fetchDropCount, [fetchDropCount]);
 
-  const handleSubmit: React.FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
+  const handleClick = async () => {
     setSubmitSuccess(false);
     setSubmitError("");
     setIsSubmitting(true);
@@ -66,27 +66,21 @@ export function EthHashDropSubmitButton({
 
   return (
     <div>
-      <AddressLink address={hashdrop.contract?.address} />
-      <div className="w-full">
-        <Disabled className="w-full" disabled={isSubmitting}>
-          <form onSubmit={handleSubmit}>
-            <button className="btn-blue" type="submit">
-              Submit
-            </button>
-            <div className="flex flex-col gap-2">
-              <ErrorMessage>{submitError}</ErrorMessage>
-              {!submitError && submitSuccess && (
-                <div className="text-green-500">
-                  Hash drop added successfully!
-                </div>
-              )}
-              <div className="text-xs">
-                Total drops: {loadingDropCount ? <Loader /> : dropCount}
-              </div>
-            </div>
-          </form>
-        </Disabled>
-      </div>
+      <Disabled disabled={isSubmitting}>
+        <VStack spacing={2}>
+          <AddressLink address={hashdrop.contract?.address} />
+          <Button colorScheme="blue" isFullWidth onClick={handleClick}>
+            Submit
+          </Button>
+          <ErrorMessage>{submitError}</ErrorMessage>
+          {!submitError && submitSuccess && (
+            <Alert status="success">Hash drop added successfully!</Alert>
+          )}
+          <Text fontSize="xs">
+            Total drops: {loadingDropCount ? <Loader /> : dropCount}
+          </Text>
+        </VStack>
+      </Disabled>
     </div>
   );
 }

@@ -1,5 +1,7 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
+import { ChakraProvider } from "@chakra-ui/react";
+import { PortalProvider } from "react-portal-hook";
 
 import "./index.css";
 
@@ -10,20 +12,25 @@ import { reloadOnChainChanged } from "./eth-react/reloadOnChainChanged";
 import { ErrorBoundary } from "react-error-boundary";
 import { EthErrorFallback } from "./eth-react/EthErrorFallback";
 import { MetaMaskProvider } from "./eth-react/useMetaMaskEthereum";
+import { theme } from "./generic/chakraTheme";
 
 reloadOnChainChanged();
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(
   <StrictMode>
-    <ErrorBoundary FallbackComponent={EthErrorFallback}>
-      <MetaMaskProvider>
-        <EthersProviderProvider>
-          <App />
-        </EthersProviderProvider>
-        <EthToolbar />
-      </MetaMaskProvider>
-    </ErrorBoundary>
+    <ChakraProvider theme={theme}>
+      <ErrorBoundary FallbackComponent={EthErrorFallback}>
+        <PortalProvider>
+          <MetaMaskProvider>
+            <EthersProviderProvider>
+              <App />
+            </EthersProviderProvider>
+            <EthToolbar />
+          </MetaMaskProvider>
+        </PortalProvider>
+      </ErrorBoundary>
+    </ChakraProvider>
   </StrictMode>,
   rootElement
 );

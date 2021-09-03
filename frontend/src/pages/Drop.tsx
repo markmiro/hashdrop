@@ -11,7 +11,27 @@ import { HashDrop as T } from "../typechain";
 import { encryptFob } from "../util/encrypt";
 import { ipfsCid } from "../util/ipfsCid";
 import { pinFile, unpin } from "../util/pinata";
-import styles from "../generic/styles.module.css";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+  Box,
+  Button,
+  Flex,
+  VStack,
+} from "@chakra-ui/react";
+import { Anchor } from "../generic/Anchor";
+import {
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+} from "@chakra-ui/react";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { IoLogoTwitter } from "react-icons/io5";
 
 // const DROP_ORIGIN = `https://ipfs.io/ipfs/${HASHDROP_DEPLOY_CID}`;
 const DROP_ORIGIN = window.location.origin;
@@ -47,6 +67,7 @@ function useAdd() {
 
         setLoading(false);
       } catch (err) {
+        setLoading(false);
         handleError(err);
       }
     },
@@ -70,6 +91,7 @@ function useAdd() {
 
         setLoading(false);
       } catch (err) {
+        setLoading(false);
         handleError(err);
       }
     },
@@ -105,25 +127,27 @@ const StatusText: FC<{
     case "SENDING_ETH":
       return <Loader>Saving to Ethereum blockchain</Loader>;
     case "SUCCESS":
-      return (
-        <div className="p-4 text-center bg-green-200">
-          <div>😎</div>
-          Success
-          <button className="btn-light w-full mt-2 p-2" onClick={onReset}>
-            OK
-          </button>
-        </div>
-      );
+      return <></>;
     case "ERROR":
       return (
-        <div className="p-4 text-center bg-red-100 text-red-500">
-          <div>😵</div>
-          Error
-          {error && <div className="text-sm">{error}</div>}
-          <button className="btn-red w-full mt-2 p-2" onClick={onReset}>
-            OK
-          </button>
-        </div>
+        <Alert
+          status="error"
+          flexDirection="column"
+          alignItems="center"
+          justifyContent="center"
+          textAlign="center"
+        >
+          <VStack spacing={2}>
+            <Flex>
+              <AlertIcon />
+              <AlertTitle>Error</AlertTitle>
+            </Flex>
+            {error && <AlertDescription>{error}</AlertDescription>}
+            <Button isFullWidth colorScheme="red" onClick={onReset}>
+              OK
+            </Button>
+          </VStack>
+        </Alert>
       );
     default:
       return <>{children}</>;
@@ -239,81 +263,98 @@ export function Drop() {
   const hashdrop = useHashDrop();
 
   return (
-    <div className={`${styles.body} flex flex-col gap-4`}>
-      <h1 className="font-bold">Drop</h1>
-
+    <>
       <DataTabs onFobChange={setFob} />
 
-      {/* <button
-        className="pa2 w-100"
-        disabled={!fob}
-        onClick={() => hashdrop.add(fob)}
-      >
-        Add
-      </button> */}
-      {/* <div className="pt2" /> */}
-      <button
-        className="btn-blue p-2 w-full"
+      <Button
+        colorScheme="blue"
         disabled={!fob}
         onClick={() => hashdrop.addPrivate(fob)}
       >
         Add Private
-      </button>
-      {hashdrop.status !== "INITIAL" && (
-        <Cover>
-          <div className="bg-white border shadow-lg p-2 text-center w-full max-w-md">
+      </Button>
+
+      <Modal
+        isOpen={hashdrop.status !== "INITIAL"}
+        onClose={() => {}}
+        isCentered
+      >
+        <ModalOverlay />
+        <ModalContent>
+          <Box textAlign="center">
             <StatusText
               status={hashdrop.status}
               error={hashdrop.error}
-              onReset={() => {
-                hashdrop.reset();
-                setFob(null);
-              }}
+              onReset={hashdrop.reset}
             />
-            {hashdrop.status === "SUCCESS" && hashdrop.cid && (
-              <div className="text-left">
-                <div className="flex gap-2">
-                  {/* https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/guides/web-intent */}
-                  <a
-                    href={tweetUrl(hashdrop.cid)}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Tweet
-                  </a>
-                  <a
-                    href={dropUrl(hashdrop.cid)}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    See Drop
-                  </a>
-                  {process.env.NODE_ENV === "development" && (
-                    <button
-                      className="btn-red"
-                      onClick={() =>
-                        unpin(hashdrop.privateCid).then(() => {
-                          alert("Unpin success!");
-                          setFob(null);
-                          hashdrop.reset();
-                        })
-                      }
-                    >
-                      Unpin
-                    </button>
-                  )}
-                </div>
+          </Box>
+          {hashdrop.status === "SUCCESS" && hashdrop.cid && (
+            <>
+              <ModalHeader>File was published.</ModalHeader>
+              <ModalBody>
+                <Alert status="success">
+                  <AlertIcon />
+                  Data was successfully notarized on the blockchain and pinned
+                  on IPFS.
+                </Alert>
                 <Cid cid={hashdrop.cid} />
-              </div>
-            )}
-          </div>
-        </Cover>
-      )}
+              </ModalBody>
+            </>
+          )}
+
+          {hashdrop.status === "SUCCESS" && hashdrop.cid && (
+            <ModalFooter>
+              <VStack spacing="2" w="100%">
+                {/* https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/guides/web-intent */}
+                <Button
+                  colorScheme="twitter"
+                  isFullWidth
+                  as="a"
+                  href={tweetUrl(hashdrop.cid)}
+                  target="_blank"
+                  rel="noreferrer"
+                  rightIcon={<IoLogoTwitter />}
+                >
+                  Tweet
+                </Button>
+                <Button
+                  isFullWidth
+                  as="a"
+                  href={dropUrl(hashdrop.cid)}
+                  target="_blank"
+                  rel="noreferrer"
+                  rightIcon={<ArrowForwardIcon />}
+                >
+                  See Drop
+                </Button>
+                {/* {process.env.NODE_ENV === "development" && (
+                  <Button
+                    colorScheme="red"
+                    onClick={() =>
+                      unpin(hashdrop.privateCid).then(() => {
+                        alert("Unpin success!");
+                        setFob(null);
+                        hashdrop.reset();
+                      })
+                    }
+                  >
+                    Unpin
+                  </Button>
+                )} */}
+              </VStack>
+            </ModalFooter>
+          )}
+        </ModalContent>
+      </Modal>
       <p>
-        <a href="https://www.kalzumeus.com/essays/dropping-hashes">
+        <Anchor
+          textDecor="underline"
+          to="https://www.kalzumeus.com/essays/dropping-hashes"
+          isExternal
+        >
           Dropping hashes: an idiom used to demonstrate provenance of documents
-        </a>
+        </Anchor>
       </p>
-    </div>
+    </>
   );
 }

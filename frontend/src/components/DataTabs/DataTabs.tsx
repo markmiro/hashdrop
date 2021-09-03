@@ -1,9 +1,6 @@
-import { useState } from "react";
-import { Tab, Tabs } from "../../generic/Tabs";
-import { TextTab } from "./TextTab";
+import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import { FileTab } from "./FileTab";
-
-type ContentTab = "TEXT" | "FILE";
+import { TextTab } from "./TextTab";
 
 // TODO: Make this a controlled component by adding `fob` prop so it's possible for parent component to reset it.
 export function DataTabs({
@@ -13,16 +10,20 @@ export function DataTabs({
   onFobChange: (fob: File | Blob | null) => void;
   cid?: string;
 }) {
-  const [contentTab, setContentTab] = useState<ContentTab>("TEXT");
-
   return (
-    <Tabs<ContentTab> value={contentTab} onChange={setContentTab}>
-      <Tab label="Text" value="TEXT">
-        <TextTab onBlobChange={onFobChange} cid={cid} />
-      </Tab>
-      <Tab label="File" value="FILE">
-        <FileTab onFileChange={onFobChange} />
-      </Tab>
+    <Tabs variant="enclosed">
+      <TabList>
+        <Tab>Text</Tab>
+        <Tab>File</Tab>
+      </TabList>
+      <TabPanels borderWidth={1} borderColor="gray.200">
+        <TabPanel>
+          <TextTab onBlobChange={onFobChange} cid={cid} />
+        </TabPanel>
+        <TabPanel>
+          <FileTab onFileChange={onFobChange} />
+        </TabPanel>
+      </TabPanels>
     </Tabs>
   );
 }

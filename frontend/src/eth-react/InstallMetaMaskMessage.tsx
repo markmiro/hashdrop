@@ -1,7 +1,9 @@
+import { Anchor } from "../generic/Anchor";
+
 export function InstallMetaMaskMessage() {
   return (
-    <a className="underline text-current" href="https://metamask.io/download">
+    <Anchor to="https://metamask.io/download" isExternal>
       Install MetaMask
-    </a>
+    </Anchor>
   );
 }

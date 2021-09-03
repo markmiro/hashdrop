@@ -1,19 +1,26 @@
+import { DownloadIcon } from "@chakra-ui/icons";
+import { Button, ButtonProps } from "@chakra-ui/react";
 import { format } from "date-fns";
+import { FC } from "react";
 
 export function formatDate(date: Date) {
   return format(date, "yyyy-MM-dd-HH_mm_ss");
 }
 
-export function DownloadButton({ cid, text }: { cid?: string; text: string }) {
+type Props = ButtonProps & { cid?: string; text: string };
+
+export const DownloadButton: FC<Props> = ({ cid, text, ...rest }) => {
   return (
-    <a
-      className={`btn-light text-black flex-shrink-0 no-underline ${
-        !text && "opacity-40 pointer-events-none"
-      }`}
+    <Button
+      as="a"
+      isDisabled={!text}
+      pointerEvents={text ? "all" : "none"}
       download={`${cid ?? "hashdrop-" + formatDate(new Date())}.txt`}
       href={"data:text/plain," + encodeURIComponent(text)}
+      leftIcon={<DownloadIcon />}
+      {...rest}
     >
-      ⇣ Download
-    </a>
+      Download
+    </Button>
   );
-}
+};

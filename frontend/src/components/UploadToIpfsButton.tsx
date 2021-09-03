@@ -1,6 +1,6 @@
+import { Button, Flex, Text, VStack } from "@chakra-ui/react";
 import { ReactNode, useState } from "react";
 import { Cid } from "../eth-react/Cid";
-import { Loader } from "../generic/Loader";
 import { pinFile } from "../util/pinata";
 
 export function UploadToIpfsButton({
@@ -34,20 +34,23 @@ export function UploadToIpfsButton({
   }
 
   return (
-    <div className="flex flex-col">
-      <button
-        className="btn-blue p-2"
+    <VStack>
+      <Button
+        isFullWidth
+        colorScheme="blue"
         onClick={submitPinataUpload}
-        disabled={isLoading}
+        isLoading={isLoading}
       >
-        {isLoading ? <Loader /> : children}
-        <div className="text-xs font-normal text-white text-opacity-60">
-          (from above section)
-        </div>
-      </button>
+        <Flex direction="column">
+          <div>{children}</div>
+          <Text fontSize="xs" fontWeight="normal" opacity="50%">
+            (from above section)
+          </Text>
+        </Flex>
+      </Button>
       <label>
         Remote CID: <Cid cid={remoteCid} />
       </label>
-    </div>
+    </VStack>
   );
 }

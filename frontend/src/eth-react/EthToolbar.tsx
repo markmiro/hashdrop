@@ -1,26 +1,44 @@
+import { Box, Circle, HStack, Spacer } from "@chakra-ui/react";
 import { FC } from "react";
 import Blockies from "react-blockies";
 import { ErrorBoundary, useErrorHandler } from "react-error-boundary";
 import { Loader } from "../generic/Loader";
 import { chainIdToInfo } from "./chainIdToInfo";
+import { InstallMetaMaskMessage } from "./InstallMetaMaskMessage";
+import { MultipleWalletsMessage } from "./MultipleWalletsMessage";
+import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 import {
   prettyAccountBalance,
   prettyBlockNumber,
   prettyGasPrice,
 } from "./utils";
-import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
-import { InstallMetaMaskMessage } from "./InstallMetaMaskMessage";
-import { MultipleWalletsMessage } from "./MultipleWalletsMessage";
 
 const Layout: FC = ({ children }) => (
   <>
-    <div className="h-4" />
-    <div className="bg-black text-white px-1 fixed bottom-0 right-0 text-xs flex gap-1 items-center flex-wrap justify-end">
+    <Box
+      bg="black"
+      color="white"
+      px="1"
+      bottom="0"
+      right="0"
+      position="fixed"
+      fontSize="xs"
+      display="flex"
+      flexWrap="wrap"
+      alignItems="center"
+      justifyContent="flex-end"
+      style={{ gap: ".5em" }}
+    >
       <span>eth-toolbar</span>
       {children}
-    </div>
+    </Box>
   </>
 );
+
+export const ErrorMessageLight: FC = ({ children }) => {
+  if (!children) return null;
+  return <Box color="red.300">⚠️ {children}</Box>;
+};
 
 export function Inner() {
   const handleError = useErrorHandler();
@@ -35,7 +53,7 @@ export function Inner() {
   if (loading) {
     return (
       <>
-        <div className="flex-auto" />
+        <Spacer />
         <Loader />
       </>
     );
@@ -44,10 +62,10 @@ export function Inner() {
   if (!data.isWalletInstalled) {
     return (
       <>
-        <div className="flex-auto" />
-        <span className="text-red-300">
-          ⚠️ Error: <InstallMetaMaskMessage />
-        </span>
+        <Spacer />
+        <ErrorMessageLight>
+          <InstallMetaMaskMessage />
+        </ErrorMessageLight>
       </>
     );
   }
@@ -55,10 +73,10 @@ export function Inner() {
   if (data.hasMultipleWallets) {
     return (
       <>
-        <div className="flex-auto" />
-        <span className="text-red-300">
-          ⚠️ Error: <MultipleWalletsMessage />
-        </span>
+        <Spacer />
+        <ErrorMessageLight>
+          <MultipleWalletsMessage />
+        </ErrorMessageLight>
       </>
     );
   }
@@ -70,17 +88,12 @@ export function Inner() {
       {data?.isMetaMask ? (
         <span title="MetaMask">🦊</span>
       ) : (
-        <span className="text-red-300">Not MetaMask!</span>
+        <ErrorMessageLight>Not MetaMask!</ErrorMessageLight>
       )}
       <span>/</span>
       {chainInfo && (
         <>
-          <span
-            className="h-2 w-2 rounded-full"
-            style={{
-              background: chainInfo?.color || "transparent",
-            }}
-          ></span>
+          <Circle w={2} h={2} bg={chainInfo?.color || "transparent"}></Circle>
           {chainInfo.name}
         </>
       )}
@@ -92,15 +105,15 @@ export function Inner() {
       <div title="Block number">Gas:{prettyGasPrice(data?.gasPrice)}</div>
       <span>–</span>
       {!data?.isConnectedToCurrentChain && (
-        <span className="text-red-300">Not Connected</span>
+        <ErrorMessageLight>Not Connected</ErrorMessageLight>
       )}
       {data?.selectedAddress ? (
-        <div className="flex items-center gap-1">
+        <HStack spacing={1} alignItems="center">
           {data?.selectedAddressBalance && (
             <div>{prettyAccountBalance(data?.selectedAddressBalance)} ETH</div>
           )}
           <Blockies seed={data.selectedAddress} scale={2} />
-        </div>
+        </HStack>
       ) : (
         <button onClick={connectAccount}>Connect Account</button>
       )}
@@ -111,7 +124,7 @@ export function Inner() {
 export const EthToolbar = () => (
   <Layout>
     <ErrorBoundary
-      fallback={<div className="text-red-300">⚠️ Something went wrong.</div>}
+      fallback={<ErrorMessageLight>Something went wrong.</ErrorMessageLight>}
     >
       <Inner />
     </ErrorBoundary>

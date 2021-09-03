@@ -1,10 +1,17 @@
+import { Box, Button, ButtonGroup, Input, Textarea } from "@chakra-ui/react";
 import aes from "crypto-js/aes";
 import { ethers } from "ethers";
-import { useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { MonoText } from "../generic/MonoText";
 import { fobAsDataUrl } from "../util/fobAsDataUrl";
-import styles from "../generic/styles.module.css";
 
 const id = ethers.utils.hexlify(ethers.utils.randomBytes(12));
+
+const Data: FC = ({ children }) => (
+  <Box maxH="20vh" overflow="scroll" fontSize="xs">
+    <MonoText>{children || "N/A"}</MonoText>
+  </Box>
+);
 
 // https://stackoverflow.com/a/20285053
 const toDataURL = (url: string) =>
@@ -30,43 +37,25 @@ export function Encrypt() {
   }, [url]);
 
   return (
-    <div className={`flex flex-col gap-2 ${styles.body}`}>
+    <>
       <label>ID</label>
-      <input type="text" disabled readOnly value={id} />
+      <Input disabled readOnly value={id} />
+
       <label>URL</label>
-      <input
-        type="text"
-        className="w-full"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-      />
-      <div className="flex gap-1">
-        <button
-          className="btn-light"
-          onClick={() => setUrl("./examples/file.txt")}
-        >
-          file.txt
-        </button>
-        <button
-          className="btn-light"
-          onClick={() => setUrl("./examples/bitcoin.pdf")}
-        >
+      <Input value={url} onChange={(e) => setUrl(e.target.value)} />
+
+      <ButtonGroup>
+        <Button onClick={() => setUrl("./examples/file.txt")}>file.txt</Button>
+        <Button onClick={() => setUrl("./examples/bitcoin.pdf")}>
           bitcoin.pdf
-        </button>
-        <button
-          className="btn-light"
-          onClick={() => setUrl("./examples/molecule.svg")}
-        >
+        </Button>
+        <Button onClick={() => setUrl("./examples/molecule.svg")}>
           molecule.svg
-        </button>
-      </div>
+        </Button>
+      </ButtonGroup>
 
       <label>Message</label>
-      <textarea
-        className="w-full"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
+      <Textarea value={message} onChange={(e) => setMessage(e.target.value)} />
 
       <div className="text-xs text-right opacity-60 font-mono">
         <div>Message length: {message.length}</div>
@@ -79,11 +68,8 @@ export function Encrypt() {
       <iframe title="content" src={url} width="100%" className="border" />
 
       <label>Encrypted</label>
-      <div className="px-6 py-2 bg-black bg-opacity-10 font-mono">
-        <div className="border text-xs overflow-scroll break-all max-h-screen">
-          {enc || "N/A"}
-        </div>
-      </div>
-    </div>
+
+      <Data>{enc || "N/A"}</Data>
+    </>
   );
 }

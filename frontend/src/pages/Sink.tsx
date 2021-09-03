@@ -1,48 +1,72 @@
-import { FC, ReactNode, useState } from "react";
+import {
+  Box,
+  Grid,
+  GridItem,
+  Tab,
+  TabList,
+  TabPanel,
+  TabPanels,
+  Tabs,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
+import { FC, ReactNode } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import { DropCount } from "../components/DropCount";
 import { AddressLink } from "../eth-react/AddressLink";
 import { ChainOptions } from "../eth-react/ChainOptions";
+import { Cid } from "../eth-react/Cid";
 import { EthEnsure } from "../eth-react/EthEnsure";
 import { EthErrorFallback } from "../eth-react/EthErrorFallback";
+import { InstallMetaMaskMessage } from "../eth-react/InstallMetaMaskMessage";
+import { MultipleWalletsMessage } from "../eth-react/MultipleWalletsMessage";
 import { NonceErrorMessage } from "../eth-react/NonceErrorMessage";
-import { Cid } from "../eth-react/Cid";
 import { ErrorMessage } from "../generic/ErrorMessage";
 import { GenericError } from "../generic/GenericError";
 import { Loader } from "../generic/Loader";
-import { Tab, Tabs } from "../generic/Tabs";
 
 const KitchenItems: FC = ({ children }) => (
-  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 divide-y divide-black">
+  <Grid
+    templateColumns={["repeat(1, 1fr)", "repeat(1, 1fr)", "repeat(3, 1fr)"]}
+    gap={4}
+  >
     {children}
-  </div>
+  </Grid>
 );
 
 const Item: FC<{ title: ReactNode }> = ({ title, children }) => (
   <>
-    <div className="col-span-1 font-semibold bg-black text-white">
-      &lt;{title}&gt;
-    </div>
-    <div className="col-span-2">{children}</div>
+    <GridItem colSpan={1} borderTop="1px" borderColor="blackAlpha.300" py="4">
+      <Text fontWeight="bold" fontSize="xl">
+        &lt;{title}&gt;
+      </Text>
+    </GridItem>
+    <GridItem colSpan={2} borderTop="1px" borderColor="blackAlpha.300" py="4">
+      <VStack alignItems="start">{children}</VStack>
+    </GridItem>
   </>
 );
 
 function TabExample() {
-  type T = "TAB1" | "TAB2";
-  const [tab, setTab] = useState<T>("TAB1");
-
   return (
-    <Tabs<T> value={tab} onChange={setTab}>
-      <Tab label="Tab 1" value="TAB1">
-        <b>Tab 1: </b>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio dolore
-        earum facere officia possimus neque error blanditiis?
-      </Tab>
-      <Tab label="Tab 2" value="TAB2">
-        <b>Tab 2: </b>
-        Maiores libero dolore enim nisi, quam, provident tempora, explicabo
-        magnam tempore error molestiae.
-      </Tab>
+    <Tabs>
+      <TabList>
+        <Tab>One</Tab>
+        <Tab>Two</Tab>
+        <Tab>Three</Tab>
+      </TabList>
+
+      <TabPanels>
+        <TabPanel>
+          <p>one!</p>
+        </TabPanel>
+        <TabPanel>
+          <p>two!</p>
+        </TabPanel>
+        <TabPanel>
+          <p>three!</p>
+        </TabPanel>
+      </TabPanels>
     </Tabs>
   );
 }
@@ -60,14 +84,13 @@ export function Sink() {
         <ChainOptions chainIds={[1337, 1, 3, 4, 42, 5]} />
       </Item>
       <Item title="Cid">
+        <Cid />
         <Cid cid="bafkreigrzc22o6la4hvhotxvvqmul4juiydhtotyhr4oz2skercvcjbvwq" />
       </Item>
       <Item title="AddressLink">
-        <div className="flex flex-col items-start gap-1">
-          <AddressLink address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" />
-          <AddressLink address="0xeF0Aa769717A29Cc5E094886b85dF35CCfA4e3ad" />
-          <AddressLink />
-        </div>
+        <AddressLink address="0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266" />
+        <AddressLink address="0xeF0Aa769717A29Cc5E094886b85dF35CCfA4e3ad" />
+        <AddressLink />
       </Item>
       <Item title="DropCount">
         <ErrorBoundary FallbackComponent={EthErrorFallback}>
@@ -75,20 +98,33 @@ export function Sink() {
         </ErrorBoundary>
       </Item>
       <Item title="GenericError">
+        <GenericError />
+        <GenericError tryAgain={() => alert("tryAgain() called")} />
         <GenericError tryAgain={() => alert("tryAgain() called")}>
           Sample Error
         </GenericError>
+        <Box fontSize="xl">
+          <GenericError tryAgain={() => alert("tryAgain() called")}>
+            Sample Error
+          </GenericError>
+        </Box>
+      </Item>
+      <Item title="InstallMetaMaskMessage">
+        <InstallMetaMaskMessage />
+      </Item>
+      <Item title="MultipleWalletsMessage">
+        <MultipleWalletsMessage />
+      </Item>
+      <Item title="NonceErrorMessage">
+        <ErrorMessage>
+          <NonceErrorMessage originalMessage={"LOREM IPSUM"} />
+        </ErrorMessage>
       </Item>
       <Item title="ErrorMessage">
         <ErrorMessage>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic beatae in
           illo, neque iure architecto explicabo voluptate labore a iste placeat
           qui quis soluta accusamus reiciendis quaerat quasi dolor. Consequatur.
-        </ErrorMessage>
-      </Item>
-      <Item title="NonceErrorMessage">
-        <ErrorMessage>
-          <NonceErrorMessage originalMessage={"LOREM IPSUM"} />
         </ErrorMessage>
       </Item>
       <Item title="EthErrorFallback">
