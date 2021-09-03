@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  ButtonGroup,
-  Input,
-  Textarea,
-  VStack,
-} from "@chakra-ui/react";
+import { Box, Button, ButtonGroup, Input, Textarea } from "@chakra-ui/react";
 import aes from "crypto-js/aes";
 import { ethers } from "ethers";
 import { FC, useEffect, useState } from "react";
@@ -64,13 +57,13 @@ export function Encrypt() {
       <label>Message</label>
       <Textarea value={message} onChange={(e) => setMessage(e.target.value)} />
 
-      <VStack fontSize="xs" textAlign="right" opacity={0.5} fontFamily="mono">
+      <Box fontSize="xs" textAlign="right" opacity={0.5} fontFamily="mono">
         <div>Message length: {message.length}</div>
         <div>Encrypted length: {enc.length}</div>
         <div>
           Difference: {Math.round((enc.length / message.length) * 100)}%
         </div>
-      </VStack>
+      </Box>
 
       <iframe title="content" src={url} width="100%" className="border" />
 
