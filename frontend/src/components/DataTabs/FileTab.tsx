@@ -1,7 +1,6 @@
 import { DeleteIcon } from "@chakra-ui/icons";
-import { Box, Button, Center } from "@chakra-ui/react";
-import { FC } from "react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { Button, Center } from "@chakra-ui/react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import { resetFileInput } from "../../util/resetFileInput";
 import { FilePreviewWithInfo } from "./FilePreviewWithInfo";
 

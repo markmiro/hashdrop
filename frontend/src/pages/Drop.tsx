@@ -1,16 +1,4 @@
-import queryString from "query-string";
-import { FC, useCallback, useState } from "react";
-import { useErrorHandler } from "react-error-boundary";
-import { DataTabs } from "../components/DataTabs/DataTabs";
-import { useEthersProvider } from "../eth-react/EthersProviderContext";
-import { useContract } from "../eth-react/useContract";
-import { Cid } from "../eth-react/Cid";
-import { Cover } from "../generic/Cover";
-import { Loader } from "../generic/Loader";
-import { HashDrop as T } from "../typechain";
-import { encryptFob } from "../util/encrypt";
-import { ipfsCid } from "../util/ipfsCid";
-import { pinFile, unpin } from "../util/pinata";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
 import {
   Alert,
   AlertDescription,
@@ -19,19 +7,28 @@ import {
   Box,
   Button,
   Flex,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
   VStack,
 } from "@chakra-ui/react";
-import { Anchor } from "../generic/Anchor";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-} from "@chakra-ui/react";
-import { ArrowForwardIcon } from "@chakra-ui/icons";
+import queryString from "query-string";
+import { FC, useCallback, useState } from "react";
+import { useErrorHandler } from "react-error-boundary";
 import { IoLogoTwitter } from "react-icons/io5";
+import { DataTabs } from "../components/DataTabs/DataTabs";
+import { Cid } from "../eth-react/Cid";
+import { useEthersProvider } from "../eth-react/EthersProviderContext";
+import { useContract } from "../eth-react/useContract";
+import { Anchor } from "../generic/Anchor";
+import { Loader } from "../generic/Loader";
+import { HashDrop as T } from "../typechain";
+import { encryptFob } from "../util/encrypt";
+import { ipfsCid } from "../util/ipfsCid";
+import { pinFile } from "../util/pinata";
 
 // const DROP_ORIGIN = `https://ipfs.io/ipfs/${HASHDROP_DEPLOY_CID}`;
 const DROP_ORIGIN = window.location.origin;

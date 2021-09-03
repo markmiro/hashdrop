@@ -1,16 +1,16 @@
+import { HStack } from "@chakra-ui/react";
 import { ErrorBoundary } from "react-error-boundary";
 import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
-import { ShowDrop } from "./components/ShowDrop/ShowDrop";
-import { EthEnsure } from "./eth-react/EthEnsure";
-import { EthErrorFallback } from "./eth-react/Errors";
-import feArtifacts from "./hardhat-frontend-artifacts.json";
 import { Nav, NavLink, PageBody, PageTitle } from "./components/PageLayout";
+import { ShowDrop } from "./components/ShowDrop/ShowDrop";
+import { EthErrorFallback } from "./eth-react/Errors";
+import { EthEnsure } from "./eth-react/EthEnsure";
+import feArtifacts from "./hardhat-frontend-artifacts.json";
 import { Arbitrum } from "./pages/Arbitrum";
 import { Drop } from "./pages/Drop";
 import { DropOld } from "./pages/DropOld";
 import { Encrypt } from "./pages/Encrypt";
 import { Sink } from "./pages/Sink";
-import { Box, HStack } from "@chakra-ui/react";
 
 const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
   (id) => parseInt(id)

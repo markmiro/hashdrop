@@ -1,10 +1,11 @@
+import { Box, Button, VStack } from "@chakra-ui/react";
 import delay from "delay";
 import { useEffect, useState } from "react";
 import { useErrorHandler } from "react-error-boundary";
+import { Cid } from "../../eth-react/Cid";
 import { EthEnsure } from "../../eth-react/EthEnsure";
 import { useEthersProvider } from "../../eth-react/EthersProviderContext";
 import { useContract } from "../../eth-react/useContract";
-import { Cid } from "../../eth-react/Cid";
 import { ErrorMessage } from "../../generic/Errors/ErrorMessage";
 import { Loader } from "../../generic/Loader";
 import feArtifacts from "../../hardhat-frontend-artifacts.json";
@@ -13,7 +14,6 @@ import { cidToUrl } from "../../util/pinata";
 import { IFramePreview } from "../IFramePreview";
 import { ShowMyPrivateDrop } from "./ShowPrivateDrop";
 import { useCheckIpfsCidExists } from "./useCheckIpfsCidExists";
-import { Box, Button, Flex, VStack } from "@chakra-ui/react";
 
 const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
   (id) => parseInt(id)
