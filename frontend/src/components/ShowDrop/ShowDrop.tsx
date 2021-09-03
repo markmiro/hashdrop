@@ -5,7 +5,7 @@ import { EthEnsure } from "../../eth-react/EthEnsure";
 import { useEthersProvider } from "../../eth-react/EthersProviderContext";
 import { useContract } from "../../eth-react/useContract";
 import { Cid } from "../../eth-react/Cid";
-import { ErrorMessage } from "../../generic/ErrorMessage";
+import { ErrorMessage } from "../../generic/Errors/ErrorMessage";
 import { Loader } from "../../generic/Loader";
 import feArtifacts from "../../hardhat-frontend-artifacts.json";
 import { HashDrop as T } from "../../typechain/HashDrop";

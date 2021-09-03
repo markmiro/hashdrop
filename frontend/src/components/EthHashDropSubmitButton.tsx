@@ -4,7 +4,7 @@ import type { ContractTransaction } from "ethers";
 import { AddressLink } from "../eth-react/AddressLink";
 import { useContract } from "../eth-react/useContract";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
-import { ErrorMessage } from "../generic/ErrorMessage";
+import { ErrorMessage } from "../generic/Errors/ErrorMessage";
 import { Loader } from "../generic/Loader";
 import { Disabled } from "../generic/Disabled";
 import { HashDrop as T } from "../typechain";

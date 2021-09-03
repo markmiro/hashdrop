@@ -15,9 +15,9 @@ import {
 } from "@chakra-ui/react";
 import { utils } from "ethers";
 import { useState } from "react";
-import { ErrorMessage } from "../generic/ErrorMessage";
+import { ErrorMessage } from "../generic/Errors/ErrorMessage";
 import { chainIdToInfo } from "./chainIdToInfo";
-import { InstallMetaMaskMessage } from "./InstallMetaMaskMessage";
+import { InstallMetaMaskMessage } from "./Errors";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 
 const ChainDisplay = ({ chainId }: { chainId: number }) => {

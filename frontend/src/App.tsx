@@ -2,7 +2,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
 import { ShowDrop } from "./components/ShowDrop/ShowDrop";
 import { EthEnsure } from "./eth-react/EthEnsure";
-import { EthErrorFallback } from "./eth-react/EthErrorFallback";
+import { EthErrorFallback } from "./eth-react/Errors";
 import feArtifacts from "./hardhat-frontend-artifacts.json";
 import { Nav, NavLink, PageBody, PageTitle } from "./components/PageLayout";
 import { Arbitrum } from "./pages/Arbitrum";

@@ -4,8 +4,7 @@ import Blockies from "react-blockies";
 import { ErrorBoundary, useErrorHandler } from "react-error-boundary";
 import { Loader } from "../generic/Loader";
 import { chainIdToInfo } from "./chainIdToInfo";
-import { InstallMetaMaskMessage } from "./InstallMetaMaskMessage";
-import { MultipleWalletsMessage } from "./MultipleWalletsMessage";
+import { InstallMetaMaskMessage, MultipleWalletsMessage } from "./Errors";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 import {
   prettyAccountBalance,

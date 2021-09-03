@@ -16,13 +16,15 @@ import { DropCount } from "../components/DropCount";
 import { AddressLink } from "../eth-react/AddressLink";
 import { ChainOptions } from "../eth-react/ChainOptions";
 import { Cid } from "../eth-react/Cid";
+import {
+  EthErrorFallback,
+  InstallMetaMaskMessage,
+  NonceErrorMessage,
+  MultipleWalletsMessage,
+} from "../eth-react/Errors";
 import { EthEnsure } from "../eth-react/EthEnsure";
-import { EthErrorFallback } from "../eth-react/EthErrorFallback";
-import { InstallMetaMaskMessage } from "../eth-react/InstallMetaMaskMessage";
-import { MultipleWalletsMessage } from "../eth-react/MultipleWalletsMessage";
-import { NonceErrorMessage } from "../eth-react/NonceErrorMessage";
-import { ErrorMessage } from "../generic/ErrorMessage";
-import { GenericError } from "../generic/GenericError";
+import { ErrorMessage } from "../generic/Errors/ErrorMessage";
+import { GenericError } from "../generic/Errors/GenericError";
 import { Loader } from "../generic/Loader";
 
 const KitchenItems: FC = ({ children }) => (

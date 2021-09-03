@@ -2,11 +2,10 @@ import { Button } from "@chakra-ui/react";
 import { BigNumber } from "ethers";
 import { FC } from "react";
 import { useErrorHandler } from "react-error-boundary";
-import { ErrorMessage } from "../generic/ErrorMessage";
+import { ErrorMessage } from "../generic/Errors/ErrorMessage";
 import { Loader } from "../generic/Loader";
 import { ChainOptions } from "./ChainOptions";
-import { InstallMetaMaskMessage } from "./InstallMetaMaskMessage";
-import { MultipleWalletsMessage } from "./MultipleWalletsMessage";
+import { InstallMetaMaskMessage, MultipleWalletsMessage } from "./Errors";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 
 type Props = {

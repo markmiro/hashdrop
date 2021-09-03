@@ -5,7 +5,22 @@ import {
   AlertTitle,
   Box,
 } from "@chakra-ui/react";
+import { FC, ReactNode } from "react";
+import { FallbackProps } from "react-error-boundary";
 import { Anchor } from "../generic/Anchor";
+import { GenericError } from "../generic/Errors/GenericError";
+
+export function MultipleWalletsMessage() {
+  return <>Do you have multiple wallets installed?</>;
+}
+
+export function InstallMetaMaskMessage() {
+  return (
+    <Anchor to="https://metamask.io/download" isExternal>
+      Install MetaMask
+    </Anchor>
+  );
+}
 
 export function NonceErrorMessage({
   originalMessage,
@@ -46,3 +61,25 @@ export function NonceErrorMessage({
     </div>
   );
 }
+
+const ensureError = (error: any) =>
+  "message" in error && typeof error.message === "string";
+
+export const EthErrorFallback: FC<FallbackProps> = ({
+  error,
+  resetErrorBoundary,
+}) => {
+  // Consider using this: https://www.npmjs.com/package/eth-rpc-errors
+  let message: ReactNode;
+  if (ensureError(error)) {
+    message = error.message;
+    if (process.env.NODE_ENV === "development") {
+      // Rewrite error
+      if (error.message.includes("Nonce too high")) {
+        message = <NonceErrorMessage originalMessage={error.message} />;
+      }
+    }
+  }
+
+  return <GenericError tryAgain={resetErrorBoundary}>{message}</GenericError>;
+};

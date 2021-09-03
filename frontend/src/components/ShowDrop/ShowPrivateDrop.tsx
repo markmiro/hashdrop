@@ -1,6 +1,6 @@
 import { Box, Button, HStack, VStack } from "@chakra-ui/react";
 import { FC } from "react";
-import { ErrorMessage } from "../../generic/ErrorMessage";
+import { ErrorMessage } from "../../generic/Errors/ErrorMessage";
 import { Loader } from "../../generic/Loader";
 import { IFramePreview } from "../IFramePreview";
 import { useCheckIpfsCidExists } from "./useCheckIpfsCidExists";
