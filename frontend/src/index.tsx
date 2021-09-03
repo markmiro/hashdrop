@@ -1,16 +1,13 @@
+import { ChakraProvider } from "@chakra-ui/react";
 import { StrictMode } from "react";
 import ReactDOM from "react-dom";
-import { ChakraProvider } from "@chakra-ui/react";
-import { PortalProvider } from "react-portal-hook";
-
-import "./index.css";
-
-import { App } from "./App";
-import { EthToolbar } from "./eth-react/EthToolbar";
-import { EthersProviderProvider } from "./eth-react/EthersProviderContext";
-import { reloadOnChainChanged } from "./eth-react/reloadOnChainChanged";
 import { ErrorBoundary } from "react-error-boundary";
+import { PortalProvider } from "react-portal-hook";
+import { App } from "./App";
 import { EthErrorFallback } from "./eth-react/Errors";
+import { EthersProviderProvider } from "./eth-react/EthersProviderContext";
+import { EthToolbar } from "./eth-react/EthToolbar";
+import { reloadOnChainChanged } from "./eth-react/reloadOnChainChanged";
 import { MetaMaskProvider } from "./eth-react/useMetaMaskEthereum";
 import { theme } from "./generic/chakraTheme";
 
