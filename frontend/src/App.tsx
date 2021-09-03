@@ -6,11 +6,12 @@ import { ShowDrop } from "./components/ShowDrop/ShowDrop";
 import { EthErrorFallback } from "./eth-react/Errors";
 import { EthEnsure } from "./eth-react/EthEnsure";
 import feArtifacts from "./hardhat-frontend-artifacts.json";
-import { Arbitrum } from "./pages/Arbitrum";
+import { Chains } from "./pages/Chains";
 import { Drop } from "./pages/Drop";
 import { DropOld } from "./pages/DropOld";
 import { Encrypt } from "./pages/Encrypt";
 import { Sink } from "./pages/Sink";
+import { Theme } from "./pages/Theme";
 
 const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
   (id) => parseInt(id)
@@ -28,10 +29,11 @@ export function App() {
         <Route path="/debug">
           <HStack borderBottomWidth={1} overflow="scroll" w="full">
             <NavLink to="/debug">Debug</NavLink>
+            <NavLink to="/debug/theme">Theme</NavLink>
             <NavLink to="/debug/sink">Kitchen Sink</NavLink>
             <NavLink to="/debug/encrypt">Encrypt</NavLink>
             <NavLink to="/debug/drop-old">Drop Old</NavLink>
-            <NavLink to="/debug/arbitrum">Arbitrum</NavLink>
+            <NavLink to="/debug/chains">Chains</NavLink>
           </HStack>
         </Route>
 
@@ -63,6 +65,12 @@ export function App() {
                 <Sink />
               </PageBody>
             </Route>
+            <Route path="/debug/theme">
+              <PageBody>
+                <PageTitle>Theme</PageTitle>
+                <Theme />
+              </PageBody>
+            </Route>
             <Route path="/debug/drop-old">
               <PageBody>
                 <PageTitle>Drop Old</PageTitle>
@@ -75,10 +83,10 @@ export function App() {
                 <Encrypt />
               </PageBody>
             </Route>
-            <Route path="/debug/arbitrum">
+            <Route path="/debug/chains">
               <PageBody>
-                <PageTitle>Arbitrum</PageTitle>
-                <Arbitrum />
+                <PageTitle>Chains</PageTitle>
+                <Chains />
               </PageBody>
             </Route>
             <Route path="/debug"></Route>

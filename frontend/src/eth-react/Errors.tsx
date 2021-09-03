@@ -4,6 +4,7 @@ import {
   AlertIcon,
   AlertTitle,
   Box,
+  Button,
 } from "@chakra-ui/react";
 import { FC, ReactNode } from "react";
 import { FallbackProps } from "react-error-boundary";
@@ -83,3 +84,14 @@ export const EthErrorFallback: FC<FallbackProps> = ({
 
   return <GenericError tryAgain={resetErrorBoundary}>{message}</GenericError>;
 };
+
+export const ReloadLink = () => (
+  <Button
+    variant="link"
+    textDecoration="underline"
+    colorScheme="red"
+    onClick={() => window.location.reload()}
+  >
+    Reload
+  </Button>
+);

@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Grid,
   GridItem,
   Tab,
@@ -76,6 +77,9 @@ function TabExample() {
 export function Sink() {
   return (
     <KitchenItems>
+      <Item title="Button variant='link'">
+        <Button variant="link">Hello</Button>
+      </Item>
       <Item title="Tabs">
         <TabExample />
       </Item>

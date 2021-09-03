@@ -5,7 +5,11 @@ import { useErrorHandler } from "react-error-boundary";
 import { ErrorMessage } from "../generic/Errors/ErrorMessage";
 import { Loader } from "../generic/Loader";
 import { ChainOptions } from "./ChainOptions";
-import { InstallMetaMaskMessage, MultipleWalletsMessage } from "./Errors";
+import {
+  InstallMetaMaskMessage,
+  MultipleWalletsMessage,
+  ReloadLink,
+} from "./Errors";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 
 type Props = {
@@ -52,8 +56,8 @@ export const EthEnsure: FC<Props> = (props) => {
   if (!data.isConnectedToCurrentChain) {
     return (
       <ErrorMessage>
-        Not connected to wallet.{" "}
-        <Button onClick={() => window.location.reload()}>Reload</Button>
+        Not connected to wallet. Check wallet to see if it's working.{" "}
+        <ReloadLink />
       </ErrorMessage>
     );
   }
@@ -65,8 +69,7 @@ export const EthEnsure: FC<Props> = (props) => {
     if (!data.chainId) {
       return (
         <ErrorMessage>
-          Can't connect to network.{" "}
-          <Button onClick={() => window.location.reload()}>Reload</Button>
+          Can't connect to network. <ReloadLink />
         </ErrorMessage>
       );
     }
@@ -81,17 +84,16 @@ export const EthEnsure: FC<Props> = (props) => {
     if (!data.chainId) {
       return (
         <ErrorMessage>
-          Not connected to wallet.{" "}
-          <Button onClick={() => window.location.reload()}>Reload</Button>
+          Not connected to wallet. <ReloadLink />
         </ErrorMessage>
       );
     }
     if (!expect.chainIds.includes(data.chainId)) {
       return (
-        <ErrorMessage>
+        <div>
           Please choose a different chain:
           <ChainOptions chainIds={expect.chainIds} />
-        </ErrorMessage>
+        </div>
       );
     }
   }
@@ -102,9 +104,11 @@ export const EthEnsure: FC<Props> = (props) => {
         ethereum.request({ method: "eth_requestAccounts" }).catch(handleError);
       };
       return (
-        <ErrorMessage>
-          <Button onClick={connect}>Connect Account</Button>
-        </ErrorMessage>
+        <div>
+          <Button colorScheme="green" onClick={connect}>
+            Connect Account
+          </Button>
+        </div>
       );
     }
   }
@@ -120,13 +124,16 @@ export const EthEnsure: FC<Props> = (props) => {
             method: "wallet_requestPermissions",
             params: [{ eth_accounts: {} }],
           })
+          .then(() => window.location.reload())
           .catch(handleError);
       };
       return (
-        <ErrorMessage>
+        <div>
           Please choose an account with a non-zero balance.{" "}
-          <Button onClick={connect}>Connect Account</Button>
-        </ErrorMessage>
+          <Button colorScheme="green" onClick={connect}>
+            Connect Account
+          </Button>
+        </div>
       );
     }
   }

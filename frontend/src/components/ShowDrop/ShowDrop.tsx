@@ -110,7 +110,12 @@ function EthShow({ cid, checkAgain }: { cid: string; checkAgain: () => void }) {
           ) : (
             <ErrorMessage>
               Couldn't find the document.{" "}
-              <Button colorScheme="blue" variant="link" onClick={checkAgain}>
+              <Button
+                colorScheme="red"
+                variant="link"
+                textDecoration="underline"
+                onClick={checkAgain}
+              >
                 Try Again
               </Button>
             </ErrorMessage>
@@ -137,7 +142,8 @@ export function ShowDrop({ cid }: { cid: string }) {
             has published the file.{" "}
             <Button
               variant="link"
-              colorScheme="blue"
+              colorScheme="red"
+              textDecoration="underline"
               onClick={cidChecker.checkAgain}
             >
               Try Again

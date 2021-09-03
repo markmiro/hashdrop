@@ -20,6 +20,11 @@ export const theme = extendTheme({
       baseStyle: {
         fontWeight: "medium",
       },
+      variants: {
+        link: {
+          textDecoration: "underline",
+        },
+      },
     },
   },
 });

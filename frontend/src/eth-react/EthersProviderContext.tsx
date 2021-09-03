@@ -15,7 +15,9 @@ function testProvider(provider: ethers.providers.Web3Provider) {
     let blockNumber: number | null = null;
 
     const connectionError = () => {
-      const err = Error("Provider can't connect to network.");
+      const err = Error(
+        "Provider can't connect to network. Please check your MetaMask wallet."
+      );
       reject(err);
     };
 
@@ -48,6 +50,7 @@ export const EthersProviderProvider: FC = ({ children }) => {
     if (!ethereum) return;
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
+      setProvider(provider);
       testProvider(provider)
         .then(() => setProvider(provider))
         .catch(handleError);
