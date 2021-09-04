@@ -11,7 +11,7 @@ export const GenericError: FC<{ tryAgain?: () => void }> = ({
         {/* <WarningIcon boxSize=".75em" color="red.500" mr="1" /> */}
         ⚠️ Something went wrong.
       </Flex>
-      <Text as="pre" fontFamily="mono">
+      <Text as="pre" fontFamily="mono" whiteSpace="pre-wrap">
         {children}
       </Text>
       {tryAgain && (
