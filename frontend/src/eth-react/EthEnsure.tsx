@@ -5,6 +5,7 @@ import { useErrorHandler } from "react-error-boundary";
 import { ErrorMessage } from "../generic/Errors/ErrorMessage";
 import { Loader } from "../generic/Loader";
 import { ChainOptions } from "./ChainOptions";
+import { CurrentChainName } from "./CurrentChainName";
 import {
   InstallMetaMaskMessage,
   MultipleWalletsMessage,
@@ -30,7 +31,11 @@ export const EthEnsure: FC<Props> = (props) => {
   const { loading, data, ethereum } = useMetaMaskEthereum();
 
   if (loading) {
-    return <Loader>Checking Ethereum wallet</Loader>;
+    return (
+      <Loader>
+        Checking <CurrentChainName /> wallet
+      </Loader>
+    );
   }
 
   // Basic checks

@@ -1,51 +1,31 @@
 import { FC, useEffect, useState } from "react";
 import { CopyButton } from "../generic/CopyButton";
-import { useEthersProvider } from "./EthersProviderContext";
 import { Anchor } from "../generic/Anchor";
 import { MonoText } from "../generic/MonoText";
-
-const availableNetworks = [
-  "mainnet",
-  "ropsten",
-  "kovan",
-  "rinkeby",
-  "goerli",
-] as const;
-
-type EtherscanNetwork = typeof availableNetworks[number];
+import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
+import { chains } from "./chains";
 
 const truncate = (str: string) => str.slice(0, 6) + "..." + str.slice(-4);
 
-type NetworkOrState =
-  | "loading"
-  | "unknown" // likely localhost
-  | EtherscanNetwork;
-
 export const AddressLink: FC<{ address?: string }> = ({ address }) => {
-  const provider = useEthersProvider();
-  const [network, setNetwork] = useState<NetworkOrState>("loading");
+  const { data } = useMetaMaskEthereum();
+  const [explorer, setExplorer] = useState<string | null>();
 
   useEffect(() => {
-    if (provider.network.name === "unknown") {
-      setNetwork("unknown");
-    } else if (provider.network.chainId === 1) {
-      setNetwork("mainnet");
-    } else if (
-      (availableNetworks as readonly string[]).includes(provider.network.name)
-    ) {
-      setNetwork(provider.network.name as EtherscanNetwork);
+    const chainId = data.chainId;
+    const chain = chains.byId(chainId as any);
+    if ("explorers" in chain && chain.explorers.length > 0) {
+      setExplorer(chain.explorers[0]);
     } else {
-      setNetwork("unknown");
+      setExplorer(null);
     }
-  }, [provider.network.name, provider.network.chainId]);
-
-  const disabled = network === "loading";
+  }, [data.chainId]);
 
   if (!address) {
     return <MonoText isDisabled>{truncate("0x00000000000000000000")}</MonoText>;
   }
 
-  if (network === "unknown") {
+  if (!explorer) {
     return (
       <span>
         <MonoText isDisabled>{truncate(address)}</MonoText>
@@ -54,15 +34,9 @@ export const AddressLink: FC<{ address?: string }> = ({ address }) => {
     );
   }
 
-  const subdomain = network === "mainnet" ? "www" : network;
-
   return (
     <span>
-      <Anchor
-        to={`https://${subdomain}.etherscan.io/address/${address}`}
-        isExternal
-        isDisabled={disabled}
-      >
+      <Anchor to={`${explorer}/address/${address}`} isExternal>
         <MonoText textTransform="lowercase">{truncate(address)}</MonoText>
       </Anchor>
       <CopyButton ml="2" toCopy={address} />

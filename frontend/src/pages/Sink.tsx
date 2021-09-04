@@ -16,6 +16,7 @@ import { ErrorBoundary } from "react-error-boundary";
 import { DropCount } from "../components/DropCount";
 import { AddressLink } from "../eth-react/AddressLink";
 import { ChainOptions } from "../eth-react/ChainOptions";
+import { chainIds } from "../eth-react/chains";
 import { Cid } from "../eth-react/Cid";
 import {
   EthErrorFallback,
@@ -87,7 +88,7 @@ export function Sink() {
         <Loader>Lorem ipsum</Loader>
       </Item>
       <Item title="ChainOptions">
-        <ChainOptions chainIds={[1337, 1, 3, 4, 42, 5]} />
+        <ChainOptions chainIds={Object.values(chainIds)} />
       </Item>
       <Item title="Cid">
         <Cid />

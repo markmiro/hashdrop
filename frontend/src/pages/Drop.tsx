@@ -21,6 +21,7 @@ import { useErrorHandler } from "react-error-boundary";
 import { IoLogoTwitter } from "react-icons/io5";
 import { DataTabs } from "../components/DataTabs/DataTabs";
 import { Cid } from "../eth-react/Cid";
+import { CurrentChainName } from "../eth-react/CurrentChainName";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
 import { Anchor } from "../generic/Anchor";
@@ -122,7 +123,11 @@ const StatusText: FC<{
     case "SENDING_IPFS":
       return <Loader>Sending to IPFS</Loader>;
     case "SENDING_ETH":
-      return <Loader>Saving to Ethereum blockchain</Loader>;
+      return (
+        <Loader>
+          Saving to <CurrentChainName /> blockchain
+        </Loader>
+      );
     case "SUCCESS":
       return <></>;
     case "ERROR":

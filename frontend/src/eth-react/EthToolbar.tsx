@@ -3,7 +3,7 @@ import { FC } from "react";
 import Blockies from "react-blockies";
 import { ErrorBoundary, useErrorHandler } from "react-error-boundary";
 import { Loader } from "../generic/Loader";
-import { chainIdToInfo } from "./chainIdToInfo";
+import { chains } from "./chains";
 import { InstallMetaMaskMessage, MultipleWalletsMessage } from "./Errors";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 import {
@@ -80,7 +80,7 @@ export function Inner() {
     );
   }
 
-  const chainInfo = data.chainId ? chainIdToInfo(data.chainId) : null;
+  const chainInfo = data.chainId ? chains.showableById(data.chainId) : null;
 
   return (
     <>

@@ -27,3 +27,6 @@ yarn-error.log*
 
 # Want to rebuild this each time
 /src/typechain
+/src/typechain
+/src/typechain-ovm
+/src/chains.json

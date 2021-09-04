@@ -3,6 +3,7 @@ import delay from "delay";
 import { useEffect, useState } from "react";
 import { useErrorHandler } from "react-error-boundary";
 import { Cid } from "../../eth-react/Cid";
+import { CurrentChainName } from "../../eth-react/CurrentChainName";
 import { EthEnsure } from "../../eth-react/EthEnsure";
 import { useEthersProvider } from "../../eth-react/EthersProviderContext";
 import { useContract } from "../../eth-react/useContract";
@@ -84,7 +85,11 @@ function EthShow({ cid, checkAgain }: { cid: string; checkAgain: () => void }) {
   return (
     <VStack spacing="2" alignItems="stretch">
       {/* <pre>{JSON.stringify(ethDrop, null, "  ")}</pre> */}
-      {ethDrop.loading && <Loader>Checking Ethereum blockchain</Loader>}
+      {ethDrop.loading && (
+        <Loader>
+          Checking <CurrentChainName /> blockchain
+        </Loader>
+      )}
       {!ethDrop.loading && (
         <>
           {process.env.NODE_ENV === "development" && (

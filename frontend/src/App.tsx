@@ -10,6 +10,7 @@ import { Chains } from "./pages/Chains";
 import { Drop } from "./pages/Drop";
 import { DropOld } from "./pages/DropOld";
 import { Encrypt } from "./pages/Encrypt";
+import { EthChains } from "./pages/EthChains";
 import { Sink } from "./pages/Sink";
 import { Theme } from "./pages/Theme";
 
@@ -34,6 +35,7 @@ export function App() {
             <NavLink to="/debug/encrypt">Encrypt</NavLink>
             <NavLink to="/debug/drop-old">Drop Old</NavLink>
             <NavLink to="/debug/chains">Chains</NavLink>
+            <NavLink to="/debug/eth-chains">eth-chains</NavLink>
           </HStack>
         </Route>
 
@@ -87,6 +89,12 @@ export function App() {
               <PageBody>
                 <PageTitle>Chains</PageTitle>
                 <Chains />
+              </PageBody>
+            </Route>
+            <Route path="/debug/eth-chains">
+              <PageBody>
+                <PageTitle>eth-chains</PageTitle>
+                <EthChains />
               </PageBody>
             </Route>
             <Route path="/debug"></Route>

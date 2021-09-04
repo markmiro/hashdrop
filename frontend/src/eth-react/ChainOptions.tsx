@@ -14,19 +14,18 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { utils } from "ethers";
-import { useState } from "react";
 import { ErrorMessage } from "../generic/Errors/ErrorMessage";
-import { chainIdToInfo } from "./chainIdToInfo";
+import { ChainId, chains } from "./chains";
 import { InstallMetaMaskMessage } from "./Errors";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 
 const ChainDisplay = ({ chainId }: { chainId: number }) => {
-  const info = chainIdToInfo(chainId);
+  const chain = chains.showableById(chainId as ChainId);
 
   return (
     <Flex alignItems="center" width="100%">
-      <Circle size="1em" bg={info.color} boxShadow="xs" mr="2" />
-      {info.name}
+      <Circle size="1em" bg={chain.color} boxShadow="xs" mr="2" />
+      {chain.name}
       <Spacer />
       <Box
         fontSize="xs"
@@ -37,7 +36,7 @@ const ChainDisplay = ({ chainId }: { chainId: number }) => {
       >
         ID: {chainId}
       </Box>
-      {info.type === "test" && <Badge variant="outline">test</Badge>}
+      {chain.testnet && <Badge colorScheme="orange">testnet</Badge>}
     </Flex>
   );
 };
@@ -51,18 +50,15 @@ export function ChainOptions({
 }) {
   const toast = useToast();
   const { ethereum, data } = useMetaMaskEthereum();
-  const [chainId, setChainId] = useState(data.chainId);
 
   const updateChainId = (chainId: number) => {
-    const hexChainId = utils.hexValue(chainId);
     if (!ethereum) return;
     if (data.chainId === chainId) return;
     ethereum
       .request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: hexChainId }],
+        params: [{ chainId: utils.hexValue(chainId) }],
       })
-      .then(() => setChainId(chainId))
       .catch((err) => toast({ title: err.message, status: "error" }));
   };
 
@@ -84,7 +80,11 @@ export function ChainOptions({
         isFullWidth
         {...buttonProps}
       >
-        {chainId ? <ChainDisplay chainId={chainId} /> : "Choose a chain"}
+        {data.chainId ? (
+          <ChainDisplay chainId={data.chainId} />
+        ) : (
+          "Choose a chain"
+        )}
       </MenuButton>
       <MenuList minW="sm">
         {chainIds.map((chainId) => (

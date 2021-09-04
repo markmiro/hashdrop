@@ -1,5 +1,6 @@
 import {
   Badge,
+  Box,
   Heading,
   Link,
   Spacer,
@@ -13,6 +14,12 @@ import {
   useRouteMatch,
   NavLink as RouterNavLink,
 } from "react-router-dom";
+import { ChainOptions } from "../eth-react/ChainOptions";
+import feArtifacts from "../hardhat-frontend-artifacts.json";
+
+const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
+  (id) => parseInt(id)
+);
 
 export const PageBody: FC<{ isFullWidth?: boolean }> = ({
   children,
@@ -68,9 +75,14 @@ export const Nav: FC = ({ children }) => (
     </NavLink>
 
     {process.env.NODE_ENV === "development" && (
-      <Badge colorScheme="orange" as={RouterNavLink} to="/debug">
-        DEBUG
-      </Badge>
+      <>
+        <Badge colorScheme="orange" as={RouterNavLink} to="/debug">
+          DEBUG
+        </Badge>
+        <Box w="xs">
+          <ChainOptions buttonProps={{ size: "sm" }} chainIds={goodChainIds} />
+        </Box>
+      </>
     )}
 
     <Spacer />
