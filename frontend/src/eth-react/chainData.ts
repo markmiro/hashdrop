@@ -83,6 +83,7 @@ export const chainData: Chain[] = [
     color: "#9064ff",
     explorers: ["https://kovan.etherscan.io"],
     faucets: [
+      "https://faucet.buni.finance/",
       "https://gitter.im/kovan-testnet/faucet",
       "https://github.com/kovan-testnet/faucet",
       "https://faucet.kovan.network",
@@ -152,7 +153,10 @@ export const chainData: Chain[] = [
     // From https://gateway.optimism.io/
     explorers: ["https://kovan-explorer.optimism.io"],
     // Not a real faucet
-    faucets: ["https://gateway.optimism.io"],
+    faucets: [
+      "https://gateway.optimism.io",
+      "https://cryptomarketpool.com/optimistic-ethereum-layer-2",
+    ],
     notes:
       "The faucet link is actually a bridge. First get some ETH into Kovan via a faucet, then use the bridge to send it to the Optimism network.",
   },
