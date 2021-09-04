@@ -37,6 +37,7 @@ function IFramePreview2({
   return (
     <VStack align="stretch" spacing={2}>
       <Button
+        size="lg"
         colorScheme="blue"
         onClick={() => decrypter.decrypt(cid, privateCid)}
       >

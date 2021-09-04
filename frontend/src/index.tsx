@@ -5,8 +5,8 @@ import { ErrorBoundary } from "react-error-boundary";
 import { PortalProvider } from "react-portal-hook";
 import { App } from "./App";
 import { EthErrorFallback } from "./eth-react/Errors";
+import { EthEnsure } from "./eth-react/EthEnsure";
 import { EthersProviderProvider } from "./eth-react/EthersProviderContext";
-import { EthToolbar } from "./eth-react/EthToolbar";
 import { reloadOnChainChanged } from "./eth-react/reloadOnChainChanged";
 import { MetaMaskProvider } from "./eth-react/useMetaMaskEthereum";
 import { theme } from "./generic/chakraTheme";
@@ -21,9 +21,11 @@ ReactDOM.render(
         <PortalProvider>
           <MetaMaskProvider>
             <EthersProviderProvider>
-              <App />
+              <EthEnsure isConnectedToChain>
+                <App />
+              </EthEnsure>
             </EthersProviderProvider>
-            <EthToolbar />
+            {/* <EthToolbar /> */}
           </MetaMaskProvider>
         </PortalProvider>
       </ErrorBoundary>

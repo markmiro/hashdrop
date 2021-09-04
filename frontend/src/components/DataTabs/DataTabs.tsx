@@ -1,4 +1,4 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
+import { Box, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import { FileTab } from "./FileTab";
 import { TextTab } from "./TextTab";
 
@@ -11,16 +11,18 @@ export function DataTabs({
   cid?: string;
 }) {
   return (
-    <Tabs variant="enclosed">
+    <Tabs variant="solid-rounded" colorScheme="blue">
       <TabList>
         <Tab>Text</Tab>
         <Tab>File</Tab>
       </TabList>
-      <TabPanels borderWidth={1} borderColor="gray.200">
-        <TabPanel>
+
+      <Box pt={2} />
+      <TabPanels>
+        <TabPanel p={0}>
           <TextTab onBlobChange={onFobChange} cid={cid} />
         </TabPanel>
-        <TabPanel>
+        <TabPanel p={0}>
           <FileTab onFileChange={onFobChange} />
         </TabPanel>
       </TabPanels>

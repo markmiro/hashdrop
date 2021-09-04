@@ -19,6 +19,7 @@ export const theme = extendTheme({
     Button: {
       baseStyle: {
         fontWeight: "medium",
+        // bg: "blackAlpha.50",
       },
       variants: {
         link: {

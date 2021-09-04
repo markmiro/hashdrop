@@ -1,4 +1,4 @@
-import { Box, Button, VStack } from "@chakra-ui/react";
+import { Alert, AlertIcon, Box, Button, Text, VStack } from "@chakra-ui/react";
 import delay from "delay";
 import { useEffect, useState } from "react";
 import { useErrorHandler } from "react-error-boundary";
@@ -104,12 +104,13 @@ function EthShow({ cid, checkAgain }: { cid: string; checkAgain: () => void }) {
               {ethDrop.isMine ? (
                 <ShowMyPrivateDrop cid={cid} privateCid={ethDrop.privateCid} />
               ) : (
-                <ErrorMessage>
+                <Alert status="warning">
+                  <AlertIcon />
                   Private drop hasn't been published yet. If this is your drop,
                   try to log into this account: {ethDrop.dropperAddress}{" "}
                   <button onClick={connectToAddress}>Connect</button>.{" "}
                   <button onClick={checkAgain}>Check Again</button>
-                </ErrorMessage>
+                </Alert>
               )}
             </>
           ) : (
@@ -142,18 +143,20 @@ export function ShowDrop({ cid }: { cid: string }) {
       )}
       {cidChecker.state === "NOT_FOUND" && (
         <>
-          <ErrorMessage>
-            The file hasn't been published yet. Check back here when the author
-            has published the file.{" "}
-            <Button
-              variant="link"
-              colorScheme="red"
-              textDecoration="underline"
-              onClick={cidChecker.checkAgain}
-            >
+          <Alert status="warning">
+            <AlertIcon />
+            <div>
+              The file hasn't been published yet. Check back here when the
+              author has published the file.{" "}
+              <Text fontSize="xs" color="blackAlpha.600">
+                Note: It's also possible that the file exists, but can't be
+                found on IPFS.
+              </Text>
+            </div>
+            <Button colorScheme="orange" onClick={cidChecker.checkAgain}>
               Try Again
             </Button>
-          </ErrorMessage>
+          </Alert>
           <EthEnsure isConnected chainIds={goodChainIds}>
             <EthShow cid={cid} checkAgain={cidChecker.checkAgain} />
           </EthEnsure>

@@ -38,7 +38,11 @@ export const PageBody: FC<{ isFullWidth?: boolean }> = ({
   </VStack>
 );
 
-export const PageTitle: FC = ({ children }) => <Heading>{children}</Heading>;
+export const PageTitle: FC = ({ children }) => (
+  <Heading fontSize="6xl" borderBottomWidth={1} borderColor="black">
+    {children}
+  </Heading>
+);
 
 export const NavLink: FC<LinkProps> = ({ to, children, ...rest }) => {
   const match = useRouteMatch({
@@ -67,26 +71,25 @@ export const Nav: FC = ({ children }) => (
     alignItems="center"
     direction={["column", "column", "row"]}
     as="nav"
-    spacing={[0, 0, "4"]}
-    borderBottomWidth={1}
+    spacing={[0, 0, 2]}
   >
     <NavLink to="/">
-      <Text fontWeight="bold">HASH💧</Text>
+      <Text fontWeight="bold">#💧</Text>
     </NavLink>
 
     {process.env.NODE_ENV === "development" && (
-      <>
-        <Badge colorScheme="orange" as={RouterNavLink} to="/debug">
-          DEBUG
-        </Badge>
-        <Box w="sm">
-          <ChainOptions buttonProps={{ size: "sm" }} chainIds={goodChainIds} />
-        </Box>
-      </>
+      <Badge colorScheme="orange" as={RouterNavLink} to="/debug">
+        DEBUG
+      </Badge>
     )}
 
     <Spacer />
-    <Stack direction={["column", "row", "row"]} as="nav" spacing={[0, 0, "4"]}>
+
+    <Box w="sm">
+      <ChainOptions buttonProps={{ size: "sm" }} chainIds={goodChainIds} />
+    </Box>
+
+    <Stack direction={["column", "row", "row"]} as="nav" spacing={[0, 0, 2]}>
       {children}
     </Stack>
   </Stack>

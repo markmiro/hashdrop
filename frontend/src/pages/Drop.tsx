@@ -1,4 +1,4 @@
-import { ArrowForwardIcon } from "@chakra-ui/icons";
+import { ArrowForwardIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import {
   Alert,
   AlertDescription,
@@ -6,13 +6,21 @@ import {
   AlertTitle,
   Box,
   Button,
+  Divider,
   Flex,
+  HStack,
+  Icon,
+  Input,
+  InputGroup,
+  InputRightAddon,
+  Link,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
   VStack,
 } from "@chakra-ui/react";
 import queryString from "query-string";
@@ -24,7 +32,7 @@ import { Cid } from "../eth-react/Cid";
 import { CurrentChainName } from "../eth-react/CurrentChainName";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
-import { Anchor } from "../generic/Anchor";
+import { CopyButton } from "../generic/CopyButton";
 import { Loader } from "../generic/Loader";
 import { HashDrop as T } from "../typechain";
 import { encryptFob } from "../util/encrypt";
@@ -108,6 +116,12 @@ type DropStatus =
   | "SUCCESS"
   | "ERROR";
 
+const Status: FC = ({ children }) => (
+  <Box px={4} py={2}>
+    <Loader>{children}</Loader>
+  </Box>
+);
+
 const StatusText: FC<{
   status: DropStatus;
   error: string;
@@ -117,16 +131,16 @@ const StatusText: FC<{
     case "INITIAL":
       return <>{children}</>;
     case "PROCESSING":
-      return <Loader>Processing</Loader>;
+      return <Status>Processing</Status>;
     case "ENCRYPTING":
-      return <Loader>Encrypting</Loader>;
+      return <Status>Encrypting</Status>;
     case "SENDING_IPFS":
-      return <Loader>Sending to IPFS</Loader>;
+      return <Status>Sending to IPFS</Status>;
     case "SENDING_ETH":
       return (
-        <Loader>
+        <Status>
           Saving to <CurrentChainName /> blockchain
-        </Loader>
+        </Status>
       );
     case "SUCCESS":
       return <></>;
@@ -266,15 +280,52 @@ export function Drop() {
 
   return (
     <>
-      <DataTabs onFobChange={setFob} />
+      <Box fontSize="xl">
+        <Link
+          // as={Link}
+          fontSize="2xl"
+          display="block"
+          // bg="blackAlpha.50"
+          // _hover={{ bg: "blackAlpha.100" }}
+          _hover={{ textDecoration: "underline" }}
+          fontWeight="normal"
+          // px={4}
+          // py={2}
+          // rounded="lg"
+          href="https://www.kalzumeus.com/essays/dropping-hashes"
+          isExternal
+        >
+          <HStack spacing={2}>
+            <Text lineHeight="short">
+              Dropping hashes: an idiom used to demonstrate provenance of
+              documents
+            </Text>
+            <Text fontSize="xs">A dapp inspired by Patrick McKenzie.</Text>
+            <Icon boxSize="1.5em" opacity="0.5" as={ChevronRightIcon} />
+          </HStack>
+        </Link>
+      </Box>
 
-      <Button
-        colorScheme="blue"
-        disabled={!fob}
-        onClick={() => hashdrop.addPrivate(fob)}
+      <Box
+        borderWidth={1}
+        borderColor="blackAlpha.300"
+        p={4}
+        rounded="2xl"
+        shadow="md"
       >
-        Add Private
-      </Button>
+        <VStack spacing={4} align="stretch">
+          <DataTabs onFobChange={setFob} />
+          <Divider />
+          <Button
+            size="lg"
+            colorScheme="blue"
+            disabled={!fob}
+            onClick={() => hashdrop.addPrivate(fob)}
+          >
+            Add Private
+          </Button>
+        </VStack>
+      </Box>
 
       <Modal
         isOpen={hashdrop.status !== "INITIAL"}
@@ -290,16 +341,16 @@ export function Drop() {
               onReset={hashdrop.reset}
             />
           </Box>
+
           {hashdrop.status === "SUCCESS" && hashdrop.cid && (
             <>
-              <ModalHeader>File was published.</ModalHeader>
+              <ModalHeader>✓ Private file was saved.</ModalHeader>
               <ModalBody>
-                <Alert status="success">
-                  <AlertIcon />
-                  Data was successfully notarized on the blockchain and pinned
-                  on IPFS.
-                </Alert>
-                <Cid cid={hashdrop.cid} />
+                Data was successfully notarized on the blockchain and pinned to
+                IPFS.
+                {/* {process.env.NODE_ENV === "development" && (
+                  <Cid cid={hashdrop.cid} />
+                )} */}
               </ModalBody>
             </>
           )}
@@ -307,8 +358,15 @@ export function Drop() {
           {hashdrop.status === "SUCCESS" && hashdrop.cid && (
             <ModalFooter>
               <VStack spacing="2" w="100%">
+                <InputGroup size="lg">
+                  <Input value={dropUrl(hashdrop.cid)} isReadOnly />
+                  <InputRightAddon>
+                    <CopyButton toCopy={dropUrl(hashdrop.cid)} as={Button} />
+                  </InputRightAddon>
+                </InputGroup>
                 {/* https://developer.twitter.com/en/docs/twitter-for-websites/tweet-button/guides/web-intent */}
                 <Button
+                  size="lg"
                   colorScheme="twitter"
                   isFullWidth
                   as="a"
@@ -320,6 +378,7 @@ export function Drop() {
                   Tweet
                 </Button>
                 <Button
+                  size="lg"
                   isFullWidth
                   as="a"
                   href={dropUrl(hashdrop.cid)}
@@ -348,15 +407,6 @@ export function Drop() {
           )}
         </ModalContent>
       </Modal>
-      <p>
-        <Anchor
-          textDecor="underline"
-          to="https://www.kalzumeus.com/essays/dropping-hashes"
-          isExternal
-        >
-          Dropping hashes: an idiom used to demonstrate provenance of documents
-        </Anchor>
-      </p>
     </>
   );
 }

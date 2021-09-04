@@ -23,9 +23,7 @@ export function App() {
     <>
       {/* https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/HashRouter.md */}
       <HashRouter hashType="slash">
-        <Nav>
-          <NavLink to="/drop">Drop</NavLink>
-        </Nav>
+        <Nav>{/* <NavLink to="/drop">Drop</NavLink> */}</Nav>
 
         <Route path="/debug">
           <HStack borderBottomWidth={1} overflow="scroll" w="full">

@@ -1,10 +1,10 @@
 import { CopyIcon } from "@chakra-ui/icons";
-import { Link, LinkProps, useToast } from "@chakra-ui/react";
+import { Box, BoxProps, useToast } from "@chakra-ui/react";
 import copy from "copy-to-clipboard";
-import React, { FC, useCallback } from "react";
+import { FC, useCallback } from "react";
 
 export const CopyButton: FC<
-  LinkProps & {
+  BoxProps & {
     toCopy: string;
   }
 > = ({ toCopy, ...rest }) => {
@@ -14,21 +14,22 @@ export const CopyButton: FC<
     copy(toCopy);
     toast({
       title: "Copied.",
+      status: "success",
       duration: 1000,
     });
   }, [toCopy, toast]);
 
   return (
-    <Link
+    <Box
       as="button"
       variant="link"
       title={toCopy}
       onClick={handleCopy}
-      _hover={{ opacity: "50%" }}
+      _hover={{ color: "black" }}
       transform="translate(0px, -1px)"
       {...rest}
     >
       <CopyIcon />
-    </Link>
+    </Box>
   );
 };

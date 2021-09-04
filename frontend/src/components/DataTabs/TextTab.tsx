@@ -5,7 +5,7 @@ import { fobAsText } from "../../util/fobAsText";
 import { textToBlob } from "../../util/textToBlob";
 import { textTypes } from "../../util/textTypes";
 import { FileInput } from "../FileInput";
-import { DownloadButton } from "./../DownloadButton";
+import _ from "lodash";
 
 export function TextTab({
   onBlobChange,
@@ -19,11 +19,21 @@ export function TextTab({
   const [text, setText] = useState("");
   const [fob, setFob] = useState<File | Blob | null>(null);
 
-  const updateText = useCallback(async (text) => {
-    setText(text);
-    const blob = textToBlob(text);
-    setFob(blob);
-  }, []);
+  const createBlob = useCallback(
+    _.debounce((text: string) => {
+      const blob = textToBlob(text);
+      setFob(blob);
+    }, 200),
+    []
+  );
+
+  const updateText = useCallback(
+    async (text) => {
+      setText(text);
+      createBlob(text);
+    },
+    [createBlob]
+  );
 
   const resetText = () => {
     setText("");
@@ -74,7 +84,7 @@ export function TextTab({
           onFileChange={updateTextFile}
         />
         <Spacer />
-        <DownloadButton cid={cid} text={text} flex="0 0 auto" />
+        {/* <DownloadButton cid={cid} text={text} flex="0 0 auto" /> */}
         <Button
           onClick={() =>
             confirm(resetText, {

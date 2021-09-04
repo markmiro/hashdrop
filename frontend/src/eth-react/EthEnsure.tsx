@@ -1,4 +1,4 @@
-import { Button } from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 import { BigNumber } from "ethers";
 import { FC } from "react";
 import { useErrorHandler } from "react-error-boundary";
@@ -134,10 +134,9 @@ export const EthEnsure: FC<Props> = (props) => {
       };
       return (
         <div>
-          Please choose an account with a non-zero balance.{" "}
-          <Button colorScheme="green" onClick={connect}>
-            Connect Account
-          </Button>
+          <p>Please choose an account with a non-zero balance.</p>
+          <Box pt={1} />
+          <Button onClick={connect}>Connect Account</Button>
         </div>
       );
     }

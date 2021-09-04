@@ -8,7 +8,6 @@ import {
   Divider,
   HStack,
   Spacer,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import { ethers } from "ethers";
