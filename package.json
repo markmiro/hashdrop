@@ -11,6 +11,7 @@
     "deploy:arbtest": "hardhat run scripts/deploy.js --network arbtest",
     "deploy:arbitrum": "hardhat run scripts/deploy.js --network arbitrum",
     "deploy:ropsten": "hardhat run scripts/deploy.js --network ropsten",
+    "deploy:matictest": "hardhat run scripts/deploy.js --network matictest",
     "deploy:mainnet": "hardhat run scripts/deploy.js --network mainnet"
   },
   "devDependencies": {

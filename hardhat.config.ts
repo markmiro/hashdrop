@@ -20,13 +20,6 @@ declare module "hardhat/types/config" {
   }
 }
 
-// Replace this private key with your Ropsten account private key
-// To export your private key from Metamask, open Metamask and
-// go to Account Details > Export Private Key
-// Be aware of NEVER putting real Ether into testing accounts
-const ROPSTEN_PRIVATE_KEY =
-  "51e789f13101edb0cd1d665a7dd7b178a917ce4b52993138dac8eef4ff39b9a2";
-
 // You need to export an object to set up your config
 // Go to https://hardhat.org/config/ to learn more
 
@@ -45,7 +38,7 @@ const config: HardhatUserConfig = {
     ropsten: {
       // From: https://dashboard.alchemyapi.io/apps/ynblct7gs7t8bilb -> VIEW KEY
       url: `https://eth-ropsten.alchemyapi.io/v2/3RI0h7l9dI7NPpIWBKiASq6IV0cUFbRQ`,
-      accounts: [`0x${ROPSTEN_PRIVATE_KEY}`],
+      accounts: [`0x${process.env.TEST_ACCOUNT_PRIVATE_KEY}`],
     },
     mainnet: {
       // From: https://dashboard.alchemyapi.io/apps/8z6bnqu7e5bnckr3 -> VIEW KEY
@@ -63,6 +56,12 @@ const config: HardhatUserConfig = {
         `0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80`,
       ],
       gasPrice: 0,
+    },
+    // https://docs.matic.network/docs/develop/hardhat/
+    matictest: {
+      // url: "https://rpc-mumbai.maticvigil.com",
+      url: "https://polygon-mumbai.g.alchemy.com/v2/-_gIxO0TWmjnOuGM99vTELeIcUk-hIRn",
+      accounts: [`0x${process.env.TEST_ACCOUNT_PRIVATE_KEY}`],
     },
   },
   // https://hardhat.org/plugins/hardhat-gas-reporter.html#configuration
