@@ -1,4 +1,5 @@
 import {
+  Alert,
   Badge,
   Box,
   Button,
@@ -57,7 +58,7 @@ function Chain({ chainId }: { chainId: ChainId }) {
           </Badge>
         </HStack>
         <VStack spacing={0} align="start" fontSize="sm">
-          {chain.description && <Text fontSize="lg">{chain.description}</Text>}
+          {chain.notes && <Alert>{chain.notes}</Alert>}
           {chain.infoUrl && (
             <>
               <b>Info: </b>

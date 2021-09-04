@@ -1,3 +1,9 @@
+// Sources:
+// https://chainlist.org
+// https://support.mycrypto.com/how-to/getting-started/where-to-get-testnet-ether
+// https://arbitrum.io/bridge-tutorial
+// EIP-3085
+
 export const chainIds = {
   LOCALHOST: 1337,
   MAINNET: 1,
@@ -35,7 +41,7 @@ export const chainData: Chain[] = [
     name: "Ropsten",
     testnet: true,
     color: "#ff4a8d",
-    description: "Matches production environment. Not immune to spam attacks.",
+    notes: "Matches production environment. Not immune to spam attacks.",
     faucets: [
       // https://docs.alchemy.com/alchemy/guides/choosing-a-network#ropsten
       "https://faucet.metamask.io",
@@ -61,7 +67,7 @@ export const chainData: Chain[] = [
     color: "#3099f2",
     explorers: ["https://goerli.etherscan.io"],
     // https://docs.alchemy.com/alchemy/guides/choosing-a-network#goerli
-    description:
+    notes:
       "Consistent availability, high reliability. Supported by multiple clients.",
     faucets: [
       "https://goerli-faucet.dappnode.net",
@@ -76,6 +82,13 @@ export const chainData: Chain[] = [
     testnet: true,
     color: "#9064ff",
     explorers: ["https://kovan.etherscan.io"],
+    faucets: [
+      "https://gitter.im/kovan-testnet/faucet",
+      "https://github.com/kovan-testnet/faucet",
+      "https://faucet.kovan.network",
+      "https://ethdrop.dev",
+      "https://xdefilab.medium.com/how-to-get-kovan-testnet-tokens-b5cf21967a8c",
+    ],
   },
   {
     chainId: 42161,
@@ -105,7 +118,7 @@ export const chainData: Chain[] = [
     rpc: ["https://rinkeby.arbitrum.io/rpc", "wss://rinkeby.arbitrum.io/ws"],
     explorers: ["https://rinkeby-explorer.arbitrum.io"],
     faucets: ["https://bridge.arbitrum.io"],
-    description:
+    notes:
       "The faucet is really a bridge. First use an Ethereum Rinkeby faucet to get some eth, then use the Arbitrum bridge and send some of the eth to Arbitrum's Rinkeby testnet.",
   },
   {
@@ -140,6 +153,8 @@ export const chainData: Chain[] = [
     explorers: ["https://kovan-explorer.optimism.io"],
     // Not a real faucet
     faucets: ["https://gateway.optimism.io"],
+    notes:
+      "The faucet link is actually a bridge. First get some ETH into Kovan via a faucet, then use the bridge to send it to the Optimism network.",
   },
   {
     chainId: 137,
@@ -157,7 +172,7 @@ export const chainData: Chain[] = [
       "wss://ws-mainnet.matic.network",
     ],
     explorers: ["https://polygonscan.com"],
-    description: "Sidechain, and has it's own coin.",
+    notes: "Sidechain, and has it's own coin.",
     infoUrl: "https://matic.network",
     faucets: ["https://faucet.matic.network"],
   },
@@ -193,7 +208,7 @@ export type ShowableChain = {
   testnet: boolean;
   color: string;
   infoUrl?: string;
-  description?: string;
+  notes?: string;
 };
 
 export type ShowableAndAddableChain = ShowableChain & AddableChain;
