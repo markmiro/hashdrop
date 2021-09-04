@@ -79,7 +79,7 @@ export const Nav: FC = ({ children }) => (
         <Badge colorScheme="orange" as={RouterNavLink} to="/debug">
           DEBUG
         </Badge>
-        <Box w="xs">
+        <Box w="sm">
           <ChainOptions buttonProps={{ size: "sm" }} chainIds={goodChainIds} />
         </Box>
       </>
