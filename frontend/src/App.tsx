@@ -52,8 +52,8 @@ export function App() {
             />
             <Route path="/drop">
               <PageBody>
-                <PageTitle>Drop</PageTitle>
                 <EthEnsure isConnected isNonZeroBalance chainIds={goodChainIds}>
+                  <PageTitle>Drop</PageTitle>
                   <Drop />
                 </EthEnsure>
               </PageBody>

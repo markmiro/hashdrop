@@ -114,7 +114,7 @@ export function Inner() {
           <Blockies seed={data.selectedAddress} scale={2} />
         </HStack>
       ) : (
-        <button onClick={connectAccount}>Connect Account</button>
+        <button onClick={connectAccount}>Connect Wallet</button>
       )}
     </>
   );

@@ -1,7 +1,8 @@
-import { Box, Button } from "@chakra-ui/react";
+import { Box, Button, Center, VStack } from "@chakra-ui/react";
 import { BigNumber } from "ethers";
 import { FC } from "react";
 import { useErrorHandler } from "react-error-boundary";
+import { FaEthereum } from "react-icons/fa";
 import { ErrorMessage } from "../generic/Errors/ErrorMessage";
 import { Loader } from "../generic/Loader";
 import { ChainOptions } from "./ChainOptions";
@@ -109,11 +110,19 @@ export const EthEnsure: FC<Props> = (props) => {
         ethereum.request({ method: "eth_requestAccounts" }).catch(handleError);
       };
       return (
-        <div>
-          <Button colorScheme="green" onClick={connect}>
-            Connect Account
-          </Button>
-        </div>
+        <Center h="50vh">
+          <VStack align="center" textAlign="center">
+            <p>Please connect your crypto wallet to continue.</p>
+            <Button
+              size="lg"
+              colorScheme="blue"
+              onClick={connect}
+              leftIcon={<FaEthereum />}
+            >
+              Connect Wallet
+            </Button>
+          </VStack>
+        </Center>
       );
     }
   }
@@ -136,7 +145,7 @@ export const EthEnsure: FC<Props> = (props) => {
         <div>
           <p>Please choose an account with a non-zero balance.</p>
           <Box pt={1} />
-          <Button onClick={connect}>Connect Account</Button>
+          <Button onClick={connect}>Choose a different account</Button>
         </div>
       );
     }

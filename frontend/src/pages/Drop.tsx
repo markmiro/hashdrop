@@ -386,7 +386,7 @@ export function Drop() {
                   rel="noreferrer"
                   rightIcon={<ArrowForwardIcon />}
                 >
-                  See Drop
+                  View / publish your file
                 </Button>
                 {/* {process.env.NODE_ENV === "development" && (
                   <Button
