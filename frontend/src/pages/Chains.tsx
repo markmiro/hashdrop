@@ -12,7 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { FC } from "react";
-import { ChainId, chainIds, chains } from "../eth-react/chains";
+import { ChainId } from "../eth-react/chainData";
+import { chainIds, chains } from "../eth-react/chains";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { Anchor } from "../generic/Anchor";
 

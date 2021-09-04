@@ -15,7 +15,8 @@ import {
 } from "@chakra-ui/react";
 import { utils } from "ethers";
 import { ErrorMessage } from "../generic/Errors/ErrorMessage";
-import { ChainId, chains } from "./chains";
+import { ChainId } from "./chainData";
+import { chains } from "./chains";
 import { InstallMetaMaskMessage } from "./Errors";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 
