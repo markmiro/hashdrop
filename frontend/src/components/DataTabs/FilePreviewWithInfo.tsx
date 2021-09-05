@@ -14,7 +14,7 @@ export const FilePreviewWithInfo: FC<{
       <Box borderWidth={1}>
         <FilePreview file={file} dataUrl={dataUrl} />
       </Box>
-      <Flex bg="blackAlpha.100" p={2}>
+      <Flex bg="blackAlpha.100" px={4} py={2} lineHeight="short">
         <div style={{ overflow: "hidden" }}>
           <Text fontWeight="semibold" isTruncated>
             {fileName}

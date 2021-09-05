@@ -6,6 +6,7 @@ import {
   ButtonProps,
   Circle,
   Flex,
+  HStack,
   Menu,
   MenuButton,
   MenuItem,
@@ -24,21 +25,17 @@ const ChainDisplay = ({ chainId }: { chainId: number }) => {
   const chain = chains.showableById(chainId as ChainId);
 
   return (
-    <Flex alignItems="center" width="100%">
-      <Circle size="1em" bg={chain.color} boxShadow="xs" mr="2" />
-      {chain.name}
+    <HStack spacing={2} alignItems="center" w="100%">
+      <Circle size="1em" bg={chain.color} boxShadow="xs" />
+      <div>{chain.name}</div>
       <Spacer />
-      <Box
-        fontSize="xs"
-        mr="2"
-        fontWeight="normal"
-        opacity="50%"
-        display="inline"
-      >
-        ID: {chainId}
-      </Box>
+      {process.env.NODE_ENV === "development" && (
+        <Box fontSize="xs" fontWeight="normal" opacity="50%" display="inline">
+          ID: {chainId}
+        </Box>
+      )}
       {chain.testnet && <Badge colorScheme="orange">testnet</Badge>}
-    </Flex>
+    </HStack>
   );
 };
 
@@ -78,7 +75,6 @@ export function ChainOptions({
         variant="outline"
         textAlign="left"
         rightIcon={<ChevronDownIcon />}
-        isFullWidth
         {...buttonProps}
       >
         {data.chainId ? (

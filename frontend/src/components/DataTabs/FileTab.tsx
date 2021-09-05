@@ -21,7 +21,7 @@ const DropArea: FC = ({ children }) => (
     border={1}
     borderStyle="dashed"
     borderColor="blackAlpha.300"
-    _hover={{ bg: "blackAlpha.100" }}
+    _hover={{ bg: "blackAlpha.50" }}
     textAlign="center"
     h="20vh"
     p="4"
@@ -60,7 +60,12 @@ export function FileTab({
   if (file) {
     return (
       <FilePreviewWithInfo file={file} dataUrl={fileDataUrl}>
-        <Button onClick={resetFile} disabled={!file} leftIcon={<DeleteIcon />}>
+        <Button
+          onClick={resetFile}
+          disabled={!file}
+          leftIcon={<DeleteIcon />}
+          colorScheme="blackAlpha"
+        >
           Remove
         </Button>
       </FilePreviewWithInfo>

@@ -21,6 +21,7 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  Tooltip,
   VStack,
 } from "@chakra-ui/react";
 import queryString from "query-string";
@@ -316,14 +317,29 @@ export function Drop() {
         <VStack spacing={4} align="stretch">
           <DataTabs onFobChange={setFob} />
           <Divider />
-          <Button
-            size="lg"
-            colorScheme="blue"
-            disabled={!fob}
-            onClick={() => hashdrop.addPrivate(fob)}
-          >
-            Add Private
-          </Button>
+          <VStack spacing={2} alignItems="center">
+            <Button
+              size="lg"
+              colorScheme="blue"
+              disabled={!fob}
+              onClick={() => hashdrop.addPrivate(fob)}
+              isFullWidth
+            >
+              Add Drop
+            </Button>
+            {/* <Text
+              color="blackAlpha.500"
+              fontSize="xs"
+              textAlign="center"
+              margin="auto"
+              w="md"
+              lineHeight="short"
+            >
+              Your data will be encrypted before it leaves this page. Your
+              crypto wallet will prompt you to confirm before data is encrypted
+              and stored on IPFS.
+            </Text> */}
+          </VStack>
         </VStack>
       </Box>
 
@@ -344,13 +360,12 @@ export function Drop() {
 
           {hashdrop.status === "SUCCESS" && hashdrop.cid && (
             <>
-              <ModalHeader>✓ Private file was saved.</ModalHeader>
+              <ModalHeader color="green.500" borderBottomWidth={1}>
+                ✓ Private file was saved.
+              </ModalHeader>
               <ModalBody>
                 Data was successfully notarized on the blockchain and pinned to
                 IPFS.
-                {/* {process.env.NODE_ENV === "development" && (
-                  <Cid cid={hashdrop.cid} />
-                )} */}
               </ModalBody>
             </>
           )}

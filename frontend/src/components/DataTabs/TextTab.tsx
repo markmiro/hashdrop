@@ -83,6 +83,7 @@ export function TextTab({
           file={fob instanceof File ? fob : null}
           keepFile={!!text}
           buttonProps={{
+            size: "sm",
             isDisabled: !!text,
             pointerEvents: !!text ? "none" : undefined,
           }}
@@ -91,6 +92,7 @@ export function TextTab({
         <Spacer />
         {/* <DownloadButton cid={cid} text={text} flex="0 0 auto" /> */}
         <Button
+          size="sm"
           onClick={() =>
             confirm(resetText, {
               title: "Are you sure you want to clear the text?",
