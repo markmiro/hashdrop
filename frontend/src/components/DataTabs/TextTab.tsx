@@ -1,11 +1,11 @@
 import { Box, Button, HStack, Spacer, Textarea } from "@chakra-ui/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useDebouncedCallback } from "use-debounce";
 import { useConfirm } from "../../generic/Confirm";
 import { fobAsText } from "../../util/fobAsText";
 import { textToBlob } from "../../util/textToBlob";
 import { textTypes } from "../../util/textTypes";
 import { FileInput } from "../FileInput";
-import _ from "lodash";
 
 export function TextTab({
   onBlobChange,
@@ -20,17 +20,14 @@ export function TextTab({
   const [fob, setFob] = useState<File | Blob | null>(null);
 
   // Calculate the fob based on the text
-  const createBlob = useCallback(
-    _.debounce((text: string) => {
-      if (text) {
-        const blob = textToBlob(text);
-        setFob(blob);
-      } else {
-        setFob(null);
-      }
-    }, 200),
-    []
-  );
+  const createBlob = useDebouncedCallback((text: string) => {
+    if (text) {
+      const blob = textToBlob(text);
+      setFob(blob);
+    } else {
+      setFob(null);
+    }
+  }, 200);
 
   const updateText = useCallback(
     async (text) => {
