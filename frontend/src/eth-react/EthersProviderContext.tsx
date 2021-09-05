@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 import { createContext, FC, useContext, useEffect, useState } from "react";
 import { useErrorHandler } from "react-error-boundary";
 import { Loader } from "../generic/Loader";
-import { testProvider } from "./testProvider";
+// import { testProvider } from "./testProvider";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 
 const EthersProviderContext =
