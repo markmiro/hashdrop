@@ -19,10 +19,15 @@ export function TextTab({
   const [text, setText] = useState("");
   const [fob, setFob] = useState<File | Blob | null>(null);
 
+  // Calculate the fob based on the text
   const createBlob = useCallback(
     _.debounce((text: string) => {
-      const blob = textToBlob(text);
-      setFob(blob);
+      if (text) {
+        const blob = textToBlob(text);
+        setFob(blob);
+      } else {
+        setFob(null);
+      }
     }, 200),
     []
   );
