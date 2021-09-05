@@ -4,8 +4,7 @@ import { Anchor } from "../generic/Anchor";
 import { MonoText } from "../generic/MonoText";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 import { chains } from "./chains";
-
-const truncate = (str: string) => str.slice(0, 6) + "..." + str.slice(-4);
+import { truncateEthAddress } from "./utils";
 
 export const AddressLink: FC<{ address?: string }> = ({ address }) => {
   const { data } = useMetaMaskEthereum();
@@ -22,13 +21,13 @@ export const AddressLink: FC<{ address?: string }> = ({ address }) => {
   }, [data.chainId]);
 
   if (!address) {
-    return <MonoText isDisabled>{truncate("0x00000000000000000000")}</MonoText>;
+    return <MonoText isDisabled>{truncateEthAddress(address)}</MonoText>;
   }
 
   if (!explorer) {
     return (
       <span>
-        <MonoText isDisabled>{truncate(address)}</MonoText>
+        <MonoText isDisabled>{truncateEthAddress(address)}</MonoText>
         <CopyButton ml="2" toCopy={address} />
       </span>
     );
@@ -37,7 +36,9 @@ export const AddressLink: FC<{ address?: string }> = ({ address }) => {
   return (
     <span>
       <Anchor to={`${explorer}/address/${address}`} isExternal>
-        <MonoText textTransform="lowercase">{truncate(address)}</MonoText>
+        <MonoText textTransform="lowercase">
+          {truncateEthAddress(address)}
+        </MonoText>
       </Anchor>
       <CopyButton ml="2" toCopy={address} />
     </span>
