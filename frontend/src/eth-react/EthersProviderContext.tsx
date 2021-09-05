@@ -19,9 +19,9 @@ export const EthersProviderProvider: FC = ({ children }) => {
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
       setProvider(provider);
-      testProvider(provider)
-        .then(() => setProvider(provider))
-        .catch(handleError);
+      // testProvider(provider)
+      //   .then(() => setProvider(provider))
+      //   .catch(handleError);
     } catch (err) {
       handleError(err);
     }
