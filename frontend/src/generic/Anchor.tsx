@@ -8,15 +8,15 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 export const Anchor: FC<
   LinkProps & RouterLinkProps & { isDisabled?: boolean }
-> = ({ children, isDisabled, isExternal, ...rest }) => (
+> = ({ to, children, isDisabled, isExternal, ...rest }) => (
   <Link
     as={isExternal ? "a" : RouterLink}
-    href={isExternal ? (rest?.to as string) : undefined}
+    href={isExternal ? (to as string) : undefined}
     isExternal={isExternal}
     {...rest}
     style={{ ...rest.style, opacity: isDisabled ? "50%" : "" }}
   >
-    {children}
+    {children ?? to}
     {isExternal && (
       <ExternalLinkIcon ml="1" opacity="50%" transform="translate(0px, -2px)" />
     )}

@@ -1,4 +1,4 @@
-import { ArrowForwardIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { ArrowForwardIcon } from "@chakra-ui/icons";
 import {
   Alert,
   AlertDescription,
@@ -8,24 +8,21 @@ import {
   Button,
   Divider,
   Flex,
-  HStack,
-  Icon,
   Input,
   InputGroup,
   InputRightAddon,
-  Link,
   Modal,
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Text,
   VStack,
 } from "@chakra-ui/react";
 import queryString from "query-string";
 import { FC, useCallback, useState } from "react";
 import { IoLogoTwitter } from "react-icons/io5";
+import { About } from "../components/About";
 import { DataTabs } from "../components/DataTabs/DataTabs";
 import { CurrentChainName } from "../eth-react/CurrentChainName";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
@@ -281,7 +278,12 @@ export function Drop() {
   return (
     <>
       <Box fontSize="xl">
-        <Link
+        Prove that you had a specific document at a specific time.
+        {/* <Text fontSize="2xl">
+          Notarize content. Notarize and publish an encrypted file now, and
+          decrypt at a later time.
+        </Text> */}
+        {/* <Link
           // as={Link}
           fontSize="2xl"
           display="block"
@@ -303,7 +305,7 @@ export function Drop() {
             <Text fontSize="xs">A dapp inspired by Patrick McKenzie.</Text>
             <Icon boxSize="1.5em" opacity="0.5" as={ChevronRightIcon} />
           </HStack>
-        </Link>
+        </Link> */}
       </Box>
 
       <Box
@@ -421,6 +423,8 @@ export function Drop() {
           )}
         </ModalContent>
       </Modal>
+      <Box pt={4} />
+      <About />
     </>
   );
 }

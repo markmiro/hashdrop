@@ -1,4 +1,4 @@
-import { HStack } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
 import { ErrorBoundary } from "react-error-boundary";
 import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
 import { Nav, NavLink, PageBody, PageTitle } from "./components/PageLayout";
@@ -53,7 +53,7 @@ export function App() {
             <Route path="/drop">
               <PageBody>
                 <EthEnsure isConnected isNonZeroBalance chainIds={goodChainIds}>
-                  <PageTitle>Drop</PageTitle>
+                  <PageTitle>Drop a hash</PageTitle>
                   <Drop />
                 </EthEnsure>
               </PageBody>
@@ -102,6 +102,9 @@ export function App() {
             </Route>
           </Switch>
         </ErrorBoundary>
+        <Box borderTopWidth={1} py={6} px={2} textAlign="center">
+          #💧
+        </Box>
       </HashRouter>
     </>
   );
