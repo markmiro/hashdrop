@@ -100,7 +100,9 @@ function Chain({ chainId }: { chainId: ChainId }) {
           )}
         </VStack>
         <ButtonGroup>
-          <Button onClick={add}>Add</Button>
+          <Button onClick={add} isDisabled={!chains.addableById(chainId)}>
+            Add
+          </Button>
           <Button onClick={connect}>Connect</Button>
         </ButtonGroup>
       </VStack>
