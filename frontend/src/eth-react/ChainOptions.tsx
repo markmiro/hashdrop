@@ -13,7 +13,7 @@ import {
   Spacer,
   useToast,
 } from "@chakra-ui/react";
-import { utils } from "ethers";
+import { ethers } from "ethers";
 import { ErrorMessage } from "../generic/Errors/ErrorMessage";
 import { ChainId } from "./chainData";
 import { chains } from "./chains";
@@ -48,13 +48,34 @@ export function ChainOptions({
   const toast = useToast();
   const { ethereum, data } = useMetaMaskEthereum();
 
-  const updateChainId = (chainId: number) => {
+  const setOrAddChain = (chainId: number) => {
     if (!ethereum) return;
-    if (data.chainId === chainId) return;
+    if (chainId === data.chainId) {
+      toast({ title: "Already connected." });
+      return;
+    }
+    if (!chainId) {
+      toast({
+        title: `Seems like you're not connected to a chain.`,
+        status: "error",
+      });
+      return;
+    }
+    const addableChain = chains.addableById(chainId);
+    // If the chain can't be added, it's either because it's a local chain or it's a preset chain in MetaMask
+    if (!addableChain) {
+      ethereum
+        .request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: ethers.utils.hexValue(chainId) }],
+        })
+        .catch((err) => toast({ title: err.message, status: "error" }));
+      return;
+    }
     ethereum
       .request({
-        method: "wallet_switchEthereumChain",
-        params: [{ chainId: utils.hexValue(chainId) }],
+        method: "wallet_addEthereumChain",
+        params: [addableChain],
       })
       .catch((err) => toast({ title: err.message, status: "error" }));
   };
@@ -84,7 +105,7 @@ export function ChainOptions({
       </MenuButton>
       <MenuList minW="sm">
         {chainIds.map((chainId) => (
-          <MenuItem key={chainId} onClick={() => updateChainId(chainId)}>
+          <MenuItem key={chainId} onClick={() => setOrAddChain(chainId)}>
             <ChainDisplay chainId={chainId} />
           </MenuItem>
         ))}

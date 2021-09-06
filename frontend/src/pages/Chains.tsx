@@ -30,8 +30,13 @@ function Chain({ chainId }: { chainId: ChainId }) {
 
   const add = () => {
     // https://docs.metamask.io/guide/rpc-api.html#wallet-addethereumchain
+    const chain = chains.addableById(chainId);
+    if (!chain) {
+      alert("Cannot add");
+      return;
+    }
     provider
-      .send("wallet_addEthereumChain", [chains.addableById(chainId)])
+      .send("wallet_addEthereumChain", [chain])
       .then((res) => console.log(res));
   };
 
@@ -69,11 +74,12 @@ function Chain({ chainId }: { chainId: ChainId }) {
           {"faucets" in chain && (
             <>
               <b>Faucets: </b>
-              {chain.faucets.map((f) => (
-                <Anchor key={f} isExternal to={f}>
-                  {f}
-                </Anchor>
-              ))}
+              {chain.faucets &&
+                chain.faucets.map((f) => (
+                  <Anchor key={f} isExternal to={f}>
+                    {f}
+                  </Anchor>
+                ))}
             </>
           )}
           {"explorers" in chain && (

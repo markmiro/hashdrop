@@ -19,6 +19,14 @@ export const chainIds = {
   POLYGON_MUMBAI: 80001,
 } as const;
 
+export const metaMaskDefaultChainIds = [
+  chainIds.MAINNET,
+  chainIds.ROPSTEN,
+  chainIds.KOVAN,
+  chainIds.RINKEBY,
+  chainIds.GOERLI,
+] as const;
+
 export const chainData: Chain[] = [
   {
     chainId: 1337,
@@ -83,7 +91,9 @@ export const chainData: Chain[] = [
     color: "#9064ff",
     explorers: ["https://kovan.etherscan.io"],
     faucets: [
-      "https://faucet.buni.finance/",
+      "https://linkfaucet.protofire.io/kovan",
+      "https://faucet.daostack.io",
+      "https://faucet.buni.finance",
       "https://gitter.im/kovan-testnet/faucet",
       "https://github.com/kovan-testnet/faucet",
       "https://faucet.kovan.network",
@@ -108,7 +118,7 @@ export const chainData: Chain[] = [
   {
     chainId: 421611,
     shortName: "arbitrum-rinkeby",
-    name: "Arbitrum Rinkeby",
+    name: "Arbitrum Testnet Rinkeby",
     testnet: true,
     color: "#28a0f0",
     nativeCurrency: {
@@ -163,7 +173,7 @@ export const chainData: Chain[] = [
   {
     chainId: 137,
     shortName: "polygon",
-    name: "Matic/Polygon Mainnet",
+    name: "Matic(Polygon) Testnet Mumbai",
     testnet: false,
     color: "#8247e5",
     nativeCurrency: {
@@ -192,7 +202,7 @@ export const chainData: Chain[] = [
       decimals: 18,
     },
     rpc: ["https://rpc-mumbai.matic.today", "wss://ws-mumbai.matic.today"],
-    explorers: ["https://mumbai.polygonscan.com"],
+    explorers: ["https://mumbai.polygonscan.com/"],
     infoUrl: "https://matic.network",
     faucets: ["https://faucet.matic.network"],
   },
@@ -215,11 +225,9 @@ export type ShowableChain = {
   notes?: string;
 };
 
-export type ShowableAndAddableChain = ShowableChain & AddableChain;
-
 export type AddableChain = {
-  // name: string;
-  // chainId: number;
+  chainId: ChainId;
+  name: string;
   nativeCurrency: {
     name: string;
     symbol: string;
@@ -231,10 +239,11 @@ export type AddableChain = {
 
 export type TestnetChain = {
   testnet: true;
-  faucets: string[];
+  faucets?: string[];
 };
 
 export type Chain =
   | ShowableChain
-  | ShowableAndAddableChain
-  | (ShowableAndAddableChain & TestnetChain);
+  | (ShowableChain & AddableChain)
+  | (ShowableChain & TestnetChain)
+  | (ShowableChain & TestnetChain & AddableChain);

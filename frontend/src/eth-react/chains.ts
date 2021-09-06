@@ -3,9 +3,10 @@ import _ from "lodash";
 import {
   chainIds,
   chainData,
-  ShowableAndAddableChain,
   ChainId,
   ShowableChain,
+  AddableChain,
+  metaMaskDefaultChainIds,
 } from "./chainData";
 
 // https://vitalik.ca/general/2021/01/05/rollup.html
@@ -44,7 +45,7 @@ type RpcConnectChain = {
   blockExplorerUrls: string[];
 };
 
-export function toRpcConnect(c: ShowableAndAddableChain): RpcConnectChain {
+export function toRpcConnect(c: AddableChain): RpcConnectChain {
   return {
     chainName: c.name,
     chainId: ethers.utils.hexValue(c.chainId),
@@ -60,9 +61,25 @@ export function toRpcConnect(c: ShowableAndAddableChain): RpcConnectChain {
 
 const allChains = _.keyBy(chainData, "chainId");
 
-const addableChains = chainData.filter(
-  (c) => "addable" in c
-) as ShowableAndAddableChain[];
+const addableStructure = {
+  chainId: _.isNumber,
+  name: _.isString,
+  nativeCurrency: (nc: any) =>
+    _.conformsTo(nc, {
+      name: _.isString,
+      symbol: _.isString,
+      decimals: _.isNumber,
+    }),
+  rpc: _.isArray,
+  explorers: _.isArray,
+};
+
+const addableChains = chainData.filter((c) => {
+  return (
+    _.conformsTo<any>(c, addableStructure) &&
+    !metaMaskDefaultChainIds.includes(c.chainId as any)
+  );
+});
 const addableRpc = _.keyBy(addableChains, "chainId");
 
 const idToKey = _.invert(chainIds);
@@ -82,8 +99,10 @@ const chains = {
       color: "#bbb",
     };
   },
-  addableById(id: ChainId) {
-    return toRpcConnect(addableRpc[id]);
+  addableById(id: number) {
+    if (id in addableRpc) {
+      return toRpcConnect(addableRpc[id] as AddableChain);
+    }
   },
   idToKey(id: ChainId) {
     return idToKey[id as any];
