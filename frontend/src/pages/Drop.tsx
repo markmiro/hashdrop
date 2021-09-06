@@ -25,7 +25,6 @@ import {
 } from "@chakra-ui/react";
 import queryString from "query-string";
 import { FC, useCallback, useState } from "react";
-import { useErrorHandler } from "react-error-boundary";
 import { IoLogoTwitter } from "react-icons/io5";
 import { DataTabs } from "../components/DataTabs/DataTabs";
 import { CurrentChainName } from "../eth-react/CurrentChainName";

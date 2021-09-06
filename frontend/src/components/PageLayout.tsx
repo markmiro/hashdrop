@@ -1,6 +1,5 @@
 import {
   Badge,
-  Box,
   Heading,
   Link,
   Spacer,
@@ -11,8 +10,8 @@ import {
 import { FC } from "react";
 import {
   LinkProps,
-  useRouteMatch,
   NavLink as RouterNavLink,
+  useRouteMatch,
 } from "react-router-dom";
 import { AccountButton } from "../eth-react/AccountButton";
 import { ChainOptions } from "../eth-react/ChainOptions";
