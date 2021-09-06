@@ -51,7 +51,6 @@ const tweetUrl = (dropId: string) =>
   })}`;
 
 function useAdd() {
-  const handleError = useErrorHandler();
   const provider = useEthersProvider();
   const hashdrop = useContract<T>("HashDrop");
 
@@ -73,10 +72,10 @@ function useAdd() {
         setLoading(false);
       } catch (err) {
         setLoading(false);
-        handleError(err);
+        throw err;
       }
     },
-    [provider, hashdrop, handleError]
+    [provider, hashdrop]
   );
 
   const addPrivate = useCallback(
@@ -97,10 +96,10 @@ function useAdd() {
         setLoading(false);
       } catch (err) {
         setLoading(false);
-        handleError(err);
+        throw err;
       }
     },
-    [provider, hashdrop, handleError]
+    [provider, hashdrop]
   );
 
   return { add, addPrivate, loading, success };
@@ -243,7 +242,10 @@ function useHashDrop() {
         await ethAdd.addPrivate(cid, privateCid);
         await updateStatus("SENDING_IPFS");
         const remotePrivateCid = await pinFile(privateFob);
-        if (privateCid !== remotePrivateCid) throw new Error("Internal error.");
+        if (privateCid !== remotePrivateCid)
+          throw new Error(
+            "Internal error. Different signature for local and uploaded file."
+          );
         setStatus("SUCCESS");
         setIsProcessing(false);
       } catch (err) {
