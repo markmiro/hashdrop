@@ -14,6 +14,7 @@ import {
   useRouteMatch,
   NavLink as RouterNavLink,
 } from "react-router-dom";
+import { AccountButton } from "../eth-react/AccountButton";
 import { ChainOptions } from "../eth-react/ChainOptions";
 import feArtifacts from "../hardhat-frontend-artifacts.json";
 
@@ -85,9 +86,12 @@ export const Nav: FC = ({ children }) => (
 
     <Spacer />
 
-    <Box w="sm">
-      <ChainOptions buttonProps={{ size: "sm" }} chainIds={goodChainIds} />
-    </Box>
+    <ChainOptions
+      buttonProps={{ size: "sm", variant: "ghost" }}
+      chainIds={goodChainIds}
+    />
+
+    <AccountButton />
 
     <Stack direction={["column", "row", "row"]} as="nav" spacing={[0, 0, 2]}>
       {children}
