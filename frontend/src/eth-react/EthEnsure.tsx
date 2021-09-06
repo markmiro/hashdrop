@@ -1,4 +1,16 @@
-import { Box, Button, Center, VStack } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  VStack,
+} from "@chakra-ui/react";
 import { BigNumber } from "ethers";
 import { FC } from "react";
 import { useErrorHandler } from "react-error-boundary";
@@ -19,6 +31,29 @@ type Props = {
   chainIds?: number[];
   isConnected?: boolean;
   isNonZeroBalance?: boolean;
+};
+
+const ModalMessage: FC = ({ children }) => {
+  return (
+    <Modal isOpen onClose={() => {}} isCentered>
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>
+          <HStack spacing={2}>
+            <div>✋ Before you continue...</div>
+          </HStack>
+        </ModalHeader>
+        {/* <ModalCloseButton /> */}
+        <ModalBody>
+          <VStack spacing={2} alignItems="start">
+            {children}
+          </VStack>
+        </ModalBody>
+
+        <ModalFooter></ModalFooter>
+      </ModalContent>
+    </Modal>
+  );
 };
 
 export const EthEnsure: FC<Props> = (props) => {
@@ -44,27 +79,31 @@ export const EthEnsure: FC<Props> = (props) => {
 
   if (!ethereum) {
     return (
-      <ErrorMessage>
-        <InstallMetaMaskMessage />
-      </ErrorMessage>
+      <ModalMessage>
+        <Flex textAlign="center">
+          <InstallMetaMaskMessage />
+        </Flex>
+      </ModalMessage>
     );
   }
 
   if (data.hasMultipleWallets) {
     return (
-      <ErrorMessage>
+      <ModalMessage>
         <MultipleWalletsMessage />
-      </ErrorMessage>
+      </ModalMessage>
     );
   }
 
   // NOTE: This doesn't happen very often
   if (!data.isConnectedToCurrentChain) {
     return (
-      <ErrorMessage>
-        Not connected to wallet. Check wallet to see if it's working.{" "}
-        <ReloadLink />
-      </ErrorMessage>
+      <ModalMessage>
+        <ErrorMessage>
+          Not connected to wallet. Check wallet to see if it's working.{" "}
+          <ReloadLink />
+        </ErrorMessage>
+      </ModalMessage>
     );
   }
 
@@ -89,17 +128,20 @@ export const EthEnsure: FC<Props> = (props) => {
     }
     if (!data.chainId) {
       return (
-        <ErrorMessage>
+        <ModalMessage>
           Not connected to wallet. <ReloadLink />
-        </ErrorMessage>
+        </ModalMessage>
       );
     }
     if (!expect.chainIds.includes(data.chainId)) {
       return (
-        <div>
-          Please choose a different chain:
-          <ChainOptions chainIds={expect.chainIds} />
-        </div>
+        <ModalMessage>
+          <label>Please choose a different chain:</label>
+          <ChainOptions
+            chainIds={expect.chainIds}
+            buttonProps={{ isFullWidth: true }}
+          />
+        </ModalMessage>
       );
     }
   }
@@ -110,8 +152,9 @@ export const EthEnsure: FC<Props> = (props) => {
         ethereum.request({ method: "eth_requestAccounts" }).catch(handleError);
       };
       return (
-        <Center h="50vh">
-          <VStack align="center" textAlign="center">
+        <ModalMessage>
+          {/* <Center h="50vh"> */}
+          <VStack align="center" w="100%">
             <p>Please connect your crypto wallet to continue.</p>
             <Button
               size="lg"
@@ -122,7 +165,8 @@ export const EthEnsure: FC<Props> = (props) => {
               Connect Wallet
             </Button>
           </VStack>
-        </Center>
+          {/* </Center> */}
+        </ModalMessage>
       );
     }
   }
@@ -142,11 +186,11 @@ export const EthEnsure: FC<Props> = (props) => {
           .catch(handleError);
       };
       return (
-        <div>
+        <ModalMessage>
           <p>Please choose an account with a non-zero balance.</p>
           <Box pt={1} />
           <Button onClick={connect}>Choose a different account</Button>
-        </div>
+        </ModalMessage>
       );
     }
   }

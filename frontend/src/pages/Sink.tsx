@@ -143,7 +143,7 @@ export function Sink() {
       <Item title="EthEnsure">
         <ErrorBoundary FallbackComponent={EthErrorFallback}>
           <EthEnsure isConnected>Is Connected</EthEnsure>
-          <EthEnsure chainIds={[1234]}>Is Connected</EthEnsure>
+          {/* <EthEnsure chainIds={[1234]}>Is Connected</EthEnsure> */}
         </ErrorBoundary>
       </Item>
     </KitchenItems>

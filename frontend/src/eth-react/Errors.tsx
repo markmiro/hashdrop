@@ -17,8 +17,12 @@ export function MultipleWalletsMessage() {
 
 export function InstallMetaMaskMessage() {
   return (
-    <Anchor to="https://metamask.io/download" isExternal>
-      Install MetaMask
+    <Anchor
+      to="https://metamask.io/download"
+      isExternal
+      textDecoration="underline"
+    >
+      Install the MetaMask extension.
     </Anchor>
   );
 }
