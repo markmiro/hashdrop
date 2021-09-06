@@ -91,7 +91,7 @@ export const FileInput = ({
           <Text fontSize="xs">
             {openedFile.type}
             {isModified && (
-              <Badge colorScheme="yellow" ml="1">
+              <Badge colorScheme="orange" ml="1">
                 Modified
               </Badge>
             )}
