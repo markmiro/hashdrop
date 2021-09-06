@@ -1,4 +1,4 @@
-import { ChevronDownIcon } from "@chakra-ui/icons";
+import { UpDownIcon } from "@chakra-ui/icons";
 import {
   Badge,
   Box,
@@ -94,7 +94,7 @@ export function ChainOptions({
         as={Button}
         variant="outline"
         textAlign="left"
-        rightIcon={<ChevronDownIcon />}
+        rightIcon={<UpDownIcon />}
         {...buttonProps}
       >
         {data.chainId ? (
