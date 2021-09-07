@@ -11,6 +11,14 @@ async function deploy(addContract) {
     console.log("Deployed to:", hashDrop.address);
     await addContract("HashDrop", hashDrop.address);
   });
+  console.log("---");
+  console.log("Drops");
+  await logBalanceDifference(async () => {
+    const Drops = await ethers.getContractFactory("Drops");
+    const drops = await Drops.deploy();
+    console.log("Deployed to:", drops.address);
+    await addContract("Drops", drops.address);
+  });
 }
 
 async function main() {

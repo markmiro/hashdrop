@@ -1,13 +1,12 @@
-import { ethers } from "hardhat";
-import { expect } from "chai";
-import { HashDrop as T } from "../frontend/src/typechain";
-import { ipfsCid } from "../frontend/src/util/ipfsCid";
-import { textToBlob } from "../frontend/src/util/textToBlob";
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
+import { expect } from "chai";
+import { ethers } from "hardhat";
+import { HashDrop as T } from "../frontend/src/typechain";
+const Hash = require("ipfs-only-hash");
 
 describe("HashDrop", () => {
   let HashDrop,
-    hashdrop,
+    hashdrop: T,
     owner: SignerWithAddress,
     acc1: SignerWithAddress,
     acc2: SignerWithAddress;
@@ -15,16 +14,16 @@ describe("HashDrop", () => {
   beforeEach(async () => {
     HashDrop = await ethers.getContractFactory("HashDrop");
     [owner, acc1, acc2] = await ethers.getSigners();
-    hashdrop = await HashDrop.deploy();
+    hashdrop = (await HashDrop.deploy()) as T;
   });
 
   it("should increase drop count", async () => {
-    const HashDrop = await ethers.getContractFactory("HashDrop");
-    const hashdrop = (await HashDrop.deploy()) as T;
-
     const numStart = (await hashdrop.dropCount()).toNumber();
-    const cid = "bafybeid3weurg3gvyoi7nisadzolomlvoxoppe2sesktnpvdve3256n5tq";
+
+    const text = "lorem ipsum";
+    const cid = await Hash.of(text, { cidVersion: 1, rawLeaves: true });
     await hashdrop.add(cid);
+
     const numEnd = (await hashdrop.dropCount()).toNumber();
     expect(numEnd - numStart).equal(1);
   });

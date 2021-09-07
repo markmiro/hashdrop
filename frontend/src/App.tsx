@@ -1,10 +1,12 @@
 import { Box, HStack } from "@chakra-ui/react";
 import { ErrorBoundary } from "react-error-boundary";
 import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
+import { DropCount } from "./components/DropCount";
 import { Nav, NavLink, PageBody, PageTitle } from "./components/PageLayout";
 import { ShowDrop } from "./components/ShowDrop/ShowDrop";
 import { EthErrorFallback } from "./eth-react/Errors";
 import { EthEnsure } from "./eth-react/EthEnsure";
+import { useMetaMaskEthereum } from "./eth-react/useMetaMaskEthereum";
 import feArtifacts from "./hardhat-frontend-artifacts.json";
 import { Chains } from "./pages/Chains";
 import { Drop } from "./pages/Drop";
@@ -12,6 +14,7 @@ import { DropOld } from "./pages/DropOld";
 import { Encrypt } from "./pages/Encrypt";
 import { EthChains } from "./pages/EthChains";
 import { NotFound } from "./pages/NotFound";
+import { ShowDrops } from "./pages/ShowDrops";
 import { Sink } from "./pages/Sink";
 import { Theme } from "./pages/Theme";
 
@@ -20,11 +23,20 @@ const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
 );
 
 export function App() {
+  const { data } = useMetaMaskEthereum();
+
   return (
     <>
       {/* https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/HashRouter.md */}
       <HashRouter hashType="slash">
-        <Nav></Nav>
+        <Nav>
+          {data.selectedAddress && (
+            <>
+              <NavLink to="/drop">Add Drop</NavLink>{" "}
+              <NavLink to="/drops">Your Drops</NavLink>
+            </>
+          )}
+        </Nav>
 
         <Route path="/debug">
           <HStack borderBottomWidth={1} overflow="scroll" w="full">
@@ -42,6 +54,13 @@ export function App() {
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Switch>
+            <Route path="/drops">
+              <PageBody>
+                <PageTitle>Your Drops</PageTitle>
+                <ShowDrops />
+                <DropCount />
+              </PageBody>
+            </Route>
             <Route
               path="/drop/:cid"
               render={(props) => (
