@@ -128,7 +128,7 @@ export const MetaMaskProvider: FC = ({ children }) => {
     };
 
     doAsync();
-  }, [ethereum, data]);
+  }, [ethereum, data.selectedAddress, data.selectedAddressBalance]);
 
   return (
     <MetaMaskContext.Provider value={{ loading, data, ethereum }}>
