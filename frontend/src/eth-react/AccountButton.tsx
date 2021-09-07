@@ -9,7 +9,8 @@ export function AccountButton() {
 
   if (loading) return <Loader>Finding account</Loader>;
 
-  if (!data) return <div>N/A</div>;
+  if (!data) return <div>No Account</div>;
+  if (!data.selectedAddressBalance) return <div>No Account</div>;
 
   return (
     <HStack align="center" spacing={1}>
@@ -19,7 +20,7 @@ export function AccountButton() {
           <HStack spacing={2} alignItems="center">
             <Box fontFamily="mono">
               <Text as="span" opacity="50%">
-                {prettyAccountBalance(data?.selectedAddressBalance)} ETH –{" "}
+                {prettyAccountBalance(data.selectedAddressBalance)} ETH –{" "}
               </Text>
               {truncateEthAddress(data.selectedAddress)}
             </Box>

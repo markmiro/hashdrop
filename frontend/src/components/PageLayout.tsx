@@ -32,6 +32,7 @@ export const PageBody: FC<{ isFullWidth?: boolean }> = ({
     px={[2, 4, 6]}
     w={isFullWidth ? "100%" : "2xl"}
     maxW="100%"
+    minH="50vh"
     mx="auto"
   >
     {children}
@@ -44,22 +45,40 @@ export const PageTitle: FC = ({ children }) => (
   </Heading>
 );
 
-export const NavLink: FC<LinkProps> = ({ to, children, ...rest }) => {
+export const NavLink: FC<LinkProps & { exact?: boolean }> = ({
+  to,
+  children,
+  exact = true,
+  ...rest
+}) => {
   const match = useRouteMatch({
     path: to as string,
-    exact: true,
+    exact,
     sensitive: true,
   });
+
+  const matchProps = match
+    ? {
+        bg: "black",
+        color: "white",
+        _hover: { bg: "blackAlpha.700" },
+      }
+    : {};
 
   return (
     <Link
       as={RouterNavLink}
       to={to}
-      px="5"
-      py="3"
-      bg={match ? "blackAlpha.100" : "transparent"}
       flexShrink={0}
+      px={3}
+      py={1}
+      textAlign="center"
+      // bg="blackAlpha.100"
+      rounded="full"
+      fontWeight="medium"
+      _hover={{ bg: "blackAlpha.300" }}
       {...rest}
+      {...matchProps}
     >
       {children}
     </Link>
@@ -69,19 +88,29 @@ export const NavLink: FC<LinkProps> = ({ to, children, ...rest }) => {
 export const Nav: FC = ({ children }) => (
   <Stack
     alignItems="center"
-    direction={["column", "column", "row"]}
+    direction={["column", "column", "column", "row"]}
     as="nav"
-    spacing={[0, 0, 2]}
+    spacing={[1, 1, 2]}
+    px={2}
+    py={2}
   >
     <NavLink to="/">
-      <Text fontWeight="bold">#💧</Text>
+      <Text fontWeight="bold" display="flex" alignItems="center">
+        hash💧{" "}
+        <Badge colorScheme="orange" ml={2}>
+          beta
+        </Badge>
+      </Text>
     </NavLink>
 
-    {process.env.NODE_ENV === "development" && (
-      <Badge colorScheme="orange" as={RouterNavLink} to="/debug">
-        DEBUG
-      </Badge>
-    )}
+    <Spacer />
+
+    <Stack direction={["column", "row", "row"]} as="nav" spacing={[1, 1, 2]}>
+      {children}
+      {process.env.NODE_ENV === "development" && (
+        <NavLink to="/debug">DEBUG</NavLink>
+      )}
+    </Stack>
 
     <Spacer />
 
@@ -91,9 +120,5 @@ export const Nav: FC = ({ children }) => (
     />
 
     <AccountButton />
-
-    <Stack direction={["column", "row", "row"]} as="nav" spacing={[0, 0, 2]}>
-      {children}
-    </Stack>
   </Stack>
 );

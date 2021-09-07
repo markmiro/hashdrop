@@ -11,6 +11,7 @@ import { Drop } from "./pages/Drop";
 import { DropOld } from "./pages/DropOld";
 import { Encrypt } from "./pages/Encrypt";
 import { EthChains } from "./pages/EthChains";
+import { NotFound } from "./pages/NotFound";
 import { Sink } from "./pages/Sink";
 import { Theme } from "./pages/Theme";
 
@@ -23,11 +24,11 @@ export function App() {
     <>
       {/* https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/HashRouter.md */}
       <HashRouter hashType="slash">
-        <Nav>{/* <NavLink to="/drop">Drop</NavLink> */}</Nav>
+        <Nav></Nav>
 
         <Route path="/debug">
           <HStack borderBottomWidth={1} overflow="scroll" w="full">
-            <NavLink to="/debug">Debug</NavLink>
+            {/* <NavLink to="/debug">Debug</NavLink> */}
             <NavLink to="/debug/theme">Theme</NavLink>
             <NavLink to="/debug/sink">Kitchen Sink</NavLink>
             <NavLink to="/debug/encrypt">Encrypt</NavLink>
@@ -97,13 +98,19 @@ export function App() {
             </Route>
             <Route path="/debug"></Route>
 
-            <Route path="/">
+            <Route exact path="/">
               <Redirect to="/drop" />
+            </Route>
+
+            <Route path="*">
+              <PageBody>
+                <NotFound />
+              </PageBody>
             </Route>
           </Switch>
         </ErrorBoundary>
         <Box borderTopWidth={1} py={6} px={2} textAlign="center">
-          #💧
+          hash💧
         </Box>
       </HashRouter>
     </>

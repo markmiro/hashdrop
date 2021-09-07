@@ -21,7 +21,7 @@ export function DropCount() {
     doAsync();
   }, [hashdrop.contract]);
 
-  if (loading) return <Loader>Drop count</Loader>;
+  if (loading) return <Loader>Total drop count by all users</Loader>;
 
-  return <div>Drop count: {dropCount ?? "N/A"}</div>;
+  return <div>Total drop count by all users: {dropCount ?? "N/A"}</div>;
 }
