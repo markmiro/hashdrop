@@ -93,6 +93,7 @@ export const Nav: FC = ({ children }) => (
     spacing={[1, 1, 2]}
     px={2}
     py={2}
+    borderBottomWidth={1}
   >
     <NavLink to="/">
       <Text fontWeight="bold" display="flex" alignItems="center">
@@ -102,8 +103,6 @@ export const Nav: FC = ({ children }) => (
         </Badge>
       </Text>
     </NavLink>
-
-    <Spacer />
 
     <Stack direction={["column", "row", "row"]} as="nav" spacing={[1, 1, 2]}>
       {children}
