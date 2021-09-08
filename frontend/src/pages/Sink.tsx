@@ -9,6 +9,7 @@ import {
   TabPanels,
   Tabs,
   Text,
+  useDisclosure,
   VStack,
 } from "@chakra-ui/react";
 import { FC, ReactNode } from "react";
@@ -25,6 +26,7 @@ import {
   MultipleWalletsMessage,
 } from "../eth-react/Errors";
 import { EthEnsure } from "../eth-react/EthEnsure";
+import { MetaMaskOverlay } from "../eth-react/MetaMaskOverlay";
 import { ErrorMessage } from "../generic/Errors/ErrorMessage";
 import { GenericError } from "../generic/Errors/GenericError";
 import { Loader } from "../generic/Loader";
@@ -75,9 +77,27 @@ function TabExample() {
   );
 }
 
+function MetaMaskExample() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <>
+      <Button onClick={onOpen}>Open</Button>
+      <MetaMaskOverlay isOpen={isOpen} onClose={onClose}>
+        <Button size="xs" onClick={onClose}>
+          Cancel
+        </Button>
+      </MetaMaskOverlay>
+    </>
+  );
+}
+
 export function Sink() {
   return (
     <KitchenItems>
+      <Item title="MetaMaskOverlay">
+        <MetaMaskExample />
+      </Item>
       <Item title="Button variant='link'">
         <Button variant="link">Hello</Button>
       </Item>
