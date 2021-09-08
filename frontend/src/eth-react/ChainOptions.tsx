@@ -14,10 +14,13 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { ethers } from "ethers";
+import { useState } from "react";
 import { ErrorMessage } from "../generic/Errors/ErrorMessage";
+import { Loader } from "../generic/Loader";
 import { ChainId } from "./chainData";
 import { chains } from "./chains";
 import { InstallMetaMaskMessage } from "./Errors";
+import { MetaMaskOverlay } from "./MetaMaskOverlay";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 
 const ChainDisplay = ({ chainId }: { chainId: number }) => {
@@ -46,19 +49,15 @@ export function ChainOptions({
   buttonProps?: ButtonProps;
 }) {
   const toast = useToast();
+  const [connecting, setConnecting] = useState(false);
   const { ethereum, data } = useMetaMaskEthereum();
 
   const setOrAddChain = (chainId: number) => {
     if (!ethereum) return;
+    setConnecting(true);
     if (chainId === data.chainId) {
       toast({ title: "Already connected." });
-      return;
-    }
-    if (!chainId) {
-      toast({
-        title: `Seems like you're not connected to a chain.`,
-        status: "error",
-      });
+      setConnecting(false);
       return;
     }
     const addableChain = chains.addableById(chainId);
@@ -69,7 +68,8 @@ export function ChainOptions({
           method: "wallet_switchEthereumChain",
           params: [{ chainId: ethers.utils.hexValue(chainId) }],
         })
-        .catch((err) => toast({ title: err.message, status: "error" }));
+        .catch((err) => toast({ title: err.message, status: "error" }))
+        .finally(() => setConnecting(false));
       return;
     }
     ethereum
@@ -77,7 +77,8 @@ export function ChainOptions({
         method: "wallet_addEthereumChain",
         params: [addableChain],
       })
-      .catch((err) => toast({ title: err.message, status: "error" }));
+      .catch((err) => toast({ title: err.message, status: "error" }))
+      .finally(() => setConnecting(false));
   };
 
   if (!ethereum) {
@@ -104,12 +105,17 @@ export function ChainOptions({
         )}
       </MenuButton>
       <MenuList minW="sm">
-        {chainIds.map((chainId) => (
-          <MenuItem key={chainId} onClick={() => setOrAddChain(chainId)}>
-            <ChainDisplay chainId={chainId} />
-          </MenuItem>
-        ))}
+        {chainIds
+          .filter((id) => id !== data.chainId)
+          .map((chainId) => (
+            <MenuItem key={chainId} onClick={() => setOrAddChain(chainId)}>
+              <ChainDisplay chainId={chainId} />
+            </MenuItem>
+          ))}
       </MenuList>
+      <MetaMaskOverlay isOpen={connecting} onClose={() => setConnecting(false)}>
+        &nbsp;
+      </MetaMaskOverlay>
     </Menu>
   );
 }
