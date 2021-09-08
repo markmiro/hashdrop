@@ -17,7 +17,7 @@ import {
 import { ethers } from "ethers";
 import { useState } from "react";
 import { ErrorMessage } from "../generic/Errors/ErrorMessage";
-import { ChainId } from "./chainData";
+import { ChainId, L2ChainIds } from "./chainData";
 import { chains } from "./chains";
 import { InstallMetaMaskMessage } from "./Errors";
 import { MetaMaskOverlay } from "./MetaMaskOverlay";
@@ -29,13 +29,24 @@ const ChainDisplay = ({ chainId }: { chainId: number }) => {
   return (
     <HStack spacing={2} alignItems="center" w="100%">
       <Circle size="1em" bg={chain.color} boxShadow="xs" />
-      <Text isTruncated>{chain.prettyName || chain.name}</Text>
+      <Text as="div" isTruncated>
+        {chain.prettyName || chain.name}
+      </Text>
       {chain.testnet && (
         <Badge variant="outline" colorScheme="orange">
           testnet
         </Badge>
       )}
       <Spacer />
+      {L2ChainIds.includes(chainId) ? (
+        <Text fontSize="xs" color="green" opacity="50%">
+          💸 Low fees
+        </Text>
+      ) : (
+        <Text fontSize="xs" color="orange.600">
+          ⚠️ High fees
+        </Text>
+      )}
       {process.env.NODE_ENV === "development" && (
         <Box
           fontSize="xs"

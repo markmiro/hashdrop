@@ -28,6 +28,15 @@ export const metaMaskDefaultChainIds = [
   chainIds.GOERLI,
 ] as const;
 
+export const L2ChainIds = [
+  chainIds.ARBITRUM,
+  chainIds.ARBITRUM_RINKEBY,
+  chainIds.OPTIMISM,
+  chainIds.OPTIMISM_KOVAN,
+  chainIds.POLYGON,
+  chainIds.POLYGON_MUMBAI,
+];
+
 export const chainData: Chain[] = [
   {
     chainId: chainIds.LOCALHOST,
