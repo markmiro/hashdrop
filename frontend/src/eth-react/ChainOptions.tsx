@@ -17,7 +17,7 @@ import {
 import { ethers } from "ethers";
 import { useState } from "react";
 import { ErrorMessage } from "../generic/Errors/ErrorMessage";
-import { ChainId, L2ChainIds } from "./chainData";
+import { ChainId, L2ChainIds, chainIds as chainDataIds } from "./chainData";
 import { chains } from "./chains";
 import { InstallMetaMaskMessage } from "./Errors";
 import { MetaMaskOverlay } from "./MetaMaskOverlay";
@@ -72,6 +72,10 @@ export function ChainOptions({
   const toast = useToast();
   const [connecting, setConnecting] = useState(false);
   const { ethereum, data } = useMetaMaskEthereum();
+
+  if (process.env.NODE_ENV !== "development") {
+    chainIds = chainIds.filter((id) => id !== chainDataIds.LOCALHOST);
+  }
 
   const setOrAddChain = (chainId: number) => {
     if (!ethereum) return;

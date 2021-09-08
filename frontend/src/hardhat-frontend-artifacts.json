@@ -4,6 +4,9 @@
     "HashDrop": {
       "name": "HashDrop",
       "chainId": {
+        "69": {
+          "address": "0x91aF78778eCdaC5Ec01C14347A433e604759aB81"
+        },
         "1337": {
           "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
         },
@@ -100,8 +103,8 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1631129013198,
-          "str": "Wed, 08 Sep 2021 19:23:33 GMT",
+          "ts": 1631142519646,
+          "str": "Wed, 08 Sep 2021 23:08:39 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/HashDrop.sol"
@@ -110,8 +113,14 @@
     "Drops": {
       "name": "Drops",
       "chainId": {
+        "69": {
+          "address": "0xe69556613C604D1A5F5E2fe81E8AD12b6e7edfb6"
+        },
         "1337": {
           "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+        },
+        "80001": {
+          "address": "0xC372F2a2dC50f1eb2c24B4Dbb72cADEB99947ebB"
         },
         "421611": {
           "address": "0x4BccD0E6DD28072097801d5F7DCf3Cebaf3C2D4E"
@@ -153,8 +162,8 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1631129013272,
-          "str": "Wed, 08 Sep 2021 19:23:33 GMT",
+          "ts": 1631142522982,
+          "str": "Wed, 08 Sep 2021 23:08:42 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/Drops.sol"

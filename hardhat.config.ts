@@ -1,9 +1,10 @@
 // import "./frontendArtifacts.d.ts";
-import { HardhatUserConfig } from "hardhat/config";
-import "@typechain/hardhat";
+import "@eth-optimism/hardhat-ovm";
 import "@nomiclabs/hardhat-waffle";
-import "hardhat-gas-reporter";
+import "@typechain/hardhat";
 import dotenv from "dotenv";
+import "hardhat-gas-reporter";
+import { HardhatUserConfig } from "hardhat/config";
 
 dotenv.config();
 
@@ -24,7 +25,7 @@ declare module "hardhat/types/config" {
 // Go to https://hardhat.org/config/ to learn more
 
 const config: HardhatUserConfig = {
-  solidity: "0.8.4",
+  solidity: "0.7.6",
   // This is used by the ./plugins/FrontendArtifacts.js plugin
   frontendArtifacts: {
     path: "./frontend/src",
@@ -61,7 +62,15 @@ const config: HardhatUserConfig = {
     matictest: {
       // url: "https://rpc-mumbai.maticvigil.com",
       url: "https://polygon-mumbai.g.alchemy.com/v2/-_gIxO0TWmjnOuGM99vTELeIcUk-hIRn",
+      // url: "https://polygon-mumbai.infura.io/v3/0487cf5b75ee421d97dac67f738a0681",
       accounts: [`0x${process.env.TEST_ACCOUNT_PRIVATE_KEY}`],
+    },
+    // https://github.com/ethereum-optimism/optimism-tutorial/tree/main/hardhat
+    optitest: {
+      url: "https://kovan.optimism.io",
+      gasPrice: 15000000,
+      accounts: [`0x${process.env.TEST_ACCOUNT_PRIVATE_KEY}`],
+      ovm: true,
     },
   },
   // https://hardhat.org/plugins/hardhat-gas-reporter.html#configuration
