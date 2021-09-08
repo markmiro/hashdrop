@@ -97,10 +97,7 @@ export const Nav: FC = ({ children }) => (
   >
     <NavLink to="/">
       <Text fontWeight="bold" display="flex" alignItems="center">
-        hash💧{" "}
-        <Badge colorScheme="orange" ml={2}>
-          beta
-        </Badge>
+        hash💧 <Badge ml={2}>beta</Badge>
       </Text>
     </NavLink>
 
