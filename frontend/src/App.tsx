@@ -11,6 +11,7 @@ import feArtifacts from "./hardhat-frontend-artifacts.json";
 import { Chains } from "./pages/Chains";
 import { Drop } from "./pages/Drop";
 import { DropOld } from "./pages/DropOld";
+import { DropTests } from "./pages/DropTests";
 import { Encrypt } from "./pages/Encrypt";
 import { EthChains } from "./pages/EthChains";
 import { NotFound } from "./pages/NotFound";
@@ -47,6 +48,7 @@ export function App() {
             <NavLink to="/debug/drop-old">Drop Old</NavLink>
             <NavLink to="/debug/chains">Chains</NavLink>
             <NavLink to="/debug/eth-chains">eth-chains</NavLink>
+            <NavLink to="/debug/drops">Drop Tests</NavLink>
           </HStack>
         </Route>
 
@@ -113,6 +115,12 @@ export function App() {
               <PageBody>
                 <PageTitle>eth-chains</PageTitle>
                 <EthChains />
+              </PageBody>
+            </Route>
+            <Route path="/debug/drops">
+              <PageBody>
+                <PageTitle>Drop Tests</PageTitle>
+                <DropTests />
               </PageBody>
             </Route>
             <Route path="/debug"></Route>

@@ -11,7 +11,7 @@
           "address": "0x91aF78778eCdaC5Ec01C14347A433e604759aB81"
         },
         "421611": {
-          "address": "0x0eDd2Dd7f07c13A3D369F526CcD4271888DA0C86"
+          "address": "0x3543115EB07adc7C5c839B50A56BD7b5B184f27a"
         }
       },
       "abi": [
@@ -100,11 +100,64 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1630782249819,
-          "str": "Sat, 04 Sep 2021 19:04:09 GMT",
-          "networkName": "maticmum"
+          "ts": 1631039644848,
+          "str": "Tue, 07 Sep 2021 18:34:04 GMT",
+          "networkName": "unknown"
         },
         "sourceName": "contracts/HashDrop.sol"
+      }
+    },
+    "Drops": {
+      "name": "Drops",
+      "chainId": {
+        "1337": {
+          "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+        },
+        "421611": {
+          "address": "0x4BccD0E6DD28072097801d5F7DCf3Cebaf3C2D4E"
+        }
+      },
+      "abi": [
+        {
+          "inputs": [
+            {
+              "internalType": "address",
+              "name": "",
+              "type": "address"
+            }
+          ],
+          "name": "addressToRootCid",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
+              "internalType": "string",
+              "name": "cid",
+              "type": "string"
+            }
+          ],
+          "name": "set",
+          "outputs": [],
+          "stateMutability": "payable",
+          "type": "function"
+        }
+      ],
+      "_debug": {
+        "lastDeploy": {
+          "ts": 1631039644916,
+          "str": "Tue, 07 Sep 2021 18:34:04 GMT",
+          "networkName": "unknown"
+        },
+        "sourceName": "contracts/Drops.sol"
       }
     }
   }
