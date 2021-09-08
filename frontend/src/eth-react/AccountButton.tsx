@@ -4,13 +4,27 @@ import { Loader } from "../generic/Loader";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 import { prettyAccountBalance, truncateEthAddress } from "./utils";
 
+const FindingAccount = () => (
+  <Menu>
+    <MenuButton as={Button} size="sm" variant="outline">
+      <Loader>Finding account</Loader>
+    </MenuButton>
+  </Menu>
+);
+
+const NoAccount = () => (
+  <Menu>
+    <MenuButton as={Button} size="sm" variant="outline">
+      No Account
+    </MenuButton>
+  </Menu>
+);
+
 export function AccountButton() {
   const { data, loading } = useMetaMaskEthereum();
 
-  if (loading) return <Loader>Finding account</Loader>;
-
-  if (!data) return <div>No Account</div>;
-  if (!data.selectedAddressBalance) return <div>No Account</div>;
+  if (loading || !data.selectedAddressBalance) return <FindingAccount />;
+  if (!data) return <NoAccount />;
 
   return (
     <HStack align="center" spacing={1}>
