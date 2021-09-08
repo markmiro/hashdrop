@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Divider,
   Flex,
   HStack,
   Modal,
@@ -100,9 +101,20 @@ export const EthEnsure: FC<Props> = (props) => {
     return (
       <ModalMessage>
         <ErrorMessage>
-          Not connected to wallet. Check wallet to see if it's working.{" "}
-          <ReloadLink />
+          Not connected to network. Check your wallet to see if the network is
+          up. <ReloadLink />
         </ErrorMessage>
+        {/* Allow user to pick a different chain if the one they wanted isn't available */}
+        {expect.chainIds && (
+          <>
+            <Divider />
+            <div>Are you sure you're on the right chain?</div>
+            <ChainOptions
+              chainIds={expect.chainIds}
+              buttonProps={{ isFullWidth: true }}
+            />
+          </>
+        )}
       </ModalMessage>
     );
   }
@@ -172,6 +184,9 @@ export const EthEnsure: FC<Props> = (props) => {
   }
 
   if (expect.isNonZeroBalance) {
+    if (data.selectedAddressBalance === undefined) {
+      return <Loader>Fetching balance</Loader>;
+    }
     const isEmpty =
       !data.selectedAddressBalance ||
       BigNumber.from(data.selectedAddressBalance).isZero();

@@ -16,7 +16,7 @@ export const MetaMaskOverlay: FC<{
 }> = ({ isOpen, onClose, children }) => {
   return (
     <Modal
-      motionPreset="none"
+      motionPreset="scale"
       isOpen={isOpen}
       onClose={onClose}
       closeOnOverlayClick={false}

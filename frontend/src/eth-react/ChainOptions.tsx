@@ -11,6 +11,7 @@ import {
   MenuItem,
   MenuList,
   Spacer,
+  Text,
   useToast,
 } from "@chakra-ui/react";
 import { ethers } from "ethers";
@@ -29,7 +30,7 @@ const ChainDisplay = ({ chainId }: { chainId: number }) => {
   return (
     <HStack spacing={2} alignItems="center" w="100%">
       <Circle size="1em" bg={chain.color} boxShadow="xs" />
-      <div>{chain.name}</div>
+      <Text isTruncated>{chain.name}</Text>
       <Spacer />
       {process.env.NODE_ENV === "development" && (
         <Box fontSize="xs" fontWeight="normal" opacity="50%" display="inline">
@@ -68,7 +69,9 @@ export function ChainOptions({
           method: "wallet_switchEthereumChain",
           params: [{ chainId: ethers.utils.hexValue(chainId) }],
         })
-        .catch((err) => toast({ title: err.message, status: "error" }))
+        .catch((err) => {
+          toast({ title: err.message, status: "error" });
+        })
         .finally(() => setConnecting(false));
       return;
     }
@@ -77,7 +80,13 @@ export function ChainOptions({
         method: "wallet_addEthereumChain",
         params: [addableChain],
       })
-      .catch((err) => toast({ title: err.message, status: "error" }))
+      .catch((err) => {
+        toast({ title: err.message, status: "error" });
+      })
+      // Ideally, want to only cancel if there's an error. Otherwise we'd like to keep the connecting
+      // screen up until the page reloads via `reloadOnChainChanged`. However, it looks like there's a bug
+      // in how MetaMask handles switching to a chain that's already been added via `wallet_addEthereumChain`.
+      // It should return an error but it doesn't.
       .finally(() => setConnecting(false));
   };
 
@@ -95,7 +104,9 @@ export function ChainOptions({
         as={Button}
         variant="outline"
         textAlign="left"
+        maxW="100%"
         rightIcon={<UpDownIcon />}
+        overflow="hidden"
         {...buttonProps}
       >
         {data.chainId ? (

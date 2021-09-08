@@ -1,12 +1,17 @@
+import { Center, Image } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { createContext, FC, useContext, useEffect, useState } from "react";
 import { useErrorHandler } from "react-error-boundary";
+import { ErrorMessage } from "../generic/Errors/ErrorMessage";
 import { Loader } from "../generic/Loader";
+import { InstallMetaMaskMessage, ReloadLink } from "./Errors";
 // import { testProvider } from "./testProvider";
+import metamaskLogo from "./metamask-fox.svg";
 import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 
-const EthersProviderContext =
-  createContext<ethers.providers.Web3Provider | null>(null);
+const EthersProviderContext = createContext<
+  ethers.providers.Web3Provider | "ERROR"
+>("ERROR");
 
 export const EthersProviderProvider: FC = ({ children }) => {
   const handleError = useErrorHandler();
@@ -19,17 +24,45 @@ export const EthersProviderProvider: FC = ({ children }) => {
     try {
       const provider = new ethers.providers.Web3Provider(ethereum);
       setProvider(provider);
-      // testProvider(provider)
-      //   .then(() => setProvider(provider))
-      //   .catch(handleError);
     } catch (err) {
       handleError(err);
     }
   }, [ethereum, handleError]);
 
-  if (loading) return <Loader />;
+  if (loading) {
+    return (
+      <Center position="fixed" w="100%" h="100vh" top={0} left={0}>
+        <Loader>Connecting</Loader>
+      </Center>
+    );
+  }
 
-  if (!provider) <></>;
+  if (!ethereum) {
+    return (
+      <Center
+        position="fixed"
+        w="100%"
+        h="100vh"
+        top={0}
+        left={0}
+        flexDir="column"
+      >
+        <ErrorMessage>
+          Failed to connect. <ReloadLink />
+        </ErrorMessage>
+        <Image boxSize="50px" src={metamaskLogo} />
+        <InstallMetaMaskMessage />
+      </Center>
+    );
+  }
+
+  if (!provider) {
+    return (
+      <Center position="fixed" w="100%" h="100vh" top={0} left={0}>
+        <ErrorMessage>Error connecting.</ErrorMessage> <ReloadLink />
+      </Center>
+    );
+  }
 
   return (
     <EthersProviderContext.Provider value={provider}>
@@ -40,9 +73,9 @@ export const EthersProviderProvider: FC = ({ children }) => {
 
 export function useEthersProvider() {
   const provider = useContext(EthersProviderContext);
-  if (!provider) {
+  if (provider === "ERROR") {
     throw new Error(
-      "`useEthersProvider()` Should have <EthersProviderProvider /> above it somewhere."
+      "useEthersProvider() should be used within an <EthersProviderProvider />."
     );
   }
   return provider;

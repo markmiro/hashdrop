@@ -32,7 +32,7 @@ export const PageBody: FC<{ isFullWidth?: boolean }> = ({
     px={[2, 4, 6]}
     w={isFullWidth ? "100%" : "2xl"}
     maxW="100%"
-    minH="50vh"
+    minH="100vh"
     mx="auto"
   >
     {children}

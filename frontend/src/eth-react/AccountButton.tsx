@@ -7,7 +7,7 @@ import { prettyAccountBalance, truncateEthAddress } from "./utils";
 const FindingAccount = () => (
   <Menu>
     <MenuButton as={Button} size="sm" variant="outline">
-      <Loader>Finding account</Loader>
+      <Loader>Fetching account</Loader>
     </MenuButton>
   </Menu>
 );

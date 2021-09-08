@@ -1,5 +1,6 @@
 import { Box, HStack } from "@chakra-ui/react";
 import { ErrorBoundary } from "react-error-boundary";
+import ReactJson from "react-json-view";
 import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
 import { DropCount } from "./components/DropCount";
 import { Nav, NavLink, PageBody, PageTitle } from "./components/PageLayout";
@@ -139,6 +140,7 @@ export function App() {
         <Box borderTopWidth={1} py={6} px={2} textAlign="center">
           hash💧
         </Box>
+        <ReactJson src={data} />
       </HashRouter>
     </>
   );
