@@ -9,9 +9,9 @@ import {
 import { ChainId, chains } from "eth-chains";
 import { ethers } from "ethers";
 import ReactJson from "react-json-view";
-import chainData from "../chains.json";
-import { useEthersProvider } from "../eth-react/EthersProviderContext";
-import { Anchor } from "../generic/Anchor";
+import chainData from "../../chains.json";
+import { useEthersProvider } from "../../eth-react/EthersProviderContext";
+import { Anchor } from "../../generic/Anchor";
 
 const chainIds = [
   ChainId.EthereumMainnet,

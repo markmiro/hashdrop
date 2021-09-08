@@ -5,17 +5,17 @@ import { base64ToBlob } from "base64-blob";
 import { format } from "date-fns";
 import _ from "lodash";
 import { FC, useState } from "react";
-import { createUserJson, UserDrop, UserJson } from "../components/UserJson";
-import { useEthersProvider } from "../eth-react/EthersProviderContext";
-import { useContract } from "../eth-react/useContract";
-import { useMetaMaskEthereum } from "../eth-react/useMetaMaskEthereum";
-import { Drops as DropsT, HashDrop as HashDropT } from "../typechain";
-import { decryptFileString, encryptFob } from "../util/encrypt";
-import { fobAsText } from "../util/fobAsText";
-import { ipfsCid } from "../util/ipfsCid";
-import { cidToUrl, pinFile } from "../util/pinata";
-import { textToBlob } from "../util/textToBlob";
-const pkg = require("../../package.json");
+import { createUserJson, UserDrop, UserJson } from "../../components/UserJson";
+import { useEthersProvider } from "../../eth-react/EthersProviderContext";
+import { useContract } from "../../eth-react/useContract";
+import { useMetaMaskEthereum } from "../../eth-react/useMetaMaskEthereum";
+import { Drops as DropsT, HashDrop as HashDropT } from "../../typechain";
+import { decryptFileString, encryptFob } from "../../util/encrypt";
+import { fobAsText } from "../../util/fobAsText";
+import { ipfsCid } from "../../util/ipfsCid";
+import { cidToUrl, pinFile } from "../../util/pinata";
+import { textToBlob } from "../../util/textToBlob";
+const pkg = require("../../../package.json");
 
 const steps = [
   "START_DROP",

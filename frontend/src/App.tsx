@@ -9,17 +9,17 @@ import { EthErrorFallback } from "./eth-react/Errors";
 import { EthEnsure } from "./eth-react/EthEnsure";
 import { useMetaMaskEthereum } from "./eth-react/useMetaMaskEthereum";
 import feArtifacts from "./hardhat-frontend-artifacts.json";
-import { Chains } from "./pages/Chains";
+import { Chains } from "./pages/debug/Chains";
 import { Drop } from "./pages/Drop";
-import { DropOld } from "./pages/DropOld";
-import { DropTests } from "./pages/DropTests";
-import { Encrypt } from "./pages/Encrypt";
-import { EthChains } from "./pages/EthChains";
+import { DropOld } from "./pages/debug/DropOld";
+import { DropTests } from "./pages/debug/DropTests";
+import { Encrypt } from "./pages/debug/Encrypt";
+import { EthChains } from "./pages/debug/EthChains";
 import { NotFound } from "./pages/NotFound";
 import { ShowDrops } from "./pages/ShowDrops";
-import { ShowDropTests } from "./pages/ShowDropTests";
-import { Sink } from "./pages/Sink";
-import { Theme } from "./pages/Theme";
+import { ShowDropTests } from "./pages/debug/ShowDropTests";
+import { Sink } from "./pages/debug/Sink";
+import { Theme } from "./pages/debug/Theme";
 
 const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
   (id) => parseInt(id)

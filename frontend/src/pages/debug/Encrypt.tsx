@@ -2,8 +2,8 @@ import { Box, Button, ButtonGroup, Input, Textarea } from "@chakra-ui/react";
 import aes from "crypto-js/aes";
 import { ethers } from "ethers";
 import { FC, useEffect, useState } from "react";
-import { MonoText } from "../generic/MonoText";
-import { fobAsDataUrl } from "../util/fobAsDataUrl";
+import { MonoText } from "../../generic/MonoText";
+import { fobAsDataUrl } from "../../util/fobAsDataUrl";
 
 const id = ethers.utils.hexlify(ethers.utils.randomBytes(12));
 

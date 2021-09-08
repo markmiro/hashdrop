@@ -1,19 +1,19 @@
 import { FC, useCallback, useEffect, useState } from "react";
-import { Cid } from "../eth-react/Cid";
-import { ipfsCid } from "../util/ipfsCid";
-import { DataTabs } from "../components/DataTabs/DataTabs";
+import { Cid } from "../../eth-react/Cid";
+import { ipfsCid } from "../../util/ipfsCid";
+import { DataTabs } from "../../components/DataTabs/DataTabs";
 import aes from "crypto-js/aes";
 import utf8Enc from "crypto-js/enc-utf8";
-import { useEthersProvider } from "../eth-react/EthersProviderContext";
-import { fobAsDataUrl } from "../util/fobAsDataUrl";
-import { textToBlob } from "../util/textToBlob";
-import { DownloadButton } from "../components/DownloadButton";
-import { UploadToIpfsButton } from "../components/UploadToIpfsButton";
-import { EthHashDropSubmitButton } from "../components/EthHashDropSubmitButton";
-import { cidToUrl } from "../util/pinata";
-import { IFramePreview } from "../components/IFramePreview";
+import { useEthersProvider } from "../../eth-react/EthersProviderContext";
+import { fobAsDataUrl } from "../../util/fobAsDataUrl";
+import { textToBlob } from "../../util/textToBlob";
+import { DownloadButton } from "../../components/DownloadButton";
+import { UploadToIpfsButton } from "../../components/UploadToIpfsButton";
+import { EthHashDropSubmitButton } from "../../components/EthHashDropSubmitButton";
+import { cidToUrl } from "../../util/pinata";
+import { IFramePreview } from "../../components/IFramePreview";
 import { Box, Button, Heading, VStack } from "@chakra-ui/react";
-import { MonoText } from "../generic/MonoText";
+import { MonoText } from "../../generic/MonoText";
 
 const GrayBox: FC = ({ children }) => (
   <Box p={2} background="blackAlpha.100">

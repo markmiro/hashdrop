@@ -12,10 +12,10 @@ import {
 } from "@chakra-ui/react";
 import { ethers } from "ethers";
 import { FC } from "react";
-import { ChainId } from "../eth-react/chainData";
-import { chainIds, chains } from "../eth-react/chains";
-import { useEthersProvider } from "../eth-react/EthersProviderContext";
-import { Anchor } from "../generic/Anchor";
+import { ChainId } from "../../eth-react/chainData";
+import { chainIds, chains } from "../../eth-react/chains";
+import { useEthersProvider } from "../../eth-react/EthersProviderContext";
+import { Anchor } from "../../generic/Anchor";
 
 const Box2: FC = ({ children }) => (
   <Box px={4} py={2} shadow="md" rounded="md" borderWidth={1}>

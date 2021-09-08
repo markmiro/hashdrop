@@ -14,22 +14,22 @@ import {
 } from "@chakra-ui/react";
 import { FC, ReactNode } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { DropCount } from "../components/DropCount";
-import { AddressLink } from "../eth-react/AddressLink";
-import { ChainOptions } from "../eth-react/ChainOptions";
-import { chainIds } from "../eth-react/chains";
-import { Cid } from "../eth-react/Cid";
+import { DropCount } from "../../components/DropCount";
+import { AddressLink } from "../../eth-react/AddressLink";
+import { ChainOptions } from "../../eth-react/ChainOptions";
+import { chainIds } from "../../eth-react/chains";
+import { Cid } from "../../eth-react/Cid";
 import {
   EthErrorFallback,
   InstallMetaMaskMessage,
   NonceErrorMessage,
   MultipleWalletsMessage,
-} from "../eth-react/Errors";
-import { EthEnsure } from "../eth-react/EthEnsure";
-import { MetaMaskOverlay } from "../eth-react/MetaMaskOverlay";
-import { ErrorMessage } from "../generic/Errors/ErrorMessage";
-import { GenericError } from "../generic/Errors/GenericError";
-import { Loader } from "../generic/Loader";
+} from "../../eth-react/Errors";
+import { EthEnsure } from "../../eth-react/EthEnsure";
+import { MetaMaskOverlay } from "../../eth-react/MetaMaskOverlay";
+import { ErrorMessage } from "../../generic/Errors/ErrorMessage";
+import { GenericError } from "../../generic/Errors/GenericError";
+import { Loader } from "../../generic/Loader";
 
 const KitchenItems: FC = ({ children }) => (
   <Grid
