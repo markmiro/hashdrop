@@ -99,6 +99,7 @@ export const chainData: Chain[] = [
   {
     chainId: chainIds.ARBITRUM,
     name: "Arbitrum One",
+    prettyName: "Arbitrum",
     testnet: false,
     color: "#28a0f0",
     nativeCurrency: {
@@ -112,6 +113,7 @@ export const chainData: Chain[] = [
   {
     chainId: chainIds.ARBITRUM_RINKEBY,
     name: chains.getById(EthChainId.ArbitrumTestnetRinkeby)?.name as any,
+    prettyName: "Arbitrum",
     testnet: true,
     color: "#28a0f0",
     nativeCurrency: chains.getById(EthChainId.ArbitrumTestnetRinkeby)
@@ -125,6 +127,7 @@ export const chainData: Chain[] = [
   {
     chainId: chainIds.OPTIMISM,
     name: chains.getById(EthChainId.OptimisticEthereum)?.name as any,
+    prettyName: "Optimism",
     testnet: false,
     color: "#ff0320",
     nativeCurrency: chains.getById(EthChainId.OptimisticEthereum)
@@ -137,6 +140,7 @@ export const chainData: Chain[] = [
     chainId: chainIds.OPTIMISM_KOVAN,
     name: chains.getById(EthChainId.OptimisticEthereumTestnetKovan)
       ?.name as any,
+    prettyName: "Optimism",
     infoUrl: "https://optimism.io",
     testnet: true,
     color: "#ff0320",
@@ -156,6 +160,7 @@ export const chainData: Chain[] = [
   {
     chainId: chainIds.POLYGON,
     name: "Matic(Polygon) Mainnet",
+    prettyName: "Polygon",
     testnet: false,
     color: "#8247e5",
     nativeCurrency: chains.getById(chainIds.POLYGON)?.nativeCurrency,
@@ -168,6 +173,7 @@ export const chainData: Chain[] = [
   {
     chainId: chainIds.POLYGON_MUMBAI,
     name: "Matic(Polygon) Testnet Mumbai",
+    prettyName: "Polygon",
     testnet: true,
     color: "#8247e5",
     nativeCurrency: chains.getById(EthChainId.MaticTestnetMumbai)
@@ -188,8 +194,8 @@ export type ChainId = typeof chainIds[ChainKeys];
 
 export type ShowableChain = {
   chainId: ChainId;
-  shortName?: string;
   name: string;
+  prettyName?: string;
   testnet: boolean;
   color: string;
   infoUrl?: string;

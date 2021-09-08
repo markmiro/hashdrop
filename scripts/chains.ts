@@ -12,7 +12,6 @@ const FILE_OPTIONS = {
 type Chain = {
   name: string;
   chainId: number;
-  shortName: string;
   networkId: number;
   nativeCurrency: {
     name: string;

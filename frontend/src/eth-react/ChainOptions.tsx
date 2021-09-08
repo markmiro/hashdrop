@@ -30,14 +30,14 @@ const ChainDisplay = ({ chainId }: { chainId: number }) => {
   return (
     <HStack spacing={2} alignItems="center" w="100%">
       <Circle size="1em" bg={chain.color} boxShadow="xs" />
-      <Text isTruncated>{chain.name}</Text>
+      <Text isTruncated>{chain.prettyName || chain.name}</Text>
+      {chain.testnet && <Badge colorScheme="orange">testnet</Badge>}
       <Spacer />
       {process.env.NODE_ENV === "development" && (
         <Box fontSize="xs" fontWeight="normal" opacity="50%" display="inline">
           ID: {chainId}
         </Box>
       )}
-      {chain.testnet && <Badge colorScheme="orange">testnet</Badge>}
     </HStack>
   );
 };
