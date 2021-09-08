@@ -5,6 +5,7 @@ import { base64ToBlob } from "base64-blob";
 import { format } from "date-fns";
 import _ from "lodash";
 import { FC, useState } from "react";
+import { createUserJson, UserDrop, UserJson } from "../components/UserJson";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
 import { useMetaMaskEthereum } from "../eth-react/useMetaMaskEthereum";
@@ -15,20 +16,6 @@ import { ipfsCid } from "../util/ipfsCid";
 import { cidToUrl, pinFile } from "../util/pinata";
 import { textToBlob } from "../util/textToBlob";
 const pkg = require("../../package.json");
-
-type UserDrop = {
-  appVersion: string;
-  appCommitHash: string;
-  userAddress: string;
-  cid: string;
-  privateCid?: string;
-  dropTitle?: string;
-};
-
-type UserJson = {
-  userAddress: string;
-  drops: Record<string, UserDrop>;
-};
 
 const steps = [
   "START_DROP",
@@ -53,13 +40,6 @@ type Step = typeof steps[number];
 const stepKeys = _.mapValues(_.invert(steps) as Record<Step, string>, (v) =>
   parseInt(v)
 );
-
-function createUserJson(userAddress: string): UserJson {
-  return {
-    userAddress,
-    drops: {},
-  };
-}
 
 export function formatDate(date: Date) {
   return format(date, "yyyy-MM-dd-HH_mm_ss");
@@ -127,6 +107,7 @@ export function DropTests() {
 
     // Save user state to IPFS
     const userDrop: UserDrop = {
+      ts: Date.now(),
       appCommitHash: process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA ?? "",
       appVersion: pkg?.version,
       userAddress,

@@ -17,6 +17,7 @@ import { Encrypt } from "./pages/Encrypt";
 import { EthChains } from "./pages/EthChains";
 import { NotFound } from "./pages/NotFound";
 import { ShowDrops } from "./pages/ShowDrops";
+import { ShowDropTests } from "./pages/ShowDropTests";
 import { Sink } from "./pages/Sink";
 import { Theme } from "./pages/Theme";
 
@@ -49,7 +50,8 @@ export function App() {
             <NavLink to="/debug/drop-old">Drop Old</NavLink>
             <NavLink to="/debug/chains">Chains</NavLink>
             <NavLink to="/debug/eth-chains">eth-chains</NavLink>
-            <NavLink to="/debug/drops">Drop Tests</NavLink>
+            <NavLink to="/debug/drops">Drops</NavLink>
+            <NavLink to="/debug/drop">Drop</NavLink>
           </HStack>
         </Route>
 
@@ -118,10 +120,16 @@ export function App() {
                 <EthChains />
               </PageBody>
             </Route>
-            <Route path="/debug/drops">
+            <Route path="/debug/drop">
               <PageBody>
                 <PageTitle>Drop Tests</PageTitle>
                 <DropTests />
+              </PageBody>
+            </Route>
+            <Route path="/debug/drops">
+              <PageBody>
+                <PageTitle>Drops Tests</PageTitle>
+                <ShowDropTests />
               </PageBody>
             </Route>
             <Route path="/debug"></Route>
