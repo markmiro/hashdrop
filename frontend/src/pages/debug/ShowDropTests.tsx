@@ -2,7 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import ReactJson from "react-json-view";
 import { createUserJson, UserJson } from "../../components/UserJson";
-import { useEthersProvider } from "../../eth-react/EthersProviderContext";
 import { useContract } from "../../eth-react/useContract";
 import { useMetaMaskEthereum } from "../../eth-react/useMetaMaskEthereum";
 import { Drops as DropsT } from "../../typechain";

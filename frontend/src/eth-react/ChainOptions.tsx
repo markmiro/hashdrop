@@ -17,7 +17,6 @@ import {
 import { ethers } from "ethers";
 import { useState } from "react";
 import { ErrorMessage } from "../generic/Errors/ErrorMessage";
-import { Loader } from "../generic/Loader";
 import { ChainId } from "./chainData";
 import { chains } from "./chains";
 import { InstallMetaMaskMessage } from "./Errors";

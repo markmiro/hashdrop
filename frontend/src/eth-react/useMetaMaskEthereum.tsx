@@ -125,7 +125,7 @@ export const MetaMaskProvider: FC<{ reloadOnChainChanged: boolean }> = ({
       setLoading(false);
     };
     doAsync().catch(handleError);
-  }, []);
+  }, [handleError, reloadOnChainChanged]);
 
   useEffect(() => {
     if (!ethereum) return;

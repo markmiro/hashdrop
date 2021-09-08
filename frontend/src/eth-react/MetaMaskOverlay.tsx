@@ -1,10 +1,8 @@
 import {
-  Button,
   Image,
   Modal,
   ModalContent,
   ModalOverlay,
-  ModalProps,
   VStack,
 } from "@chakra-ui/react";
 import { FC } from "react";
