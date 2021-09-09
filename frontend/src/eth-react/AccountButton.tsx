@@ -30,6 +30,7 @@ const FindingAccount = () => (
 );
 
 const ConnectWallet = () => {
+  const toast = useToast();
   const handleError = useErrorHandler();
   const { ethereum } = useMetaMaskEthereum();
 
@@ -38,7 +39,12 @@ const ConnectWallet = () => {
       handleError("ethereum is not set.");
       return;
     }
-    ethereum.request({ method: "eth_requestAccounts" }).catch(handleError);
+    ethereum.request({ method: "eth_requestAccounts" }).catch((err) => {
+      toast({
+        title: err.message,
+        status: "error",
+      });
+    });
   };
 
   return (
@@ -66,8 +72,8 @@ export function AccountButton() {
     });
   }, [data.selectedAddress, toast]);
 
-  if (loading || !data.selectedAddressBalance) return <FindingAccount />;
   if (!data || !data.selectedAddress) return <ConnectWallet />;
+  if (loading || !data.selectedAddressBalance) return <FindingAccount />;
 
   return (
     <HStack align="center" spacing={1}>
