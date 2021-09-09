@@ -113,12 +113,13 @@ export const MetaMaskProvider: FC<{ reloadOnChainChanged: boolean }> = ({
       }
 
       ethereum.on("accountsChanged", (accounts: string[]) => {
-        if (!accounts || !_.isArray(accounts) || accounts.length === 0) {
-          handleError(new Error("No accounts found."));
+        let newAddress: string = "";
+        if (accounts && _.isArray(accounts) && accounts.length > 0) {
+          newAddress = accounts[0];
         }
         setData((d: Data) => ({
           ...d,
-          selectedAddress: accounts[0],
+          selectedAddress: newAddress,
         }));
       });
 

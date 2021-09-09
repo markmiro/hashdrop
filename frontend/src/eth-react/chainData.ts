@@ -209,6 +209,7 @@ export type ShowableChain = {
   color: string;
   infoUrl?: string;
   notes?: string;
+  explorers?: string[];
 };
 
 export type AddableChain = {

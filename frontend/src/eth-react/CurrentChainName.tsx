@@ -3,8 +3,7 @@ import { useMetaMaskEthereum } from "./useMetaMaskEthereum";
 
 export function CurrentChainName() {
   const { data } = useMetaMaskEthereum();
+  const chain = chains.showableById(data.chainId || -1);
 
-  const name = chains.showableById(data.chainId || -1).name;
-
-  return <>{name}</>;
+  return <>{chain.prettyName || chain.name}</>;
 }

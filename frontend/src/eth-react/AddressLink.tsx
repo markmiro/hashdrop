@@ -13,7 +13,7 @@ export const AddressLink: FC<{ address?: string }> = ({ address }) => {
   useEffect(() => {
     const chainId = data.chainId;
     const chain = chains.byId(chainId as any);
-    if ("explorers" in chain && chain.explorers.length > 0) {
+    if ("explorers" in chain && chain.explorers && chain.explorers.length > 0) {
       setExplorer(chain.explorers[0]);
     } else {
       setExplorer(null);

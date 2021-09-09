@@ -85,14 +85,17 @@ function Chain({ chainId }: { chainId: ChainId }) {
           {"explorers" in chain && (
             <>
               <b>Explorers: </b>
-              {chain.explorers.map((f) => (
-                <Anchor key={f} isExternal to={f}>
-                  {f}
-                </Anchor>
-              ))}
+              {chain.explorers &&
+                chain.explorers.map((f) => (
+                  <Anchor key={f} isExternal to={f}>
+                    {f}
+                  </Anchor>
+                ))}
               <Anchor
                 isExternal
-                to={`${chain.explorers[0]}/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`}
+                to={`${
+                  chain.explorers && chain.explorers[0]
+                }/address/0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266`}
               >
                 0xf3...2266
               </Anchor>
