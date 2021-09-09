@@ -1,12 +1,4 @@
-import {
-  Badge,
-  Heading,
-  Link,
-  Spacer,
-  Stack,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Heading, Link, Spacer, Stack, VStack } from "@chakra-ui/react";
 import { FC } from "react";
 import {
   LinkProps,
@@ -16,6 +8,7 @@ import {
 import { AccountButton } from "../eth-react/AccountButton";
 import { ChainOptions } from "../eth-react/ChainOptions";
 import feArtifacts from "../hardhat-frontend-artifacts.json";
+import { Logo } from "./Logo";
 
 const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
   (id) => parseInt(id)
@@ -96,9 +89,7 @@ export const Nav: FC = ({ children }) => (
     borderBottomWidth={1}
   >
     <NavLink to="/">
-      <Text fontWeight="bold" display="flex" alignItems="center">
-        hash💧 <Badge ml={2}>beta</Badge>
-      </Text>
+      <Logo />
     </NavLink>
 
     <Stack direction={["column", "row", "row"]} as="nav" spacing={[1, 1, 2]}>

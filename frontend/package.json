@@ -17,6 +17,7 @@
     "crypto-js": "4.1.1",
     "date-fns": "2.23.0",
     "delay": "5.0.0",
+    "detect-browser": "5.2.0",
     "eth-chains": "0.3.5",
     "ethers": "5.4.5",
     "form-data": "4.0.0",
