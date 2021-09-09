@@ -59,7 +59,7 @@ const Item: FC<{ isCurrent: boolean; isChecked: boolean }> = ({
   </HStack>
 );
 
-export function DropTests() {
+export function DropTest() {
   const { data } = useMetaMaskEthereum();
   const provider = useEthersProvider();
   const drops = useContract<DropsT>("Drops");

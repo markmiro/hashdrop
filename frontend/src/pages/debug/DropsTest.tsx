@@ -7,7 +7,7 @@ import { useMetaMaskEthereum } from "../../eth-react/useMetaMaskEthereum";
 import { Drops as DropsT } from "../../typechain";
 import { cidToUrl } from "../../util/pinata";
 
-export function ShowDropTests() {
+export function DropsTest() {
   const { data } = useMetaMaskEthereum();
   const drops = useContract<DropsT>("Drops");
   const [userJson, setUserJson] = useState<UserJson | null>(null);
@@ -30,7 +30,6 @@ export function ShowDropTests() {
 
   return (
     <div>
-      ShowDropTests
       <ReactJson
         src={userJson || {}}
         displayDataTypes={false}

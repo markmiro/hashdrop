@@ -1,7 +1,13 @@
-import { Box, HStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Link, Spacer } from "@chakra-ui/react";
 import { ErrorBoundary } from "react-error-boundary";
 import ReactJson from "react-json-view";
-import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
+import {
+  HashRouter,
+  Redirect,
+  Route,
+  Switch,
+  Link as RouterLink,
+} from "react-router-dom";
 import { DropCount } from "./components/DropCount";
 import { Nav, NavLink, PageBody, PageTitle } from "./components/PageLayout";
 import { ShowDrop } from "./components/ShowDrop/ShowDrop";
@@ -12,14 +18,15 @@ import feArtifacts from "./hardhat-frontend-artifacts.json";
 import { Chains } from "./pages/debug/Chains";
 import { Drop } from "./pages/Drop";
 import { DropOld } from "./pages/debug/DropOld";
-import { DropTests } from "./pages/debug/DropTests";
+import { DropTest as DropTest } from "./pages/debug/DropTest";
 import { Encrypt } from "./pages/debug/Encrypt";
 import { EthChains } from "./pages/debug/EthChains";
 import { NotFound } from "./pages/NotFound";
 import { ShowDrops } from "./pages/ShowDrops";
-import { ShowDropTests } from "./pages/debug/ShowDropTests";
+import { DropsTest } from "./pages/debug/DropsTest";
 import { Sink } from "./pages/debug/Sink";
 import { Theme } from "./pages/debug/Theme";
+import { AddIcon } from "@chakra-ui/icons";
 
 const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
   (id) => parseInt(id)
@@ -51,7 +58,7 @@ export function App() {
             <NavLink to="/debug/chains">Chains</NavLink>
             <NavLink to="/debug/eth-chains">eth-chains</NavLink>
             <NavLink to="/debug/drops">Drops</NavLink>
-            <NavLink to="/debug/drop">Drop</NavLink>
+            <NavLink to="/debug/drop">Add Drop</NavLink>
           </HStack>
         </Route>
 
@@ -122,14 +129,26 @@ export function App() {
             </Route>
             <Route path="/debug/drop">
               <PageBody>
-                <PageTitle>Drop Tests</PageTitle>
-                <DropTests />
+                <PageTitle>Add Drop</PageTitle>
+                <DropTest />
               </PageBody>
             </Route>
             <Route path="/debug/drops">
               <PageBody>
-                <PageTitle>Drops Tests</PageTitle>
-                <ShowDropTests />
+                <PageTitle>
+                  <HStack>
+                    <div>Drops</div>
+                    <Spacer />
+                    <Button
+                      as={RouterLink}
+                      to="/debug/drop"
+                      leftIcon={<AddIcon />}
+                    >
+                      Add
+                    </Button>
+                  </HStack>
+                </PageTitle>
+                <DropsTest />
               </PageBody>
             </Route>
             <Route path="/debug"></Route>
