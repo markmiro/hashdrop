@@ -120,6 +120,7 @@ export const MetaMaskProvider: FC<{ reloadOnChainChanged: boolean }> = ({
         setData((d: Data) => ({
           ...d,
           selectedAddress: newAddress,
+          selectedAddressBalance: undefined,
         }));
       });
 
