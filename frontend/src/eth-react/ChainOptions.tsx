@@ -139,7 +139,7 @@ export function ChainOptions({
           "Choose a chain"
         )}
       </MenuButton>
-      <MenuList minW="sm">
+      <MenuList>
         {chainIds
           .filter((id) => id !== data.chainId)
           .map((chainId) => (
