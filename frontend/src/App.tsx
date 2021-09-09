@@ -148,7 +148,7 @@ export function App() {
         <Box borderTopWidth={1} py={6} px={2} textAlign="center">
           hash💧
         </Box>
-        <ReactJson src={data} />
+        {process.env.NODE_ENV === "development" && <ReactJson src={data} />}
       </HashRouter>
     </>
   );
