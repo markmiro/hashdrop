@@ -5,7 +5,10 @@ export type UserDrop = {
   cid: string;
   privateCid?: string;
   dropTitle?: string;
-  ts: number;
+  created: number;
+  modified: number;
+  // published: boolean;
+  tx?: string; // blockchain transaction
 };
 
 export type UserJson = {

@@ -27,6 +27,7 @@ import { DropsTest } from "./pages/debug/DropsTest";
 import { Sink } from "./pages/debug/Sink";
 import { Theme } from "./pages/debug/Theme";
 import { AddIcon } from "@chakra-ui/icons";
+import { DropTools } from "./pages/debug/DropTools";
 
 const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
   (id) => parseInt(id)
@@ -57,6 +58,7 @@ export function App() {
             <NavLink to="/debug/drop-old">Drop Old</NavLink>
             <NavLink to="/debug/chains">Chains</NavLink>
             <NavLink to="/debug/eth-chains">eth-chains</NavLink>
+            <NavLink to="/debug/drop-tools">Drop Tools</NavLink>
             <NavLink to="/debug/drops">Drops</NavLink>
             <NavLink to="/debug/drop">Add Drop</NavLink>
           </HStack>
@@ -125,6 +127,12 @@ export function App() {
               <PageBody>
                 <PageTitle>eth-chains</PageTitle>
                 <EthChains />
+              </PageBody>
+            </Route>
+            <Route path="/debug/drop-tools">
+              <PageBody>
+                <PageTitle>Drop Tools</PageTitle>
+                <DropTools />
               </PageBody>
             </Route>
             <Route path="/debug/drop">
