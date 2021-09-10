@@ -19,6 +19,16 @@ export function About() {
         sending it a text message. You'll want to write down the steps of how
         this is done and save it somewhere safe.
       </Text>
+      <Heading fontSize="xl">Pre-register a scientific study.</Heading>
+      <Text fontSize="lg">
+        Science shouldn't be controlled by intermediaries if it can be avoided.
+        Scientific institutions aren't software companies, but you have to trust
+        them as if they are. You trust that an intern doesn't wipe their
+        database, that they make regular backups, and so on. With this system,
+        you have read and write access to the database by default. Easy data
+        replication is also built-in. You also own your data and nobody can
+        tamper with it after it's been saved.
+      </Text>
       <Heading fontSize="xl">A tell-all.</Heading>
       <Text fontSize="lg">
         Suppose you're working at a company and it's all going poorly. You don't
