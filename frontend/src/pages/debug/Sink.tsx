@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { FC, ReactNode } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { EditableExample } from "../../components/debug/EditableExample";
 import { DropCount } from "../../components/DropCount";
 import { AddressLink } from "../../eth-react/AddressLink";
 import { ChainOptions } from "../../eth-react/ChainOptions";
@@ -95,6 +96,9 @@ function MetaMaskExample() {
 export function Sink() {
   return (
     <KitchenItems>
+      <Item title="Editable">
+        <EditableExample />
+      </Item>
       <Item title="MetaMaskOverlay">
         <MetaMaskExample />
       </Item>
