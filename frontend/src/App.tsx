@@ -1,14 +1,7 @@
-import { AddIcon } from "@chakra-ui/icons";
-import { Box, Button, HStack, Spacer } from "@chakra-ui/react";
+import { Box, HStack } from "@chakra-ui/react";
 import { ErrorBoundary } from "react-error-boundary";
 import ReactJson from "react-json-view";
-import {
-  HashRouter,
-  Link as RouterLink,
-  Redirect,
-  Route,
-  Switch,
-} from "react-router-dom";
+import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
 import { DropCount } from "./components/DropCount";
 import { Nav, NavLink, PageBody, PageTitle } from "./components/PageLayout";
 import { ShowDrop } from "./components/ShowDrop/ShowDrop";
@@ -142,20 +135,8 @@ export function App() {
               </PageBody>
             </Route>
             <Route path="/debug/drops">
-              <PageBody>
-                <PageTitle>
-                  <HStack>
-                    <div>Drops</div>
-                    <Spacer />
-                    <Button
-                      as={RouterLink}
-                      to="/debug/drop"
-                      leftIcon={<AddIcon />}
-                    >
-                      Add
-                    </Button>
-                  </HStack>
-                </PageTitle>
+              <PageBody isFullWidth>
+                <PageTitle>Drops</PageTitle>
                 <DropsTest />
               </PageBody>
             </Route>
