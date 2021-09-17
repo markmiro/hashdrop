@@ -1,6 +1,5 @@
 import { Box, HStack } from "@chakra-ui/react";
 import { ErrorBoundary } from "react-error-boundary";
-import ReactJson from "react-json-view";
 import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
 import { DropCount } from "./components/DropCount";
 import { Nav, NavLink, PageBody, PageTitle } from "./components/PageLayout";
@@ -8,11 +7,12 @@ import { ShowDrop } from "./components/ShowDrop/ShowDrop";
 import { EthErrorFallback } from "./eth-react/Errors";
 import { EthEnsure } from "./eth-react/EthEnsure";
 import { useMetaMaskEthereum } from "./eth-react/useMetaMaskEthereum";
+import { Json } from "./generic/Json";
 import feArtifacts from "./hardhat-frontend-artifacts.json";
 import { Chains } from "./pages/debug/Chains";
 import { DropOld } from "./pages/debug/DropOld";
-import { DropsTest } from "./pages/debug/DropsTest";
-import { DropTest as DropTest } from "./pages/debug/DropTest";
+import { DropsTest } from "./pages/debug/drops/DropsTest";
+import { DropTest } from "./pages/debug/DropTest";
 import { DropTools } from "./pages/debug/DropTools";
 import { Encrypt } from "./pages/debug/Encrypt";
 import { EthChains } from "./pages/debug/EthChains";
@@ -156,7 +156,7 @@ export function App() {
         <Box borderTopWidth={1} py={6} px={2} textAlign="center">
           hash💧
         </Box>
-        {process.env.NODE_ENV === "development" && <ReactJson src={data} />}
+        {process.env.NODE_ENV === "development" && <Json src={data} />}
       </HashRouter>
     </>
   );

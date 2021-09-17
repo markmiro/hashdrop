@@ -1,12 +1,11 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { createUserJson, UserJson } from "./UserJson";
+import { createUserJson, UserJson } from "../../../components/UserJson";
 
 export const initialUserJson = createUserJson("NONE");
 // Minimal example:
 // https://codesandbox.io/s/vibrant-jasper-bvhs2?file=/src/App.js
 export const reducer = createReducer(initialUserJson, {
   SET: (state: UserJson, action) => {
-    debugger;
     state = action.value;
     return action.value;
   },
