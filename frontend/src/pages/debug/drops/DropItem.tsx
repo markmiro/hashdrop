@@ -11,7 +11,7 @@ const RelativeTs = ({ ts }: { ts: number }) => (
   </Tooltip>
 );
 
-export function DropView({
+export function DropItem({
   drop,
   editing,
   dispatch,

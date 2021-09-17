@@ -21,7 +21,7 @@ import { Loader } from "../../../generic/Loader";
 import { Drops as DropsT } from "../../../typechain";
 import { cidToUrl } from "../../../util/pinata";
 import { CidView } from "./CidView";
-import { DropView } from "./DropView";
+import { DropItem } from "./DropItem";
 import { initialUserJson, reducer } from "./userJsonReducer";
 
 export function DropsTest() {
@@ -80,7 +80,7 @@ export function DropsTest() {
             </Button>
           </Flex>
           {_.values(userJson?.drops).map((drop) => (
-            <DropView
+            <DropItem
               key={drop.cid}
               drop={drop}
               editing={editing}
