@@ -19,14 +19,18 @@ import { useMetaMaskEthereum } from "../../../eth-react/useMetaMaskEthereum";
 import { Json } from "../../../generic/Json";
 import { Loader } from "../../../generic/Loader";
 import { Drops as DropsT } from "../../../typechain";
-import { cidToUrl } from "../../../util/pinata";
+import { cidToUrl, pinFile } from "../../../util/pinata";
 import { DropView } from "./DropView";
 import { DropItem } from "./DropItem";
 import { initialUserJson, reducer } from "./userJsonReducer";
+import { textToBlob } from "../../../util/textToBlob";
+import { ipfsCid } from "../../../util/ipfsCid";
+import { useEthersProvider } from "../../../eth-react/EthersProviderContext";
 
 export function Drops() {
   const { data } = useMetaMaskEthereum();
   const drops = useContract<DropsT>("Drops");
+  const provider = useEthersProvider();
   const [userJson, dispatch] = useReducer(reducer, initialUserJson);
   const [loading, setLoading] = useState(false);
   const [editing, setEditing] = useState(false);
@@ -51,6 +55,24 @@ export function Drops() {
     doAsync();
   }, [drops.contract, data.selectedAddress]);
 
+  const handleSave = async () => {
+    if (!drops.contract) return new Error("No 'Drops smart contract");
+    if (!data.selectedAddress) return new Error("No address selected");
+
+    const newUserBlob = textToBlob(JSON.stringify(userJson));
+    const newUserCid = await ipfsCid(newUserBlob);
+    const remoteNewUserCid = await pinFile(newUserBlob);
+    if (newUserCid !== remoteNewUserCid) {
+      return new Error("User JSON: Local and remote CID don't match.");
+    }
+
+    const signer = provider.getSigner();
+    const dropsTx = await drops.contract.connect(signer).set(newUserCid);
+    await dropsTx.wait();
+
+    setEditing(false);
+  };
+
   if (loading) return <Loader>Loading user data</Loader>;
 
   return (
@@ -63,7 +85,7 @@ export function Drops() {
                 <Button onClick={() => setEditing(false)}>Cancel</Button>
                 <Button
                   colorScheme="blue"
-                  onClick={() => setEditing(false)}
+                  onClick={handleSave}
                   leftIcon={<CheckIcon />}
                 >
                   Save All
