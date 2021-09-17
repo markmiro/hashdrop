@@ -11,7 +11,7 @@ import { Json } from "./generic/Json";
 import feArtifacts from "./hardhat-frontend-artifacts.json";
 import { Chains } from "./pages/debug/Chains";
 import { DropOld } from "./pages/debug/DropOld";
-import { DropsTest } from "./pages/debug/drops/DropsTest";
+import { Drops as DebugDrops } from "./pages/debug/drops/Drops";
 import { DropTest } from "./pages/debug/DropTest";
 import { DropTools } from "./pages/debug/DropTools";
 import { Encrypt } from "./pages/debug/Encrypt";
@@ -137,7 +137,7 @@ export function App() {
             <Route path="/debug/drops">
               <PageBody isFullWidth>
                 <PageTitle>Drops</PageTitle>
-                <DropsTest />
+                <DebugDrops />
               </PageBody>
             </Route>
             <Route path="/debug"></Route>

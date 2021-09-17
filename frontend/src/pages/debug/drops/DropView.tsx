@@ -12,7 +12,7 @@ import { IFramePreview } from "../../../components/IFramePreview";
 import { Cid } from "../../../eth-react/Cid";
 import { useDecrypter } from "../../../components/ShowDrop/useDecrypter";
 
-export function CidView({
+export function DropView({
   cid,
   userJson,
 }: {

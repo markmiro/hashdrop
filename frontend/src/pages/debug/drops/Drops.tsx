@@ -24,7 +24,7 @@ import { DropView } from "./DropView";
 import { DropItem } from "./DropItem";
 import { initialUserJson, reducer } from "./userJsonReducer";
 
-export function DropsTest() {
+export function Drops() {
   const { data } = useMetaMaskEthereum();
   const drops = useContract<DropsT>("Drops");
   const [userJson, dispatch] = useReducer(reducer, initialUserJson);
