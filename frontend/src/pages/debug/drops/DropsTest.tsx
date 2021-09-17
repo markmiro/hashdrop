@@ -20,7 +20,7 @@ import { Json } from "../../../generic/Json";
 import { Loader } from "../../../generic/Loader";
 import { Drops as DropsT } from "../../../typechain";
 import { cidToUrl } from "../../../util/pinata";
-import { CidView } from "./CidView";
+import { DropView } from "./DropView";
 import { DropItem } from "./DropItem";
 import { initialUserJson, reducer } from "./userJsonReducer";
 
@@ -94,7 +94,7 @@ export function DropsTest() {
             render={(props) => (
               <div>
                 {/* Use `key` to force reload component when cid changes */}
-                <CidView
+                <DropView
                   key={props.match.params.cid}
                   cid={props.match.params.cid}
                   userJson={userJson}
