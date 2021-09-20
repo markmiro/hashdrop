@@ -61,6 +61,7 @@ export function DropView({
             </Button>
           </>
         )}
+        <Box bg="blackAlpha.100">STATE: {decrypter.state || "N/A"}</Box>
       </VStack>
     );
   }
