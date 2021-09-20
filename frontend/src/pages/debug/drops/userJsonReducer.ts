@@ -11,5 +11,6 @@ export const reducer = createReducer(initialUserJson, {
   },
   SET_TITLE: (state: UserJson, action) => {
     state.drops[action.key].dropTitle = action.value;
+    state.drops[action.key].modified = Date.now();
   },
 });

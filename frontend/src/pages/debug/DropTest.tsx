@@ -107,7 +107,7 @@ export function DropTest() {
 
     // Save user state to IPFS
     const userDrop: UserDrop = {
-      modified: Date.now(),
+      modified: undefined,
       created: Date.now(),
       appCommitHash: process.env.REACT_APP_VERCEL_GIT_COMMIT_SHA ?? "",
       appVersion: pkg?.version,

@@ -6,7 +6,7 @@ export type UserDrop = {
   privateCid?: string;
   dropTitle?: string;
   created: number;
-  modified: number;
+  modified?: number;
   // published: boolean;
   tx?: string; // blockchain transaction
 };
