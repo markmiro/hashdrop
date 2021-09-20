@@ -103,8 +103,8 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1631142519646,
-          "str": "Wed, 08 Sep 2021 23:08:39 GMT",
+          "ts": 1632163756431,
+          "str": "Mon, 20 Sep 2021 18:49:16 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/HashDrop.sol"
@@ -162,8 +162,8 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1631142522982,
-          "str": "Wed, 08 Sep 2021 23:08:42 GMT",
+          "ts": 1632163756497,
+          "str": "Mon, 20 Sep 2021 18:49:16 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/Drops.sol"
