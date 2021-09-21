@@ -16,7 +16,7 @@ import { DropTest } from "./pages/debug/DropTest";
 import { DropTools } from "./pages/debug/DropTools";
 import { Encrypt } from "./pages/debug/Encrypt";
 import { EthChains } from "./pages/debug/EthChains";
-import { Ipfs } from "./pages/debug/ipfs";
+import { Ipfs, Ipfs2 } from "./pages/debug/ipfs";
 import { Sink } from "./pages/debug/Sink";
 import { Theme } from "./pages/debug/Theme";
 import { Drop } from "./pages/Drop";
@@ -146,6 +146,9 @@ export function App() {
               <PageBody>
                 <PageTitle>IPFS</PageTitle>
                 <Ipfs />
+                <hr />
+                <PageTitle>IPFS 2</PageTitle>
+                <Ipfs2 />
               </PageBody>
             </Route>
             <Route path="/debug"></Route>
