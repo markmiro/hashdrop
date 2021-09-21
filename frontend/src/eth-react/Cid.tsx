@@ -11,7 +11,11 @@ export function Cid({ cid }: { cid?: string }) {
   return (
     // https://cid.ipfs.io/#bafkreidripbo7vytlcwvtko2mdl54jfknp3nuowqbr6s5pllkmksoy2mc4
     <span>
-      <Anchor to={`https://cid.ipfs.io/#${cid}`} isExternal>
+      <Anchor
+        to={`https://${process.env.REACT_APP_IPFS_GATEWAY}/ipfs/${cid}`}
+        isExternal
+      >
+        {/* <Anchor to={`https://cid.ipfs.io/#${cid}`} isExternal> */}
         <MonoText>{truncate(cid)}</MonoText>
       </Anchor>
       <CopyButton ml="2" toCopy={cid} />
