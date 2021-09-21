@@ -3,10 +3,12 @@ import { Input } from "@chakra-ui/input";
 import { VStack } from "@chakra-ui/layout";
 import axios from "axios";
 import { base64ToBlob } from "base64-blob";
+import aes from "crypto-js/aes";
+import utf8Enc from "crypto-js/enc-utf8";
 import delay from "delay";
 import { useState } from "react";
 import { Cid } from "../../eth-react/Cid";
-import { decryptFileString, encryptFob } from "../../util/encrypt";
+import { fobAsDataUrl } from "../../util/fobAsDataUrl";
 import { fobAsText } from "../../util/fobAsText";
 import { ipfsCid } from "../../util/ipfsCid";
 import { cidToUrl, pinFile } from "../../util/pinata";
@@ -37,7 +39,6 @@ export function Ipfs() {
     setCid(cid);
     try {
       const res = await axios.get(cidToUrl(cid));
-      debugger;
       setRemoteMessage(res.data);
     } catch (err) {
       setRemoteMessage(err);
@@ -73,26 +74,24 @@ export function Ipfs2() {
 
     const message = `Test message: ${new Date()}`;
     setMessage(message);
-    const fob = textToBlob(message);
     const ps = "whatever";
-    const privateFob = await encryptFob(fob, ps);
-    const privateCid = await ipfsCid(privateFob);
-    setCid(privateCid);
-    const remoteCid = await pinFile(privateFob);
-    if (privateCid !== remoteCid) {
-      return new Error("File drop: Local and remote CID don't match.");
-    }
+    const fob = textToBlob(message);
+    const dataUrl = await fobAsDataUrl(fob);
+    const encrypted = aes.encrypt(dataUrl, ps).toString();
+
+    const dataUrl2 = aes.decrypt(encrypted, ps).toString(utf8Enc);
+    const fob2 = await base64ToBlob(dataUrl2);
+    const message2 = await fobAsText(fob2);
+
+    const cid2 = await pinFile(fob2);
+    setCid(cid2);
 
     try {
-      const res = await axios.get(cidToUrl(privateCid));
+      const res = await axios.get(cidToUrl(cid2));
       if (res.status === 404) {
-        return new Error(`Encrypted file with CID ${privateCid} not found.`);
+        return new Error(`Encrypted file with CID ${cid2} not found.`);
       }
-      const encrypted = await res.data;
-      const dataUrl = await decryptFileString(encrypted, ps);
-      const fob2 = await base64ToBlob(dataUrl);
-      const remoteText = await fobAsText(fob2);
-      setRemoteMessage(remoteText);
+      setRemoteMessage(message2);
     } catch (err) {
       setRemoteMessage(err);
     }
