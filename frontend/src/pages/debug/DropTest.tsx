@@ -172,11 +172,11 @@ export function DropTest() {
     if (!privateCid) return new Error("File was never encrypted.");
 
     // Fetch
-    const res = await fetch(cidToUrl(privateCid));
+    const res = await axios.get(cidToUrl(privateCid));
     if (res.status === 404) {
       return new Error(`Encrypted file with CID ${privateCid} not found.`);
     }
-    const encrypted = await res.text();
+    const encrypted = await res.data;
 
     setCurrentStepIndex(stepKeys.FETCH_SAVED);
 
