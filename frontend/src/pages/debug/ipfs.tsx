@@ -72,20 +72,32 @@ export function Ipfs2() {
 
     await delay(500);
 
+    // Encrypt file
     const message = `Test message: ${new Date()}`;
     setMessage(message);
     const ps = "whatever";
     const fob = textToBlob(message);
     const dataUrl = await fobAsDataUrl(fob);
     const encrypted = aes.encrypt(dataUrl, ps).toString();
+    const encFob = textToBlob(encrypted);
 
-    const dataUrl2 = aes.decrypt(encrypted, ps).toString(utf8Enc);
+    // Upload encrypted file
+    const encCid = await pinFile(encFob);
+
+    // Download encrypted file
+    const res = await axios.get(cidToUrl(encCid));
+    const encrypted2 = res.data;
+
+    // Decrypt file
+    const dataUrl2 = aes.decrypt(encrypted2, ps).toString(utf8Enc);
     const fob2 = await base64ToBlob(dataUrl2);
     const message2 = await fobAsText(fob2);
 
+    // Upload decrypted
     const cid2 = await pinFile(fob2);
     setCid(cid2);
 
+    // Verify decrypted
     try {
       const res = await axios.get(cidToUrl(cid2));
       if (res.status === 404) {
