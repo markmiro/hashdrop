@@ -13,6 +13,5 @@ export async function encryptFob(fob: File | Blob, password: string) {
 export async function decryptFileString(data: string, password: string) {
   const decryptedDataUrl = aes.decrypt(data, password).toString(utf8Enc);
   return decryptedDataUrl;
-  // const blob = textToBlob(decrypted);
-  // return blob;
+  // return base64ToBlob(decryptedDataUrl)
 }
