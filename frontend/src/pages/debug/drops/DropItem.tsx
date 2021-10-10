@@ -3,7 +3,7 @@ import axios from "axios";
 import { format, formatDistanceToNow } from "date-fns/esm";
 import { useEffect, useState } from "react";
 import { Link as RouterLink, useRouteMatch } from "react-router-dom";
-import { UserDrop } from "../../../components/UserJson";
+import { UserDrop } from "../../../util/UserJson";
 import { Loader } from "../../../generic/Loader";
 import { cidToUrl } from "../../../util/pinata";
 

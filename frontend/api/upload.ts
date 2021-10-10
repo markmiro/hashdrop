@@ -1,3 +1,4 @@
+import delay from "delay";
 import { PinMetadata } from "./../src/types.d";
 import { VercelRequest, VercelResponse } from "@vercel/node";
 import axios from "axios";
@@ -83,6 +84,13 @@ async function pinFile(file: File, pinataMetadata?: PinMetadata) {
         },
       }
     );
+
+    await delay(1000);
+
+    await axios.get(
+      `https://hashdrop.mypinata.cloud/ipfs/${response.data.IpfsHash}`
+    );
+    console.log(`Got CID: ${response.data.IpfsHash}`);
     return response.data.IpfsHash;
   } catch (err) {
     console.error(err);

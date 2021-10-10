@@ -5,7 +5,7 @@ import { base64ToBlob } from "base64-blob";
 import { format } from "date-fns";
 import _ from "lodash";
 import { FC, useState } from "react";
-import { createUserJson, UserDrop, UserJson } from "../../components/UserJson";
+import { createUserJson, UserDrop, UserJson } from "../../util/UserJson";
 import { useEthersProvider } from "../../eth-react/EthersProviderContext";
 import { useContract } from "../../eth-react/useContract";
 import { useMetaMaskEthereum } from "../../eth-react/useMetaMaskEthereum";
@@ -41,7 +41,7 @@ const stepKeys = _.mapValues(_.invert(steps) as Record<Step, string>, (v) =>
   parseInt(v)
 );
 
-export function formatDate(date: Date) {
+function formatDate(date: Date) {
   return format(date, "yyyy-MM-dd-HH_mm_ss");
 }
 

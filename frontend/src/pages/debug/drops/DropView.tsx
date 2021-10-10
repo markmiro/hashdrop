@@ -6,7 +6,7 @@ import {
   Heading,
   VStack,
 } from "@chakra-ui/react";
-import { UserJson } from "../../../components/UserJson";
+import { UserJson } from "../../../util/UserJson";
 import { cidToUrl } from "../../../util/pinata";
 import { IFramePreview } from "../../../components/IFramePreview";
 import { Cid } from "../../../eth-react/Cid";
