@@ -33,7 +33,7 @@ export const PageBody: FC<{ isFullWidth?: boolean }> = ({
 );
 
 export const PageTitle: FC = ({ children }) => (
-  <Heading fontSize="6xl" borderBottomWidth={1} borderColor="black">
+  <Heading fontSize="4xl" borderBottomWidth={1} borderColor="black">
     {children}
   </Heading>
 );
