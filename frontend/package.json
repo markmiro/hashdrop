@@ -13,6 +13,7 @@
     "@metamask/detect-provider": "^1.2.0",
     "@reduxjs/toolkit": "1.6.1",
     "axios": "0.21.1",
+    "axios-retry": "3.2.0",
     "base64-blob": "1.4.1",
     "copy-to-clipboard": "^3.3.1",
     "crypto-js": "4.1.1",

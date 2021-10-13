@@ -10,10 +10,7 @@ import { useMetaMaskEthereum } from "./eth-react/useMetaMaskEthereum";
 import { Json } from "./generic/Json";
 import feArtifacts from "./hardhat-frontend-artifacts.json";
 import { Chains } from "./pages/debug/Chains";
-import { DropOld } from "./pages/debug/DropOld";
 import { Drops as DebugDrops } from "./pages/debug/drops/Drops";
-import { DropsTest2 } from "./pages/debug/drops/DropsTest2";
-import { DropTest } from "./pages/debug/DropTest";
 import { DropTest2 } from "./pages/debug/DropTest2";
 import { DropTools } from "./pages/debug/DropTools";
 import { Encrypt } from "./pages/debug/Encrypt";
@@ -34,6 +31,7 @@ export function App() {
 
   return (
     <>
+      {" "}
       {/* https://github.com/ReactTraining/react-router/blob/master/packages/react-router-dom/docs/api/HashRouter.md */}
       <HashRouter hashType="slash">
         <Nav>
@@ -51,7 +49,6 @@ export function App() {
             <NavLink to="/debug/theme">Theme</NavLink>
             <NavLink to="/debug/sink">Kitchen Sink</NavLink>
             <NavLink to="/debug/encrypt">Encrypt</NavLink>
-            <NavLink to="/debug/drop-old">Drop Old</NavLink>
             <NavLink to="/debug/chains">Chains</NavLink>
             <NavLink to="/debug/eth-chains">eth-chains</NavLink>
             <NavLink to="/debug/drop-tools">Drop Tools</NavLink>
@@ -102,12 +99,6 @@ export function App() {
                 <Theme />
               </PageBody>
             </Route>
-            <Route path="/debug/drop-old">
-              <PageBody>
-                <PageTitle>Drop Old</PageTitle>
-                <DropOld />
-              </PageBody>
-            </Route>
             <Route path="/debug/encrypt">
               <PageBody>
                 <PageTitle>Encrypt</PageTitle>
@@ -141,7 +132,7 @@ export function App() {
             <Route path="/debug/drops">
               <PageBody isFullWidth>
                 <PageTitle>Drops</PageTitle>
-                <DropsTest2 />
+                <DebugDrops />
               </PageBody>
             </Route>
             <Route path="/debug/ipfs">

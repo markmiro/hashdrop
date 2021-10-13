@@ -63,11 +63,11 @@ function IsDropped({ drop }: { drop: UserDrop }) {
 export function DropItem({
   drop,
   editing,
-  dispatch,
+  onSetTitle,
 }: {
   drop: UserDrop;
   editing: boolean;
-  dispatch: React.Dispatch<any>;
+  onSetTitle: (title: string) => void;
 }) {
   const match = useRouteMatch<{ cid: string }>("/debug/drops/:cid");
   const isActive = match?.params.cid === drop.cid;
@@ -89,13 +89,7 @@ export function DropItem({
               size="sm"
               w="100%"
               value={drop.dropTitle}
-              onChange={(e) =>
-                dispatch({
-                  type: "SET_TITLE",
-                  key: drop.cid,
-                  value: e.target.value,
-                })
-              }
+              onChange={(e) => onSetTitle(e.target.value)}
               borderColor="blackAlpha.400"
               fontWeight="inherit"
               fontSize="inherit"

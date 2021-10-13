@@ -79,5 +79,5 @@ export function useUser() {
     await dropsTx.wait();
   };
 
-  return { loading, userJson, addDrop };
+  return { loading, userJson, addDrop, dispatch };
 }

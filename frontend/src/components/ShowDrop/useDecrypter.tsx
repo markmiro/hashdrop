@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { cidToUrl, pinFile } from "../../util/pinata";
-import { decryptFileString } from "../../util/encrypt";
-import { useEthersProvider } from "../../eth-react/EthersProviderContext";
-import { base64ToBlob } from "base64-blob";
+import {
+  cidToUrl,
+  dataUrlToBlob,
+  pinBlob,
+  retrieveCidFromOtherServer,
+  useEncrypter,
+} from "../../util/dropUtils";
+import axios from "axios";
 
 export type DecrypterState =
   | "INITIAL"
@@ -10,25 +14,25 @@ export type DecrypterState =
   | "DECRYPTING"
   | "DECRYPTED"
   | "PUBLISHING"
-  | "PUBLISHED";
+  | "PUBLISHED"
+  | "ERROR_PUBLISHING"
+  | "CHECKING_AVAILABLE"
+  | "AVAILABLE"
+  | "NOT_AVAILABLE";
 
 export function useDecrypter() {
-  const provider = useEthersProvider();
   const [cid, setCid] = useState("");
   const [state, setState] = useState<DecrypterState>("INITIAL");
   const [dataUrl, setDataUrl] = useState<string | null>(null);
+  const encrypter = useEncrypter();
 
   async function decrypt(cid: string, privateCid: string) {
     setState("LOADING");
-    const res = await fetch(cidToUrl(privateCid));
-    if (res.status === 404) {
-      throw new Error("Not found");
-    }
-    const encrypted = await res.text();
+    const res = await axios.get(cidToUrl(privateCid));
+
+    const downloadedEncrypted = res.data;
     setState("DECRYPTING");
-    const signer = provider.getSigner();
-    const ps = await signer.signMessage(cid);
-    const dataUrl = await decryptFileString(encrypted, ps);
+    const dataUrl = await encrypter.decrypt(downloadedEncrypted, cid);
     setDataUrl(dataUrl);
     setState("DECRYPTED");
     setCid(cid);
@@ -37,13 +41,28 @@ export function useDecrypter() {
   async function publish() {
     if (!dataUrl || !cid) throw new Error("File not decrypted yet.");
     setState("PUBLISHING");
-    const fob = await base64ToBlob(dataUrl);
-    const remoteCid = await pinFile(fob, { name: "decrypted" });
-    // This should never fail, but just inn case
+    const fob = await dataUrlToBlob(dataUrl);
+    const remoteCid = await pinBlob(fob).catch(() =>
+      setState("ERROR_PUBLISHING")
+    );
+    // This should never fail, but just in case
     if (cid !== remoteCid) {
+      debugger;
+      setState("ERROR_PUBLISHING");
       throw new Error("Uploaded file CID doesn't match the expected CID.");
     }
-    setState("PUBLISHED");
+
+    // setState("PUBLISHED");
+
+    setState("CHECKING_AVAILABLE");
+
+    return retrieveCidFromOtherServer(cid)
+      .then(() => {
+        setState("AVAILABLE");
+      })
+      .catch(() => {
+        setState("NOT_AVAILABLE");
+      });
   }
 
   return { state, decrypt, publish, dataUrl };

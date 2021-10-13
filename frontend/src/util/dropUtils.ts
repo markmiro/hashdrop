@@ -1,6 +1,9 @@
-import utf8Enc from "crypto-js/enc-utf8";
-import aes from "crypto-js/aes";
+import axios, { AxiosResponse } from "axios";
+import axiosRetry from "axios-retry";
 import { base64ToBlob } from "base64-blob";
+import aes from "crypto-js/aes";
+import utf8Enc from "crypto-js/enc-utf8";
+import delay from "delay";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { ipfsCid } from "./ipfsCid";
 import { pinFile } from "./pinata";
@@ -29,6 +32,33 @@ export async function blobToCid(blob: Blob) {
 export const cidToUrl = (cid: string) => {
   return `https://hashdrop.mypinata.cloud/ipfs/${cid}`;
 };
+
+/**
+ * Need to retrieve from another place because of a bug with Pinata that I contacted them about.
+ * The problem is that if you fetch a drop before it's published, then the 404 is cached until you retrieve
+ * it from another client.
+ */
+export async function retrieveCidFromOtherServer(cid: string) {
+  await axios.get(
+    `https://hashdrop-ggt0u55hj-markmiro.vercel.app/api/get/${cid}`
+  );
+
+  await delay(1000);
+
+  const client = axios.create();
+  axiosRetry(client, {
+    retries: 20,
+    retryDelay: (retryCount) => {
+      console.log(`retry attempt: ${retryCount}`);
+      return retryCount * 2000; // time interval between retries
+    },
+    // Default retry conditions don't work with 404 errors
+    retryCondition: (error) => {
+      return error.response?.status === 404;
+    },
+  });
+  return client.get(cidToUrl(cid));
+}
 
 export function pinBlob(blob: Blob) {
   return pinFile(blob);
