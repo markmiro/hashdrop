@@ -1,6 +1,6 @@
 import { Button } from "@chakra-ui/button";
 import { Input } from "@chakra-ui/input";
-import { Link, VStack } from "@chakra-ui/layout";
+import { VStack } from "@chakra-ui/layout";
 import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 import { Cid } from "../../eth-react/Cid";
@@ -8,7 +8,6 @@ import { Json } from "../../generic/Json";
 import { Loader } from "../../generic/Loader";
 import {
   blobToCid,
-  blobToDataUrl,
   pinBlob,
   textToBlob,
   useEncrypter,

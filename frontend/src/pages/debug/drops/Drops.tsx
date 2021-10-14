@@ -8,25 +8,21 @@ import {
   Spacer,
   VStack,
 } from "@chakra-ui/react";
-import axios from "axios";
-import delay from "delay";
 import _ from "lodash";
-import { useEffect, useReducer, useState } from "react";
+import { useState } from "react";
 import { Link as RouterLink, Route, Switch } from "react-router-dom";
-import { createUserJson, UserJson } from "../../../util/UserJson";
+import { useEthersProvider } from "../../../eth-react/EthersProviderContext";
 import { useContract } from "../../../eth-react/useContract";
 import { useMetaMaskEthereum } from "../../../eth-react/useMetaMaskEthereum";
 import { Json } from "../../../generic/Json";
 import { Loader } from "../../../generic/Loader";
 import { Drops as DropsT } from "../../../typechain";
-import { cidToUrl, pinFile } from "../../../util/pinata";
-import { DropView } from "./DropView";
-import { DropItem } from "./DropItem";
-import { initialUserJson, reducer } from "../../../util/userJsonReducer";
-import { textToBlob } from "../../../util/textToBlob";
 import { ipfsCid } from "../../../util/ipfsCid";
-import { useEthersProvider } from "../../../eth-react/EthersProviderContext";
+import { pinFile } from "../../../util/pinata";
+import { textToBlob } from "../../../util/textToBlob";
 import { useUser } from "../../../util/useUser";
+import { DropItem } from "./DropItem";
+import { DropView } from "./DropView";
 
 export function Drops() {
   const { data } = useMetaMaskEthereum();
