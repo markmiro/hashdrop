@@ -39,9 +39,7 @@ export const cidToUrl = (cid: string) => {
  * it from another client.
  */
 export async function retrieveCidFromOtherServer(cid: string) {
-  await axios.get(
-    `https://hashdrop-ggt0u55hj-markmiro.vercel.app/api/get/${cid}`
-  );
+  await axios.get(`https://get-drop-api-workaround.vercel.app/api/get/${cid}`);
 
   await delay(1000);
 
