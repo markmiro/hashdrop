@@ -42,24 +42,12 @@ export function About() {
         isExternal
       />
       <Heading fontSize="xl">
-        Nobody saw it coming? You did, but you couldn't tell the relevant people
-        without serious personal consequences.
-      </Heading>
-      <Text fontSize="lg">
-        Suppose you're working at a company and it's all going poorly. You don't
-        want to publish what you wrote about the experience right away. Later,
-        after the company is dead and enough time has passed, you might want to
-        publish your diary from that time in a provable way.
-      </Text>
-      <Heading fontSize="xl">
         Make statements that are controversial now, but may be less
         controversial later.
       </Heading>
       <Text fontSize="lg">
-        Suppose you're working at a company and it's all going poorly. You don't
-        want to publish what you wrote right now. Later, after the company is
-        dead and enough time has passed, you might want to publish your diary
-        from that time in a provable way.
+        What's socially acceptable changes over time. Before 2020, telling
+        people you believe in UFOs would get you weird looks.
       </Text>
       <Heading fontSize="xl">Proof of invention.</Heading>
       <Text fontSize="lg">
