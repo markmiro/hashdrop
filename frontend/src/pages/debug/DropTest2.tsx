@@ -59,11 +59,7 @@ export function DropTest2() {
         PUB CID: <Cid cid={cid} />
       </div>
       {cid && encCid && (
-        <Button
-          colorScheme="blue"
-          as={RouterLink}
-          to={`/debug/drops/${cid}?encCid=${encCid}`}
-        >
+        <Button colorScheme="blue" as={RouterLink} to={`/debug/drops/${cid}`}>
           Drop It
         </Button>
       )}
