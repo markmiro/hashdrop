@@ -6,11 +6,39 @@ import {
   Heading,
   VStack,
 } from "@chakra-ui/react";
-import { UserJson } from "../../../components/UserJson";
+import { UserJson } from "../../../util/UserJson";
 import { cidToUrl } from "../../../util/pinata";
 import { IFramePreview } from "../../../components/IFramePreview";
 import { Cid } from "../../../eth-react/Cid";
-import { useDecrypter } from "../../../components/ShowDrop/useDecrypter";
+import {
+  DecrypterState,
+  useDecrypter,
+} from "../../../components/ShowDrop/useDecrypter";
+import { Loader } from "../../../generic/Loader";
+
+function State({ state }: { state: DecrypterState }) {
+  return (
+    <Box bg="blackAlpha.100" display="flex">
+      STATE: {state || "N/A"}
+      {state === "DECRYPTING" ||
+        state === "LOADING" ||
+        state === "PUBLISHING" ||
+        (state === "CHECKING_AVAILABLE" && <Loader />)}
+    </Box>
+  );
+}
+
+const EmptyView = () => (
+  <Center
+    w="100%"
+    h="40vh"
+    fontSize="xl"
+    fontWeight="medium"
+    bg="blackAlpha.100"
+  >
+    👈 Choose an item.
+  </Center>
+);
 
 export function DropView({
   cid,
@@ -21,28 +49,24 @@ export function DropView({
 }) {
   const decrypter = useDecrypter();
 
-  if (!cid) {
-    return (
-      <Center
-        w="100%"
-        h="40vh"
-        fontSize="xl"
-        fontWeight="medium"
-        bg="blackAlpha.100"
-      >
-        👈 Choose an item.
-      </Center>
-    );
-  }
+  if (!cid) return <EmptyView />;
 
   const userDrop = userJson?.drops[cid];
   const privateCid = userDrop?.privateCid;
+
   if (privateCid) {
     return (
       <VStack spacing={2} alignItems="stretch">
         <Heading>{userDrop?.dropTitle}</Heading>
         <label>CID:</label>
         <Cid cid={cid} />
+        <iframe
+          style={{ border: "1px solid" }}
+          title="cid"
+          src={cidToUrl(cid)}
+          width="100%"
+          height="300px"
+        />
         <label>Private CID:</label>
         <Cid cid={privateCid} />
         <ButtonGroup>
@@ -56,12 +80,15 @@ export function DropView({
             <Box borderWidth={1} w="full">
               <IFramePreview src={decrypter.dataUrl} />
             </Box>
-            <Button colorScheme="green" onClick={decrypter.publish}>
+            <Button
+              colorScheme="green"
+              onClick={() => decrypter.publish().then(() => alert("done!"))}
+            >
               Publish
             </Button>
           </>
         )}
-        <Box bg="blackAlpha.100">STATE: {decrypter.state || "N/A"}</Box>
+        <State state={decrypter.state} />
       </VStack>
     );
   }

@@ -8,52 +8,28 @@ import {
   Spacer,
   VStack,
 } from "@chakra-ui/react";
-import axios from "axios";
-import delay from "delay";
 import _ from "lodash";
-import { useEffect, useReducer, useState } from "react";
+import { useState } from "react";
 import { Link as RouterLink, Route, Switch } from "react-router-dom";
-import { createUserJson, UserJson } from "../../../components/UserJson";
+import { useEthersProvider } from "../../../eth-react/EthersProviderContext";
 import { useContract } from "../../../eth-react/useContract";
 import { useMetaMaskEthereum } from "../../../eth-react/useMetaMaskEthereum";
 import { Json } from "../../../generic/Json";
 import { Loader } from "../../../generic/Loader";
 import { Drops as DropsT } from "../../../typechain";
-import { cidToUrl, pinFile } from "../../../util/pinata";
-import { DropView } from "./DropView";
-import { DropItem } from "./DropItem";
-import { initialUserJson, reducer } from "./userJsonReducer";
-import { textToBlob } from "../../../util/textToBlob";
 import { ipfsCid } from "../../../util/ipfsCid";
-import { useEthersProvider } from "../../../eth-react/EthersProviderContext";
+import { pinFile } from "../../../util/pinata";
+import { textToBlob } from "../../../util/textToBlob";
+import { useUser } from "../../../util/useUser";
+import { DropItem } from "./DropItem";
+import { DropView } from "./DropView";
 
 export function Drops() {
   const { data } = useMetaMaskEthereum();
   const drops = useContract<DropsT>("Drops");
   const provider = useEthersProvider();
-  const [userJson, dispatch] = useReducer(reducer, initialUserJson);
-  const [loading, setLoading] = useState(false);
+  const { userJson, dispatch, loading: loadingUser } = useUser();
   const [editing, setEditing] = useState(false);
-
-  useEffect(() => {
-    const doAsync = async () => {
-      setLoading(true);
-
-      if (!drops.contract) return new Error("No 'Drops smart contract");
-      if (!data.selectedAddress) return new Error("No address selected");
-
-      const userAddress = data.selectedAddress;
-      const userCid = await drops.contract.addressToRootCid(userAddress);
-      const userJson = userCid
-        ? (await axios.get<UserJson>(cidToUrl(userCid))).data
-        : createUserJson(userAddress);
-      await delay(200);
-
-      dispatch({ type: "SET", value: userJson });
-      setLoading(false);
-    };
-    doAsync();
-  }, [drops.contract, data.selectedAddress]);
 
   const handleSave = async () => {
     if (!drops.contract) return new Error("No 'Drops smart contract");
@@ -73,7 +49,9 @@ export function Drops() {
     setEditing(false);
   };
 
-  if (loading) return <Loader>Loading user data</Loader>;
+  if (loadingUser) {
+    return <Loader>Loading user</Loader>;
+  }
 
   return (
     <div>
@@ -101,14 +79,22 @@ export function Drops() {
               Add
             </Button>
           </Flex>
-          {_.values(userJson?.drops).map((drop) => (
-            <DropItem
-              key={drop.cid}
-              drop={drop}
-              editing={editing}
-              dispatch={dispatch}
-            />
-          ))}
+          {_.values(_.orderBy(userJson?.drops, "created", "desc")).map(
+            (drop) => (
+              <DropItem
+                key={drop.cid}
+                drop={drop}
+                editing={editing}
+                onSetTitle={(title) =>
+                  dispatch({
+                    type: "SET_TITLE",
+                    key: drop.cid,
+                    value: title,
+                  })
+                }
+              />
+            )
+          )}
         </VStack>
         <Switch>
           <Route

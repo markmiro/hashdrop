@@ -83,8 +83,10 @@ async function pinFile(file: File, pinataMetadata?: PinMetadata) {
         },
       }
     );
+
     return response.data.IpfsHash;
   } catch (err) {
     console.error(err);
+    return { error: err };
   }
 }

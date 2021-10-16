@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { createUserJson, UserJson } from "../../../components/UserJson";
+import { createUserJson, UserJson } from "./UserJson";
 
 export const initialUserJson = createUserJson("NONE");
 // Minimal example:
