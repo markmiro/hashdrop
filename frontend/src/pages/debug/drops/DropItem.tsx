@@ -41,7 +41,7 @@ function IsDropped({ drop }: { drop: UserDrop }) {
           setDropStatus("NOT_FOUND");
         }
       });
-  }, []);
+  }, [drop.cid, drop.privateCid]);
 
   switch (dropStatus) {
     case "DROPPED":

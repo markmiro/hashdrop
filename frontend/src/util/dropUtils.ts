@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import axiosRetry from "axios-retry";
 import { base64ToBlob } from "base64-blob";
 import aes from "crypto-js/aes";
