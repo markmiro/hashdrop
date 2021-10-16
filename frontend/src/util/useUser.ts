@@ -66,18 +66,27 @@ export function useUser() {
     };
     let newUserJson = _.cloneDeep(userJson);
     newUserJson.drops[partialDrop.cid] = userDrop;
-    const newUserBlob = textToBlob(JSON.stringify(newUserJson));
+    dispatch({ type: "SET", value: newUserJson });
+    save(newUserJson);
+  };
+
+  const save = async (userJson: UserJson) => {
+    setLoading(true);
+    if (!drops.contract) return new Error("No 'Drops smart contract");
+    if (!data.selectedAddress) return new Error("No address selected");
+
+    const newUserBlob = textToBlob(JSON.stringify(userJson));
     const newUserCid = await blobToCid(newUserBlob);
     const remoteNewUserCid = await pinBlob(newUserBlob);
     if (newUserCid !== remoteNewUserCid) {
-      throw new Error("User JSON: Local and remote CID don't match.");
+      return new Error("User JSON: Local and remote CID don't match.");
     }
 
-    // Notarize on the blockchain
     const signer = provider.getSigner();
     const dropsTx = await drops.contract.connect(signer).set(newUserCid);
     await dropsTx.wait();
+    setLoading(false);
   };
 
-  return { loading, userJson, addDrop, dispatch };
+  return { loading, userJson, addDrop, save, dispatch };
 }

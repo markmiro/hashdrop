@@ -11,41 +11,18 @@ import {
 import _ from "lodash";
 import { useState } from "react";
 import { Link as RouterLink, Route, Switch } from "react-router-dom";
-import { useEthersProvider } from "../../../eth-react/EthersProviderContext";
-import { useContract } from "../../../eth-react/useContract";
-import { useMetaMaskEthereum } from "../../../eth-react/useMetaMaskEthereum";
 import { Json } from "../../../generic/Json";
 import { Loader } from "../../../generic/Loader";
-import { Drops as DropsT } from "../../../typechain";
-import { ipfsCid } from "../../../util/ipfsCid";
-import { pinFile } from "../../../util/pinata";
-import { textToBlob } from "../../../util/textToBlob";
 import { useUser } from "../../../util/useUser";
 import { DropItem } from "./DropItem";
 import { DropView } from "./DropView";
 
 export function Drops() {
-  const { data } = useMetaMaskEthereum();
-  const drops = useContract<DropsT>("Drops");
-  const provider = useEthersProvider();
-  const { userJson, dispatch, loading: loadingUser } = useUser();
+  const { userJson, dispatch, save, loading: loadingUser } = useUser();
   const [editing, setEditing] = useState(false);
 
   const handleSave = async () => {
-    if (!drops.contract) return new Error("No 'Drops smart contract");
-    if (!data.selectedAddress) return new Error("No address selected");
-
-    const newUserBlob = textToBlob(JSON.stringify(userJson));
-    const newUserCid = await ipfsCid(newUserBlob);
-    const remoteNewUserCid = await pinFile(newUserBlob);
-    if (newUserCid !== remoteNewUserCid) {
-      return new Error("User JSON: Local and remote CID don't match.");
-    }
-
-    const signer = provider.getSigner();
-    const dropsTx = await drops.contract.connect(signer).set(newUserCid);
-    await dropsTx.wait();
-
+    await save(userJson);
     setEditing(false);
   };
 
