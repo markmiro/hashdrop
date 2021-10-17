@@ -8,7 +8,7 @@
           "address": "0x91aF78778eCdaC5Ec01C14347A433e604759aB81"
         },
         "1337": {
-          "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+          "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
         },
         "80001": {
           "address": "0x91aF78778eCdaC5Ec01C14347A433e604759aB81"
@@ -103,27 +103,18 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1634420595214,
-          "str": "Sat, 16 Oct 2021 21:43:15 GMT",
+          "ts": 1634506663003,
+          "str": "Sun, 17 Oct 2021 21:37:43 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/HashDrop.sol"
       }
     },
-    "Drops": {
-      "name": "Drops",
+    "User": {
+      "name": "User",
       "chainId": {
-        "69": {
-          "address": "0xe69556613C604D1A5F5E2fe81E8AD12b6e7edfb6"
-        },
         "1337": {
-          "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
-        },
-        "80001": {
-          "address": "0xC372F2a2dC50f1eb2c24B4Dbb72cADEB99947ebB"
-        },
-        "421611": {
-          "address": "0x4BccD0E6DD28072097801d5F7DCf3Cebaf3C2D4E"
+          "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
         }
       },
       "abi": [
@@ -162,11 +153,11 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1634420595281,
-          "str": "Sat, 16 Oct 2021 21:43:15 GMT",
+          "ts": 1634506663052,
+          "str": "Sun, 17 Oct 2021 21:37:43 GMT",
           "networkName": "unknown"
         },
-        "sourceName": "contracts/Drops.sol"
+        "sourceName": "contracts/User.sol"
       }
     }
   }

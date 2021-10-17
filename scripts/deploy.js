@@ -12,12 +12,12 @@ async function deploy(addContract) {
     await addContract("HashDrop", hashDrop.address);
   });
   console.log("---");
-  console.log("Drops");
+  console.log("User");
   await logBalanceDifference(async () => {
-    const Drops = await ethers.getContractFactory("Drops");
-    const drops = await Drops.deploy();
-    console.log("Deployed to:", drops.address);
-    await addContract("Drops", drops.address);
+    const User = await ethers.getContractFactory("User");
+    const user = await User.deploy();
+    console.log("Deployed to:", user.address);
+    await addContract("User", user.address);
   });
 }
 

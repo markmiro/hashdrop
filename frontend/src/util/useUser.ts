@@ -4,7 +4,7 @@ import axios from "axios";
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { format } from "date-fns";
 import { useMetaMaskEthereum } from "../eth-react/useMetaMaskEthereum";
-import { Drops as DropsT } from "../typechain";
+import { User as UserT } from "../typechain";
 import { useContract } from "../eth-react/useContract";
 import { createUserJson, UserJson } from "./UserJson";
 import { blobToCid, cidToUrl, pinBlob, textToBlob } from "./dropUtils";
@@ -20,18 +20,18 @@ export function formatDate(date: Date) {
 export function useUser() {
   const provider = useEthersProvider();
   const { data } = useMetaMaskEthereum();
-  const drops = useContract<DropsT>("Drops");
+  const userContract = useContract<UserT>("User");
   const [userJson, dispatch] = useReducer(reducer, initialUserJson);
   const [loading, setLoading] = useState(false);
 
   const getUserJson = useCallback(async () => {
     setLoading(true);
 
-    if (!drops.contract) return new Error("No 'Drops smart contract");
+    if (!userContract.contract) return new Error("No 'Drops smart contract");
     if (!data.selectedAddress) return new Error("No address selected");
 
     const userAddress = data.selectedAddress;
-    const userCid = await drops.contract.addressToRootCid(userAddress);
+    const userCid = await userContract.contract.addressToRootCid(userAddress);
     const userJson = userCid
       ? (await axios.get<UserJson>(cidToUrl(userCid))).data
       : createUserJson(userAddress);
@@ -39,7 +39,7 @@ export function useUser() {
 
     dispatch({ type: "SET", value: userJson });
     setLoading(false);
-  }, [drops.contract, data.selectedAddress]);
+  }, [userContract.contract, data.selectedAddress]);
 
   useEffect(() => {
     getUserJson();
@@ -50,7 +50,7 @@ export function useUser() {
     cid: string;
     privateCid: string;
   }) => {
-    if (!drops.contract) return new Error("No 'Drops smart contract");
+    if (!userContract.contract) return new Error("No 'Drops smart contract");
     if (!data.selectedAddress) return new Error("No address selected");
     if (!userJson) throw new Error("`userJson` expected to be set");
 
@@ -72,7 +72,7 @@ export function useUser() {
 
   const save = async (userJson: UserJson) => {
     setLoading(true);
-    if (!drops.contract) return new Error("No 'Drops smart contract");
+    if (!userContract.contract) return new Error("No 'Drops smart contract");
     if (!data.selectedAddress) return new Error("No address selected");
 
     const newUserBlob = textToBlob(JSON.stringify(userJson));
@@ -83,7 +83,7 @@ export function useUser() {
     }
 
     const signer = provider.getSigner();
-    const dropsTx = await drops.contract.connect(signer).set(newUserCid);
+    const dropsTx = await userContract.contract.connect(signer).set(newUserCid);
     await dropsTx.wait();
     setLoading(false);
   };

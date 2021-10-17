@@ -8,7 +8,7 @@ import { useEthersProvider } from "../../eth-react/EthersProviderContext";
 import { useContract } from "../../eth-react/useContract";
 import { useMetaMaskEthereum } from "../../eth-react/useMetaMaskEthereum";
 import { Loader } from "../../generic/Loader";
-import { Drops as DropsT } from "../../typechain";
+import { User as DropsT } from "../../typechain";
 import { ipfsCid } from "../../util/ipfsCid";
 import { cidToUrl, pinFile } from "../../util/pinata";
 import { textToBlob } from "../../util/textToBlob";
@@ -16,7 +16,7 @@ import { textToBlob } from "../../util/textToBlob";
 export function DropTools() {
   const { data } = useMetaMaskEthereum();
   const provider = useEthersProvider();
-  const drops = useContract<DropsT>("Drops");
+  const drops = useContract<DropsT>("User");
   const [userJson, setUserJson] = useState<object | null | "loading">(null);
 
   useEffect(() => {

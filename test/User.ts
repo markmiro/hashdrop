@@ -1,12 +1,12 @@
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/signers";
 import { assert } from "chai";
 import { ethers } from "hardhat";
-import { Drops as DropsT } from "../frontend/src/typechain";
+import { User as UserT } from "../frontend/src/typechain";
 const Hash = require("ipfs-only-hash");
 
-describe("Drops", () => {
-  let Drops,
-    drops: DropsT,
+describe("User", () => {
+  let User,
+    user: UserT,
     owner: SignerWithAddress,
     acc1: SignerWithAddress,
     acc2: SignerWithAddress;
@@ -14,8 +14,8 @@ describe("Drops", () => {
   beforeEach(async () => {
     [owner, acc1, acc2] = await ethers.getSigners();
 
-    Drops = await ethers.getContractFactory("Drops");
-    drops = (await Drops.deploy()) as DropsT;
+    User = await ethers.getContractFactory("Drops");
+    user = (await User.deploy()) as UserT;
   });
 
   it("should set root drops cid", async () => {
@@ -36,9 +36,9 @@ describe("Drops", () => {
       rawLeaves: true,
     });
 
-    await drops.connect(acc1).set(rootCid);
+    await user.connect(acc1).set(rootCid);
 
-    const ethRootCid = await drops.addressToRootCid(acc1.address);
+    const ethRootCid = await user.addressToRootCid(acc1.address);
 
     assert.equal(rootCid, ethRootCid);
   });

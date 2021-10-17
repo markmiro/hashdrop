@@ -9,14 +9,14 @@ import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
 import { useMetaMaskEthereum } from "../eth-react/useMetaMaskEthereum";
 import { Loader } from "../generic/Loader";
-import { Drops as T } from "../typechain";
+import { User as T } from "../typechain";
 import { ipfsCid } from "../util/ipfsCid";
 import { cidToUrl, pinFile } from "../util/pinata";
 import { textToBlob } from "../util/textToBlob";
 
 export function ShowDrops() {
   const [loading, setLoading] = useState(true);
-  const drops = useContract<T>("Drops");
+  const drops = useContract<T>("User");
   const [rootCid, setRootCid] = useState<string | undefined>();
   const { data } = useMetaMaskEthereum();
   const provider = useEthersProvider();

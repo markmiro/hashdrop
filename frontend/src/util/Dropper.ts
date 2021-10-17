@@ -1,4 +1,4 @@
-import { Drops as DropsT, HashDrop as HashDropT } from "../typechain";
+import { User as UserT, HashDrop as HashDropT } from "../typechain";
 import { useEthersProvider } from "../eth-react/EthersProviderContext";
 import { useContract } from "../eth-react/useContract";
 import { useMetaMaskEthereum } from "../eth-react/useMetaMaskEthereum";
@@ -31,7 +31,7 @@ export class TextDropper {
 export function useDrops() {
   const { data } = useMetaMaskEthereum();
   const provider = useEthersProvider();
-  const drops = useContract<DropsT>("Drops");
+  const user = useContract<UserT>("User");
   const hashdrop = useContract<HashDropT>("HashDrop");
 
   // return {
