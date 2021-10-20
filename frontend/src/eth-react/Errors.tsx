@@ -48,6 +48,7 @@ export function NonceErrorMessage({
           <Box bg="white" color="black" p="2">
             <b>
               <Anchor
+                isExternal
                 textDecor="underline"
                 to="https://metamask.zendesk.com/hc/en-us/articles/360015488891-How-to-reset-your-wallet"
               >
