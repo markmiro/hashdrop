@@ -1,6 +1,8 @@
 import { Button, ButtonGroup } from "@chakra-ui/button";
+import { useDisclosure } from "@chakra-ui/hooks";
 import delay from "delay";
 import { useState } from "react";
+import { MetaMaskOverlay } from "../../eth-react/MetaMaskOverlay";
 import { CheckOffItem, CheckOffStatus, CheckOffWrapper } from "../CheckOff";
 
 const initialStatuses: Record<string, CheckOffStatus> = {
@@ -11,6 +13,7 @@ const initialStatuses: Record<string, CheckOffStatus> = {
 };
 
 export function CheckOffExample() {
+  const metaMaskDisclosure = useDisclosure();
   const [statuses, setStatuses] = useState(initialStatuses);
 
   const reset = () => {
@@ -32,13 +35,15 @@ export function CheckOffExample() {
       decrypt: "DONE",
       confirm: "IN_PROGRESS",
     });
-    await delay(500);
+    metaMaskDisclosure.onOpen();
+    await delay(2000);
     setStatuses({
       ...statuses,
       load: "DONE",
       decrypt: "DONE",
       confirm: "ERROR",
     });
+    metaMaskDisclosure.onClose();
   };
 
   return (
@@ -51,6 +56,14 @@ export function CheckOffExample() {
         <Button onClick={play}>Play</Button>
         <Button onClick={reset}>Reset</Button>
       </ButtonGroup>
+      <MetaMaskOverlay
+        isOpen={metaMaskDisclosure.isOpen}
+        onClose={metaMaskDisclosure.onClose}
+      >
+        <Button size="xs" onClick={metaMaskDisclosure.onClose}>
+          Cancel
+        </Button>
+      </MetaMaskOverlay>
     </CheckOffWrapper>
   );
 }
