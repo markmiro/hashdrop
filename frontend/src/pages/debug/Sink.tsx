@@ -14,7 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { FC, ReactNode } from "react";
 import { ErrorBoundary } from "react-error-boundary";
-import { CheckOffExample } from "../../components/debug/CheckOffExample";
+import { StepperExample } from "../../components/debug/StepperExample";
 import { EditableExample } from "../../components/debug/EditableExample";
 import { DropCount } from "../../components/DropCount";
 import { AddressLink } from "../../eth-react/AddressLink";
@@ -97,8 +97,8 @@ function MetaMaskExample() {
 export function Sink() {
   return (
     <KitchenItems>
-      <Item title="CheckOff">
-        <CheckOffExample />
+      <Item title="Stepper">
+        <StepperExample />
       </Item>
       <Item title="Editable">
         <EditableExample />

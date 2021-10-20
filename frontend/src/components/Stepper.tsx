@@ -3,15 +3,15 @@ import { HStack, VStack } from "@chakra-ui/layout";
 import { Spinner } from "@chakra-ui/spinner";
 import { FC } from "react";
 
-export type CheckOffStatus = "" | "DONE" | "IN_PROGRESS" | "ERROR";
+export type StepperStatus = "" | "DONE" | "IN_PROGRESS" | "ERROR";
 
-export const CheckOffItem: FC<{
-  status: CheckOffStatus;
+export const StepperItem: FC<{
+  status: StepperStatus;
   title: string;
 }> = ({ status, title, children }) => {
   return (
-    <VStack spacing={2}>
-      <HStack spacing={1}>
+    <VStack as="ul" spacing={2}>
+      <HStack as="li" spacing={1}>
         {status === "IN_PROGRESS" && <Spinner size="sm" />}
         {status === "" && <CheckCircleIcon flexShrink={0} opacity={0.2} />}
         {status === "DONE" && (
@@ -25,7 +25,7 @@ export const CheckOffItem: FC<{
   );
 };
 
-export const CheckOffWrapper: FC = ({ children }) => {
+export const StepperWrapper: FC = ({ children }) => {
   return (
     <VStack align="start" spacing={2}>
       {children}

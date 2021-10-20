@@ -3,16 +3,16 @@ import { useDisclosure } from "@chakra-ui/hooks";
 import delay from "delay";
 import { useState } from "react";
 import { MetaMaskOverlay } from "../../eth-react/MetaMaskOverlay";
-import { CheckOffItem, CheckOffStatus, CheckOffWrapper } from "../CheckOff";
+import { StepperItem, StepperStatus, StepperWrapper } from "../Stepper";
 
-const initialStatuses: Record<string, CheckOffStatus> = {
+const initialStatuses: Record<string, StepperStatus> = {
   load: "",
   decrypt: "",
   confirm: "",
   publish: "",
 };
 
-export function CheckOffExample() {
+export function StepperExample() {
   const metaMaskDisclosure = useDisclosure();
   const [statuses, setStatuses] = useState(initialStatuses);
 
@@ -47,11 +47,11 @@ export function CheckOffExample() {
   };
 
   return (
-    <CheckOffWrapper>
-      <CheckOffItem title="Load" status={statuses["load"]} />
-      <CheckOffItem title="Decrypt" status={statuses["decrypt"]} />
-      <CheckOffItem title="Confirm" status={statuses["confirm"]} />
-      <CheckOffItem title="Publish" status={statuses["publish"]} />
+    <StepperWrapper>
+      <StepperItem title="Load" status={statuses["load"]} />
+      <StepperItem title="Decrypt" status={statuses["decrypt"]} />
+      <StepperItem title="Confirm" status={statuses["confirm"]} />
+      <StepperItem title="Publish" status={statuses["publish"]} />
       <ButtonGroup>
         <Button onClick={play}>Play</Button>
         <Button onClick={reset}>Reset</Button>
@@ -64,6 +64,6 @@ export function CheckOffExample() {
           Cancel
         </Button>
       </MetaMaskOverlay>
-    </CheckOffWrapper>
+    </StepperWrapper>
   );
 }

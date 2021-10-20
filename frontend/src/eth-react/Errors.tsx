@@ -53,7 +53,6 @@ export function NonceErrorMessage({
               >
                 Try resetting your wallet
               </Anchor>
-              .
             </b>
             <p>
               🦊 → (account icon on the top right) → Settings → Advanced → Reset
