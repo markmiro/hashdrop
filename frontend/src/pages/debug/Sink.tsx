@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { FC, ReactNode } from "react";
 import { ErrorBoundary } from "react-error-boundary";
+import { CheckOffExample } from "../../components/debug/CheckOffExample";
 import { EditableExample } from "../../components/debug/EditableExample";
 import { DropCount } from "../../components/DropCount";
 import { AddressLink } from "../../eth-react/AddressLink";
@@ -23,8 +24,8 @@ import { Cid } from "../../eth-react/Cid";
 import {
   EthErrorFallback,
   InstallMetaMaskMessage,
-  NonceErrorMessage,
   MultipleWalletsMessage,
+  NonceErrorMessage,
 } from "../../eth-react/Errors";
 import { EthEnsure } from "../../eth-react/EthEnsure";
 import { MetaMaskOverlay } from "../../eth-react/MetaMaskOverlay";
@@ -96,6 +97,9 @@ function MetaMaskExample() {
 export function Sink() {
   return (
     <KitchenItems>
+      <Item title="CheckOff">
+        <CheckOffExample />
+      </Item>
       <Item title="Editable">
         <EditableExample />
       </Item>

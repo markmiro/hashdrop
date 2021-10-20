@@ -15,6 +15,7 @@ import {
   useDecrypter,
 } from "../../../components/ShowDrop/useDecrypter";
 import { Loader } from "../../../generic/Loader";
+import { CheckOffItem } from "../../../components/CheckOff";
 
 function State({ state }: { state: DecrypterState }) {
   return (
@@ -88,6 +89,13 @@ export function DropView({
             </Button>
           </>
         )}
+        <VStack align="start" spacing={2}>
+          <CheckOffItem title="Load" status="DONE" />
+          <CheckOffItem title="Decrypt" status="ERROR" />
+          <CheckOffItem title="Confirm" status="IN_PROGRESS" />
+          <CheckOffItem title="Publish" status="" />
+          <CheckOffItem title="Verify" status="" />
+        </VStack>
         <State state={decrypter.state} />
       </VStack>
     );

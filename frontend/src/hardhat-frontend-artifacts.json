@@ -8,7 +8,7 @@
           "address": "0x91aF78778eCdaC5Ec01C14347A433e604759aB81"
         },
         "1337": {
-          "address": "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9"
+          "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
         },
         "80001": {
           "address": "0x91aF78778eCdaC5Ec01C14347A433e604759aB81"
@@ -103,8 +103,8 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1634506663003,
-          "str": "Sun, 17 Oct 2021 21:37:43 GMT",
+          "ts": 1634693362622,
+          "str": "Wed, 20 Oct 2021 01:29:22 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/HashDrop.sol"
@@ -114,7 +114,7 @@
       "name": "User",
       "chainId": {
         "1337": {
-          "address": "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
+          "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
         }
       },
       "abi": [
@@ -153,8 +153,8 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1634506663052,
-          "str": "Sun, 17 Oct 2021 21:37:43 GMT",
+          "ts": 1634693362685,
+          "str": "Wed, 20 Oct 2021 01:29:22 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/User.sol"
