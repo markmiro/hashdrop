@@ -15,7 +15,7 @@ import {
   useDecrypter,
 } from "../../../components/ShowDrop/useDecrypter";
 import { Loader } from "../../../generic/Loader";
-import { StepperItem } from "../../../components/Stepper";
+// import { StepperItem, StepperWrapper } from "../../../components/Stepper";
 
 function State({ state }: { state: DecrypterState }) {
   return (
@@ -89,13 +89,17 @@ export function DropView({
             </Button>
           </>
         )}
-        <VStack align="start" spacing={2}>
+        {/* <StepperWrapper>
           <StepperItem title="Load" status="DONE" />
-          <StepperItem title="Decrypt" status="ERROR" />
-          <StepperItem title="Confirm" status="IN_PROGRESS" />
-          <StepperItem title="Publish" status="" />
-          <StepperItem title="Verify" status="" />
-        </VStack>
+          <StepperItem
+            title="Decrypt"
+            status="INITIAL"
+            error={new Error("Some error")}
+          />
+          <StepperItem title="Confirm" status="ACTIVE" />
+          <StepperItem title="Publish" />
+          <StepperItem title="Verify" />
+        </StepperWrapper> */}
         <State state={decrypter.state} />
       </VStack>
     );
