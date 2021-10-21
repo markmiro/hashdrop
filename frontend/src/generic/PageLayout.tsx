@@ -8,7 +8,7 @@ import {
 import { AccountButton } from "../eth-react/AccountButton";
 import { ChainOptions } from "../eth-react/ChainOptions";
 import feArtifacts from "../hardhat-frontend-artifacts.json";
-import { Logo } from "./Logo";
+import { Logo } from "../components/Logo";
 
 const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
   (id) => parseInt(id)

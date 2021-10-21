@@ -2,7 +2,7 @@ import { Box, HStack } from "@chakra-ui/react";
 import { ErrorBoundary } from "react-error-boundary";
 import { HashRouter, Redirect, Route, Switch } from "react-router-dom";
 import { DropCount } from "./components/DropCount";
-import { Nav, NavLink, PageBody, PageTitle } from "./components/PageLayout";
+import { Nav, NavLink, PageBody, PageTitle } from "./generic/PageLayout";
 import { ShowDrop } from "./components/ShowDrop/ShowDrop";
 import { EthErrorFallback } from "./eth-react/Errors";
 import { EthEnsure } from "./eth-react/EthEnsure";
