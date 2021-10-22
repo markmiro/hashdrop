@@ -14,7 +14,7 @@ describe("User", () => {
   beforeEach(async () => {
     [owner, acc1, acc2] = await ethers.getSigners();
 
-    User = await ethers.getContractFactory("Drops");
+    User = await ethers.getContractFactory("User");
     user = (await User.deploy()) as UserT;
   });
 
