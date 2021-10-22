@@ -1,6 +1,7 @@
 import { Button } from "@chakra-ui/button";
 import { CheckIcon } from "@chakra-ui/icons";
 import { Box, HStack, VStack } from "@chakra-ui/layout";
+import { Spinner } from "@chakra-ui/react";
 import { Collapse } from "@chakra-ui/transition";
 import styled from "@emotion/styled";
 import _ from "lodash";
@@ -115,6 +116,21 @@ const StepperIcon = ({
       </StepCircle>
     );
   }
+  // if (isActive) {
+  //   if (isDone) {
+  //     return (
+  //       <StepCircle bg="green.100" color="green.700">
+  //         <CheckIcon boxSize={3.5} />
+  //       </StepCircle>
+  //     );
+  //   } else {
+  //     return (
+  //       <StepCircle bg="gray.100" fontWeight="medium">
+  //         <Spinner size="sm" />
+  //       </StepCircle>
+  //     );
+  //   }
+  // }
   if (!isDone) {
     return (
       <StepCircle bg="gray.100" fontWeight="medium">

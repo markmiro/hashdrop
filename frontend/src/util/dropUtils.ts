@@ -38,7 +38,10 @@ export const cidToUrl = (cid: string) => {
  * The problem is that if you fetch a drop before it's published, then the 404 is cached until you retrieve
  * it from another client.
  */
-export async function retrieveCidFromOtherServer(cid: string) {
+export async function retrieveCidFromOtherServer(
+  cid: string,
+  onAttempt?: (attemptCount: number) => void
+) {
   await axios.get(`https://get-drop-api-workaround.vercel.app/api/get/${cid}`);
 
   await delay(1000);
@@ -47,6 +50,7 @@ export async function retrieveCidFromOtherServer(cid: string) {
   axiosRetry(client, {
     retries: 20,
     retryDelay: (retryCount) => {
+      onAttempt && onAttempt(retryCount);
       console.log(`retry attempt: ${retryCount}`);
       return retryCount * 2000; // time interval between retries
     },
