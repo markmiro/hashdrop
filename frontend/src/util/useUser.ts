@@ -67,7 +67,7 @@ export function useUser() {
     let newUserJson = _.cloneDeep(userJson);
     newUserJson.drops[partialDrop.cid] = userDrop;
     dispatch({ type: "SET", value: newUserJson });
-    save(newUserJson);
+    await save(newUserJson);
   };
 
   const save = async (userJson: UserJson) => {
