@@ -8,7 +8,7 @@
           "address": "0x91aF78778eCdaC5Ec01C14347A433e604759aB81"
         },
         "1337": {
-          "address": "0x5FbDB2315678afecb367f032d93F642f64180aa3"
+          "address": "0x4826533B4897376654Bb4d4AD88B7faFD0C98528"
         },
         "80001": {
           "address": "0x91aF78778eCdaC5Ec01C14347A433e604759aB81"
@@ -52,6 +52,25 @@
         {
           "inputs": [
             {
+              "internalType": "uint256",
+              "name": "index",
+              "type": "uint256"
+            }
+          ],
+          "name": "cidAt",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
+          "inputs": [
+            {
               "internalType": "string",
               "name": "",
               "type": "string"
@@ -88,6 +107,25 @@
           "type": "function"
         },
         {
+          "inputs": [
+            {
+              "internalType": "uint256",
+              "name": "",
+              "type": "uint256"
+            }
+          ],
+          "name": "cids",
+          "outputs": [
+            {
+              "internalType": "string",
+              "name": "",
+              "type": "string"
+            }
+          ],
+          "stateMutability": "view",
+          "type": "function"
+        },
+        {
           "inputs": [],
           "name": "dropCount",
           "outputs": [
@@ -103,8 +141,8 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1634870366558,
-          "str": "Fri, 22 Oct 2021 02:39:26 GMT",
+          "ts": 1635296015904,
+          "str": "Wed, 27 Oct 2021 00:53:35 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/HashDrop.sol"
@@ -114,7 +152,7 @@
       "name": "User",
       "chainId": {
         "1337": {
-          "address": "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512"
+          "address": "0x99bbA657f2BbC93c02D617f8bA121cB8Fc104Acf"
         }
       },
       "abi": [
@@ -153,8 +191,8 @@
       ],
       "_debug": {
         "lastDeploy": {
-          "ts": 1634870366615,
-          "str": "Fri, 22 Oct 2021 02:39:26 GMT",
+          "ts": 1635296015957,
+          "str": "Wed, 27 Oct 2021 00:53:35 GMT",
           "networkName": "unknown"
         },
         "sourceName": "contracts/User.sol"

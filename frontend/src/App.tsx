@@ -20,6 +20,7 @@ import { Theme } from "./pages/debug/Theme";
 import { Drop } from "./pages/Drop";
 import { NotFound } from "./pages/NotFound";
 import { ShowDrops } from "./pages/ShowDrops";
+import { LatestDrops } from "./pages/LatestDrops";
 
 const goodChainIds = Object.keys(feArtifacts.contract.HashDrop.chainId).map(
   (id) => parseInt(id)
@@ -36,6 +37,7 @@ export function App() {
         <Nav>
           {data.selectedAddress && (
             <>
+              <NavLink to="/latest">Latest Drops</NavLink>{" "}
               <NavLink to="/drop">Add Drop</NavLink>{" "}
               <NavLink to="/drops">Your Drops</NavLink>
             </>
@@ -61,6 +63,13 @@ export function App() {
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Switch>
+            <Route path="/latest">
+              <PageBody>
+                <PageTitle>Latest Drops</PageTitle>
+                <LatestDrops />
+                <DropCount />
+              </PageBody>
+            </Route>
             <Route path="/drops">
               <PageBody>
                 <PageTitle>Your Drops</PageTitle>
