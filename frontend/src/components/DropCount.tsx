@@ -13,8 +13,9 @@ export function DropCount() {
   useEffect(() => {
     const doAsync = async () => {
       setLoading(true);
+      if (!hashdrop.contract) return;
       await delay(500);
-      const dropCount = (await hashdrop.contract?.dropCount())?.toNumber();
+      const dropCount = (await hashdrop.contract.dropCount()).toNumber();
       setDropCount(dropCount);
       setLoading(false);
     };

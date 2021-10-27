@@ -14,6 +14,8 @@ export type OnConnect<T extends BaseContract> = (contract: T) => void;
 
 // TODO: Each instance of `useContract()` is unique so they're not going to stay in sync.
 // Consider introducing a global reducer to keep things in sync.
+// TODO: Consider adding a "signer" via `contract.connect(signer)` so that it doesn't
+// have to be supplied externally when using the contract provided by this hook.
 export function useContract<T extends BaseContract>(
   contractName: FeContractName,
   onConnect?: OnConnect<T>
