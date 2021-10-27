@@ -6,6 +6,7 @@ import { Link as RouterLink } from "react-router-dom";
 import { Stepper, StepperItem, useStepper } from "../../components/Stepper";
 import { Cid } from "../../eth-react/Cid";
 import { useMetaMaskOverlay } from "../../eth-react/MetaMaskOverlay";
+import { useContract } from "../../eth-react/useContract";
 import { Json } from "../../generic/Json";
 import { Loader } from "../../generic/Loader";
 import {
@@ -14,7 +15,9 @@ import {
   textToBlob,
   useEncrypter,
 } from "../../util/dropUtils";
+import { HashDrop as HashDropT } from "../../typechain";
 import { useUser } from "../../util/useUser";
+import { useEthersProvider } from "../../eth-react/EthersProviderContext";
 
 enum DropSteps {
   Encrypt,
@@ -37,6 +40,8 @@ export function DropTest2() {
   const [cid, setCid] = useState("");
   const [encCid, setEncCid] = useState("");
   const encrypter = useEncrypter();
+  const provider = useEthersProvider();
+  const hashdropContract = useContract<HashDropT>("HashDrop");
   const user = useUser();
 
   const reset = () => {
@@ -57,17 +62,21 @@ export function DropTest2() {
         encrypted = await encrypter.encrypt(blob);
       });
     });
-    let encCid: string;
+    let privateCid: string;
     await stepper.takeStep(DropSteps.PinEncrypted, async () => {
-      encCid = await pinBlob(textToBlob(encrypted));
-      setEncCid(encCid);
+      privateCid = await pinBlob(textToBlob(encrypted));
+      setEncCid(privateCid);
     });
     stepper
       .takeStep(DropSteps.NotarizeUser, async () => {
         await metamaskOverlay.openFor(async () => {
+          const signer = provider.getSigner();
+          await hashdropContract.contract
+            ?.connect(signer)
+            .addPrivate(cid, privateCid);
           await user.addDrop({
             cid,
-            privateCid: encCid,
+            privateCid,
           });
         });
       })
